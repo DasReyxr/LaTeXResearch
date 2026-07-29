@@ -1,0 +1,895 @@
+\documentclass[aspectratio=169]{beamer}
+
+% =========================
+% TEMA
+% =========================
+\usetheme{SimplePlus}
+
+% =========================
+% IDIOMA (SOLO polyglossia)
+% =========================
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+
+% =========================
+% FUENTES (Unicode real)
+% =========================
+\setmainfont{Latin Modern Roman}
+
+% =========================
+% MATEMÁTICAS (FORZADAS A IMAGEN)
+% =========================
+\usepackage{amsmath, amssymb}
+\usepackage{bm}
+
+% Evita que Canva intente "leer" el math
+\usepackage{graphicx}
+
+% =========================
+% HIPERVÍNCULOS
+% =========================
+\usepackage{hyperref}
+
+
+% Información de la presentación
+\title{ETAPA 3}
+\subtitle{Reporte de Investigación Exploratoria}
+\author{Contreras Reyes Orlando \and García Barrera Iker Emiliano}
+\institute{Universidad Autónoma de Aguascalientes \\ Ingeniería Electrónica}
+\date{\today}
+
+
+\begin{document}
+
+
+% Diapositiva de título
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\section{Fundamentos de Computación Cuántica}
+% ============================================================
+
+\begin{frame}{Bit Clásico vs Qubit}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{Qbits/src/I1.png}
+\caption{Bit clásico: niveles de voltaje}
+\end{figure}
+
+\textbf{Bit Clásico}
+\begin{itemize}
+\item Estado: 0 o 1
+\item Determinista
+\item Base física: voltaje, corriente
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{Qbits/src/I2.png}
+\caption{Qubit: superposición de estados}
+\end{figure}
+
+\textbf{Qubit}
+\begin{itemize}
+\item Estado: superposición % hasta medición
+\item Probabilístico % resultados de medición
+\item Base física: espín, polarización, niveles atómicos
+\end{itemize}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Estado del Qubit}
+
+\begin{block}{Estado del Qubit}
+% CORRECCIÓN: Aclarar que α y β son amplitudes complejas
+\[
+|\psi\rangle = \alpha|0\rangle + \beta|1\rangle, \quad |\alpha|^2 + |\beta|^2 = 1
+\]
+Donde $\alpha, \beta \in \mathbb{C}$ (amplitudes complejas, no probabilidades).
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Superposición Cuántica}
+\begin{columns}[c]
+\column{0.55\textwidth}
+\begin{definition}
+Un sistema cuántico puede existir simultáneamente en múltiples estados % base
+hasta que se realiza una medición.
+\end{definition}
+
+%vspace{0.05cm}
+\textbf{Propiedades clave:}
+\begin{itemize}
+\item Coherencia cuántica permite interferencia
+\item Amplificación de soluciones correctas
+\item Supresión de soluciones incorrectas
+\end{itemize}
+
+%\vspace{0.15cm}
+% CORRECCIÓN IMPORTANTE: El "paralelismo cuántico" es muy malentendido
+\begin{exampleblock}{Aclaración sobre paralelismo cuántico}
+\small
+Un sistema de $n$ qubits puede estar en superposición de $2^n$ estados.\\
+\textcolor{red}{\textbf{NO}} significa que se ejecuten $2^n$ cálculos en paralelo.
+\end{exampleblock}
+
+\column{0.45\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Qbits/src/I3ge.png}
+\caption{Ilustración conceptual de la superposición}
+\end{figure}
+
+\vspace{0.2cm}
+\begin{figure}
+\centering
+\includegraphics[width=0.3\textwidth]{Qbits/src/I4.png}
+\caption{Colapso del estado tras medición}
+\end{figure}
+\end{columns}
+\end{frame}
+
+% FRAME ADICIONAL: Ejemplo concreto de superposición
+\begin{frame}{Ejemplo Concreto: Interferencia en Superposición}
+\small
+\begin{exampleblock}{Puerta Hadamard}
+Aplicar $H$ a $|0\rangle$: $|0\rangle \xrightarrow{H} \frac{1}{\sqrt{2}}(|0\rangle + |1\rangle) = |+\rangle$
+\begin{itemize}
+\item Medición: 50\% probabilidad de 0, 50\% de 1
+\end{itemize}
+\end{exampleblock}
+
+\vspace{0.15cm}
+\begin{exampleblock}{Doble Hadamard (interferencia)}
+Aplicar dos Hadamard: $|0\rangle \xrightarrow{H} |+\rangle \xrightarrow{H} |0\rangle$
+\begin{equation*}
+H|+\rangle = H\frac{1}{\sqrt{2}}(|0\rangle + |1\rangle) = \frac{1}{2}(|0\rangle+|1\rangle+|0\rangle-|1\rangle) = |0\rangle
+\end{equation*}
+\begin{itemize}
+\item Las amplitudes se cancelan destructivamente para $|1\rangle$
+\item Medición: 100\% probabilidad de 0 (interferencia constructiva)
+\end{itemize}
+\end{exampleblock}
+
+\textcolor{blue}{\textbf{Clave:}} Sin interferencia, esto sería imposible. Este es el poder real de la superposición.
+\end{frame}
+
+\begin{frame}{Entrelazamiento Cuántico}
+\small
+\begin{block}{Definición}
+Correlación cuántica entre qubits que no puede explicarse clásicamente.
+\end{block}
+
+\textbf{Estado de Bell (ejemplo):}
+\[
+|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)
+\]
+
+\begin{columns}[c]
+\column{0.5\textwidth}
+\textbf{Características:}
+\begin{itemize}
+\item Correlación perfecta
+\item Colapso correlacionado
+\item No separable: $|\Phi^+\rangle \neq |\psi_A\rangle \otimes |\psi_B\rangle$
+\item Base de QKD
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Aplicaciones:}
+\begin{itemize}
+\item Teleportación cuántica
+\item Distribución de claves (QKD)
+\item Algoritmos cuánticos
+\item Computación distribuida
+\end{itemize}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Aclaracion Fundamental}
+
+\begin{alertblock}{Aclaración fundamental}
+Si medimos qubit A y obtenemos 0, qubit B colapsa a 0.\\
+\textcolor{red}{\textbf{Pero:}} Esto \underline{NO} permite comunicación superlumínica (no viola relatividad).\\
+B solo ve resultados aleatorios hasta recibir información clásica de A.
+\end{alertblock}
+
+\end{frame}
+
+% FRAME ADICIONAL: Ejemplo concreto de entrelazamiento
+\begin{frame}{Ejemplo Concreto: Distinguiendo Entrelazamiento}
+\small
+\begin{exampleblock}{Estado entrelazado vs. estado separable}
+\textbf{Entrelazado:} $|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$
+\begin{itemize}
+\item Medición: 50\% obtener 00, 50\% obtener 11
+\item \textbf{Nunca} se observa 01 o 10
+\item Correlación: $P(A=B) = 1$ (perfecta)
+\end{itemize}
+\end{exampleblock}
+
+\vspace{0.15cm}
+\begin{exampleblock}{Separable (NO entrelazado):}
+$|\psi\rangle = |+\rangle \otimes |+\rangle = \frac{1}{2}(|00\rangle + |01\rangle + |10\rangle + |11\rangle)$
+\begin{itemize}
+\item Medición: 25\% para cada resultado (00, 01, 10, 11)
+\item Independencia: $P(A=0|B=0) = P(A=0) = 0.5$
+\end{itemize}
+\end{exampleblock}
+
+\textcolor{blue}{\textbf{Distinción clave:}} La ausencia de ciertos resultados (01, 10) es la firma del entrelazamiento.
+\end{frame}
+
+% ============================================================
+\section{Algoritmos Cuánticos}
+% ============================================================
+
+\begin{frame}{Ventaja Cuántica}
+\begin{definition}
+Capacidad de resolver ciertos problemas más eficientemente que cualquier algoritmo clásico conocido.
+\end{definition}
+
+\vspace{0.2cm}
+% CORRECCIÓN: Aclaraciones importantes para evitar malentendidos
+\textbf{Importantes aclaraciones:}
+\begin{itemize}
+\item No es superioridad universal (la mayoría de problemas no tienen ventaja)
+\item Depende de la estructura específica del problema
+\item Requiere explotar fenómenos cuánticos (interferencia, entrelazamiento)
+\item No resuelve problemas NP-completos en tiempo polinomial
+\end{itemize}
+
+\vspace{0.2cm}
+\begin{block}{Fuentes de aceleración}
+\begin{itemize}
+\item Superposición $\rightarrow$ evaluar función en múltiples entradas simultáneamente
+\item Interferencia $\rightarrow$ amplificación/supresión de amplitudes
+\item Entrelazamiento $\rightarrow$ correlaciones no clásicas entre qubits
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Algoritmo de Deutsch-Jozsa}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\begin{block}{Problema}
+Determinar si $f:\{0,1\}^n \to \{0,1\}$ es constante o balanceada % (garantizado ser una de las dos).
+\end{block}
+
+% CORRECCIÓN: Precisión en complejidad de consultas
+\textbf{Comparación de complejidad:}
+\begin{itemize}
+\item \textcolor{red}{Clásico determinista}: $2^{n-1} + 1$ consultas (peor caso)
+\item \textcolor{orange}{Clásico probabilístico}: $O(1)$ con error acotado
+\item \textcolor{green}{Cuántico}: 1 consulta (sin error)
+\end{itemize}
+
+%\vspace{0.3cm}
+\begin{exampleblock}{Importancia histórica}
+Primer ejemplo de separación entre computación clásica y cuántica.\\
+\textbf{Ventaja:} Sobre algoritmo determinista, no sobre probabilístico.
+\end{exampleblock}
+
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{Qbits/src/I5.png}
+\caption{Diagrama del algoritmo Deutsch-Jozsa}
+\end{figure}
+
+\textbf{Limitación práctica:}
+\begin{itemize}
+\item Problema artificial % (promesa de constante o balanceada)
+\item Valor principalmente pedagógico
+\item Difícil encontrar aplicaciones reales
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Algoritmo de Grover}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\begin{block}{Problema}
+Búsqueda en base de datos no estructurada de $N$ elementos.
+\end{block}
+
+% CORRECCIÓN: Aclaración sobre optimalidad
+\textbf{Aceleración cuadrática:}
+\begin{itemize}
+\item \textcolor{red}{Clásico}: $O(N)$ consultas (óptimo clásico)
+\item \textcolor{green}{Cuántico}: $O(\sqrt{N})$ consultas
+\item \textbf{Óptimo:} Demostrado que ningún algoritmo cuántico puede hacer mejor % (cota inferior de Bennett et al., 1997)
+\end{itemize}
+
+%\vspace{0.1cm}
+\begin{exampleblock}{Impacto en criptografía}
+\begin{itemize}
+\item Ataques de fuerza bruta más eficientes
+\item AES-128 $\rightarrow$ seguridad efectiva de $2^{64}$ ops (no 64 bits)
+\item AES-256 $\rightarrow$ seguridad efectiva de $2^{128}$ ops
+\end{itemize}
+\end{exampleblock}
+
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{Qbits/src/I6.png}
+\caption{Algoritmo de Grover}
+\end{figure}
+
+%\vspace{0.3cm}
+\begin{alertblock}{Mitigación}
+Duplicar tamaño de claves simétricas mantiene seguridad post-cuántica.
+\end{alertblock}
+\end{columns}
+\end{frame}
+
+% FRAME ADICIONAL: Ejemplo numérico de Grover
+\begin{frame}{Ejemplo Numérico: Ventaja de Grover}
+\small
+\begin{exampleblock}{Búsqueda de contraseña de 4 bits}
+Base de datos: $N = 2^4 = 16$ posibilidades
+\begin{itemize}
+\item \textbf{Clásico:} Promedio $N/2 = 8$ intentos, peor caso $N = 16$
+\item \textbf{Grover:} $\sim \frac{\pi}{4}\sqrt{N} \approx 3.14$ iteraciones (4 en práctica)
+\end{itemize}
+Ventaja: $\sim 4\times$ más rápido
+\end{exampleblock}
+
+\vspace{0.15cm}
+\begin{exampleblock}{Escala a AES-128}
+Base de datos: $N = 2^{128}$ claves posibles
+\begin{itemize}
+\item \textbf{Clásico:} $\sim 2^{127}$ intentos promedio ($10^{38}$ operaciones)
+\item \textbf{Grover:} $\sim 2^{64}$ consultas ($10^{19}$ operaciones)
+\end{itemize}
+Ventaja: $2^{63} \approx 10^{19}\times$ más rápido
+\end{exampleblock}
+
+\textcolor{blue}{\textbf{Nota:}} Aunque $2^{64}$ aún es intratable hoy, proyecciones futuras motivan AES-256.
+\end{frame}
+
+\begin{frame}{Algoritmo de Shor}
+\begin{columns}[c]
+\column{0.55\textwidth}
+\begin{block}{Problema}
+Factorización de enteros y logaritmo discreto % (reducibles a order-finding).
+\end{block}
+
+% CORRECCIÓN: Precisión en complejidad
+\textbf{Complejidad (para factorizar entero de $n$ bits):}
+\begin{itemize}
+\item \textcolor{red}{Mejor clásico (GNFS)}: $\exp(O(n^{1/3} (\log n)^{2/3}))$ (subexponencial)
+\item \textcolor{green}{Shor}: $O(n^2 \log n \log \log n)$ con FFT cuántica % (polinomial)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Impacto devastador}
+\textbf{Sistemas completamente vulnerables:}
+\begin{itemize}
+\item RSA (factorización)
+\item Diffie-Hellman (logaritmo discreto mod $p$)
+\item ECDH/ECDSA (logaritmo discreto en curvas elípticas)
+\item DSA (logaritmo discreto)
+\end{itemize}
+\end{alertblock}
+
+\column{0.45\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Qbits/src/I7.png}
+\caption{Algoritmo de Shor en Qiskit}
+\end{figure}
+
+\vspace{0.3cm}
+\textcolor{blue}{\textbf{Implicación:}} Toda la infraestructura de clave pública actual (HTTPS, SSH, firmas digitales) queda comprometida.
+\end{columns}
+\end{frame}
+
+% FRAME ADICIONAL: Ejemplo concreto de Shor
+\begin{frame}{Ejemplo Concreto: Factorización con Shor}
+\small
+\begin{exampleblock}{Factorizar $N = 15$ (ejemplo didáctico)}
+\textbf{Paso 1:} Elegir $a$ coprimo con $N$, e.g., $a = 7$\\
+\textbf{Paso 2:} Encontrar el orden $r$ tal que $7^r \equiv 1 \pmod{15}$
+\begin{itemize}
+\item Clásicamente: probar $r=1,2,3,\ldots$
+\item Cuánticamente: usar Quantum Period Finding (QFT)
+\end{itemize}
+\textbf{Resultado:} $r = 4$ (porque $7^4 = 2401 \equiv 1 \pmod{15}$)\\
+\textbf{Paso 3:} Calcular $\gcd(7^{r/2} \pm 1, 15)$
+\begin{align*}
+\gcd(7^2 - 1, 15) = \gcd(48, 15) &= 3 \\
+\gcd(7^2 + 1, 15) = \gcd(50, 15) &= 5
+\end{align*}
+\textbf{Factorización:} $15 = 3 \times 5$ \checkmark
+\end{exampleblock}
+
+\textcolor{blue}{\textbf{Clave:}} La parte cuántica (encontrar $r$) es exponencialmente más rápida que clásica.
+\end{frame}
+
+% ============================================================
+\section{Impacto en la Criptografía}
+% ============================================================
+
+\begin{frame}{Amenazas a Sistemas Actuales}
+
+\begin{columns}[t]
+
+% -------- Columna izquierda --------
+\column{0.52\textwidth}
+
+\textbf{Criptografía Asimétrica}
+\begin{itemize}
+\item[\textcolor{red}{$\times$}] RSA vulnerable (Shor)
+\item[\textcolor{red}{$\times$}] ECC vulnerable (Shor)
+\item[\textcolor{red}{$\times$}] DH vulnerable (Shor)
+\item Seguridad completamente comprometida
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Criptografía Simétrica}
+\begin{itemize}
+\item[\textcolor{orange}{!}] AES parcialmente afectado (Grover)
+\item[\textcolor{orange}{!}] SHA-2/SHA-3 debilitado % (búsqueda de colisiones)
+\item Requiere claves más largas
+\item Aún viable con ajustes
+\end{itemize}
+
+% -------- Columna derecha --------
+\column{0.48\textwidth}
+
+\centering
+\includegraphics[width=0.5\textwidth]{Qbits/src/I8.png}
+
+\vspace{0.05cm}
+{\scriptsize Complejidad computacional Clásica vs Cuántica}
+
+\vspace{0.25cm}
+
+% CORRECCIÓN: Precisión en bits efectivos
+\begin{block}{Reducción de seguridad efectiva}
+\small
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Sistema} & \textbf{Bits nominales} & \textbf{Bits efectivos} \\
+\hline
+AES-128 & 128 & 64 \\
+AES-256 & 256 & 128 \\
+RSA-2048 & $\sim$112 & \textcolor{red}{0} \\
+SHA-256 & 256 & 128 % (búsqueda preimagen)\\
+\hline
+\end{tabular}
+\end{block}
+
+\end{columns}
+\end{frame}
+
+
+% ======================
+
+\begin{frame}{Limitaciones Tecnológicas Actuales}
+\small
+\begin{block}{¿Por qué no es una amenaza inmediata?}
+Hardware cuántico actual tiene importantes restricciones tecnológicas.
+\end{block}
+
+\vspace{0.2cm}
+% CORRECCIÓN: Datos actualizados (2024-2025)
+\textbf{Desafíos técnicos:}
+\begin{itemize}
+\item \textbf{Pocos qubits}: IBM Condor 1,121 qubits (2023), Atom Computing 1,180 qubits (2024)
+\item \textbf{Altas tasas de error}: Fidelidad 99-99.9\% (insuficiente para Shor)
+\item \textbf{Decoherencia}: Tiempo de coherencia $T_2 \sim 50-200$ $\mu$s
+\item \textbf{Corrección de errores}: Requiere $\sim 1,000-10,000$ qubits físicos por qubit lógico
+\end{itemize}
+
+\vspace{0.2cm}
+\begin{exampleblock}{Requisitos para romper RSA-2048}
+\begin{itemize}
+\item $\sim 20$ millones de qubits físicos ruidosos (estimación optimista)
+\item $\sim 10^3$ qubits lógicos con corrección de errores
+\item Tiempo de ejecución: 8-10 horas (estimación)
+\item Tecnología actual: 10-15 años de distancia (proyección conservadora)
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Amenaza de "Harvest Now, Decrypt Later"}
+\begin{alertblock}{Escenario de riesgo}
+Adversarios pueden almacenar datos cifrados hoy y descifrarlos cuando tengan acceso a computadoras cuánticas suficientemente potentes (horizonte: 10-20 años).
+\end{alertblock}
+
+\vspace{0.3cm}
+\textbf{Implicaciones:}
+\begin{itemize}
+\item Datos sensibles con valor a largo plazo están en riesgo \textbf{hoy}
+\item Secretos gubernamentales, militares, financieros
+\item Información de salud, propiedad intelectual, comunicaciones diplomáticas
+\end{itemize}
+
+\vspace{0.3cm}
+% CORRECCIÓN: Añadir datos concretos de NIST
+\begin{block}{Urgencia de transición}
+\begin{itemize}
+\item No podemos esperar a que existan computadoras cuánticas potentes
+\item La migración a criptografía post-cuántica debe comenzar \textbf{ahora}
+\item NIST estima 10-20 años para transición completa de infraestructura
+\item Directiva OMB (EE.UU.): Migración completa para 2035
+\end{itemize}
+\end{block}
+\end{frame}
+
+% ============================================================
+\section{Simulación con Qiskit}
+% ============================================================
+
+\begin{frame}{Plataforma Qiskit}
+\begin{block}{¿Qué es Qiskit?}
+Framework Python de código abierto de IBM para programación cuántica, simulación y acceso a hardware real.
+\end{block}
+
+\textbf{Componentes principales:}
+\begin{itemize}
+\item \textbf{Qiskit Terra}: Construcción y compilación de circuitos
+\item \textbf{Qiskit Aer}: Simuladores de alto rendimiento (CPU/GPU)
+\item \textbf{IBM Quantum Runtime}: Acceso a hardware real (127-1,121 qubits)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\textbf{Simulador AerSimulator:}
+\begin{itemize}
+\item Libre de ruido (ideal)
+\item Estados cuánticos exactos
+\item Reproducible (seed)
+\item Límite: $\sim$30 qubits % (memoria: $2^n \times 16$ bytes)
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Hardware Real:}
+\begin{itemize}
+\item 27-1,121 qubits (IBM, 2024)
+\item Errores de puerta: 0.1-3\% % (dependiendo del tipo)
+\item Decoherencia ($T_1, T_2$)
+\item Acceso limitado/costoso
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Ejemplos de Circuitos}
+\textbf{1. Estado de superposición $|+\rangle$:}
+\[
+H|0\rangle = \frac{1}{\sqrt{2}}(|0\rangle + |1\rangle) = |+\rangle
+\]
+
+\vspace{0.3cm}
+\textbf{2. Estado de Bell $|\Phi^+\rangle$:}
+\[
+|00\rangle \xrightarrow{H \otimes I} \frac{1}{\sqrt{2}}(|00\rangle + |10\rangle) \xrightarrow{\text{CNOT}} \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)
+\]
+
+\vspace{0.3cm}
+\begin{block}{Resultados de medición (teóricos)}
+\begin{itemize}
+\item Estado $|+\rangle$: $P(0) = P(1) = 50\%$
+\item Estado Bell: $P(00) = P(11) = 50\%$, $P(01) = P(10) = 0\%$
+\end{itemize}
+\end{block}
+
+\vspace{0.2cm}
+% CORRECCIÓN: Aclaración pedagógica
+\textcolor{blue}{La firma del entrelazamiento es la \underline{ausencia} de ciertos resultados (01, 10).\\
+En hardware real, pueden aparecer con $\sim 1-3\%$ por errores.}
+\end{frame}
+
+\begin{frame}{Convergencia Estadística}
+% CORRECCIÓN: Precisión en fórmula de error
+\begin{block}{Error de muestreo (Born rule)}
+Para $n$ mediciones (shots) de observable binario con $P(0) = P(1) = 0.5$:
+\[
+\sigma = \sqrt{\frac{P(1-P)}{n}} = \frac{1}{2\sqrt{n}}
+\]
+Para $P \neq 0.5$: $\sigma = \sqrt{P(1-P)/n}$
+\end{block}
+
+\vspace{0.1cm}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Shots} & \textbf{Error $\sigma$} & \textbf{Error relativo (\%)} \\
+\hline
+10 & 0.158 & 31.6\% \\
+100 & 0.050 & 10.0\% \\
+1,024 & 0.016 & 3.1\% \\
+10,000 & 0.005 & 1.0\% \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Implicación práctica}
+Mayor número de shots $\rightarrow$ mejor aproximación a probabilidades teóricas.\\
+\textbf{Trade-off:} Precisión vs. tiempo de ejecución (lineal en shots).
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Comparación: Clásico vs Cuántico}
+\textbf{Representación de estado:}
+\begin{itemize}
+\item $n$ bits clásicos: $n$ valores binarios (representación explícita)
+\item $n$ qubits: $2^n$ amplitudes complejas (espacio de Hilbert $\mathbb{C}^{2^n}$)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{block}{Crecimiento exponencial de recursos (simulación clásica)}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Qubits} & \textbf{Dimensión} & \textbf{Memoria (double complex)} \\
+\hline
+10 & $2^{10} = 1,024$ & 16 KB \\
+20 & $2^{20} \approx 10^6$ & 16 MB \\
+30 & $2^{30} \approx 10^9$ & 17 GB \\
+40 & $2^{40} \approx 10^{12}$ & 17 TB \\
+\hline
+\end{tabular}
+\end{center}
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Consecuencia:}
+\begin{itemize}
+\item Simulación clásica inviable para $n \gtrsim 45$ (memoria + tiempo)
+\item Hardware cuántico mantiene complejidad lineal en qubits físicos
+\end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Criptografía Post-Cuántica}
+% ============================================================
+
+\begin{frame}{Estrategias de Defensa}
+\begin{block}{Criptografía Post-Cuántica (PQC)}
+Algoritmos criptográficos seguros frente a adversarios cuánticos, pero implementables en hardware clásico (no requieren computadora cuántica).
+\end{block}
+
+\textbf{Familias principales:}
+\begin{enumerate}
+\item \textbf{Basados en retículas} (Lattice-based)
+\begin{itemize}
+\item Problema: Shortest Vector Problem (SVP), Learning With Errors (LWE)
+\item Ejemplo: CRYSTALS-Kyber (KEM), CRYSTALS-Dilithium (firma)
+\end{itemize}
+
+\item \textbf{Basados en códigos} (Code-based)
+\begin{itemize}
+\item Problema: decodificación de códigos lineales aleatorios
+\item Ejemplo: Classic McEliece (más antiguo, 1978)
+\end{itemize}
+
+\item \textbf{Basados en hash} (Hash-based)
+\begin{itemize}
+\item Firmas usando funciones hash resistentes a colisiones
+\item Ejemplo: SPHINCS+ (stateless hash-based signatures)
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Proceso de Estandarización NIST}
+% CORRECCIÓN: Timeline actualizado (2024)
+\begin{block}{Timeline completo}
+\begin{itemize}
+\item 2016: Convocatoria pública de propuestas (69 candidatos)
+\item 2017-2022: Tres rondas de evaluación (seguridad, rendimiento, implementación)
+\item \textbf{Julio 2022}: Anuncio de selección de finalistas
+\item \textbf{Agosto 2024}: Publicación de estándares FIPS 203, 204, 205
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Algoritmos estandarizados (FIPS):}
+\begin{itemize}
+\item \textcolor{green}{\textbf{ML-KEM (Kyber)}}: Encapsulación de claves (FIPS 203)
+\item \textcolor{green}{\textbf{ML-DSA (Dilithium)}}: Firmas digitales (FIPS 204)
+\item \textcolor{green}{\textbf{SLH-DSA (SPHINCS+)}}: Firmas sin estado (FIPS 205)
+\item \textcolor{green}{\textbf{FN-DSA (FALCON)}}: Firmas compactas (próximo estándar)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Recomendación NIST}
+Implementación \textbf{híbrida}: combinar algoritmos clásicos + post-cuánticos durante transición (e.g., X25519+Kyber para TLS 1.3).
+\end{alertblock}
+\end{frame}
+
+% FRAME ADICIONAL: Ejemplo concreto de PQC
+\begin{frame}{Ejemplo Concreto: Kyber (ML-KEM)}
+\small
+\begin{exampleblock}{Encapsulación de claves Kyber-768 (nivel de seguridad 3)}
+\textbf{Tamaños de claves y rendimiento:}
+\begin{itemize}
+\item Clave pública: 1,184 bytes
+\item Clave privada: 2,400 bytes
+\item Ciphertext: 1,088 bytes
+\item Operaciones: $\sim 0.1$ ms (generación + encaps + decaps en CPU moderno)
+\end{itemize}
+\end{exampleblock}
+
+\vspace{0.15cm}
+\begin{exampleblock}{Comparación con RSA-2048}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Métrica} & \textbf{RSA-2048} & \textbf{Kyber-768} \\
+\hline
+Clave pública & 256 bytes & 1,184 bytes \\
+Velocidad (keygen) & $\sim 10$ ms & $\sim 0.03$ ms \\
+Seguridad cuántica & \textcolor{red}{Roto} & \textcolor{green}{Seguro} \\
+\hline
+\end{tabular}
+\end{center}
+\end{exampleblock}
+
+\textcolor{blue}{\textbf{Ventaja:}} Kyber es más rápido que RSA \underline{y} resistente a Shor.
+\end{frame}
+
+\begin{frame}{Distribución Cuántica de Claves (QKD)}
+\footnotesize
+\begin{block}{Seguridad basada en física cuántica}
+QKD usa principios de mecánica cuántica (no-cloning, incertidumbre) para establecer claves secretas con seguridad incondicional (information-theoretic).
+\end{block}
+
+%\vspace{0.1cm}
+% CORRECCIÓN: Precisión en el protocolo BB84
+\textbf{Protocolo BB84 (Bennett-Brassard 1984):}
+\begin{enumerate}
+\item Alice prepara qubits en bases aleatorias ($Z = \{|0\rangle, |1\rangle\}$ o $X = \{|+\rangle, |-\rangle\}$)
+\item Bob mide en bases aleatorias ($Z$ o $X$)
+\item Comunicación pública \underline{autenticada}: comparan bases (no valores)
+\item Conservan bits donde coincidieron bases ($\sim 50\%$ de los qubits)
+\item \textbf{Detección de espionaje}: Comparar subconjunto (si error $> \epsilon$, abortar)
+\item \textbf{Corrección de errores + amplificación de privacidad}
+\end{enumerate}
+
+%\vspace{0.1cm}
+\begin{exampleblock}{Ventaja fundamental}
+\begin{itemize}
+\item Cualquier intercepción perturba el estado cuántico (no-cloning theorem)
+\item Detección \underline{probabilística} garantizada de espionaje
+\item Seguridad no depende de complejidad computacional (incondicional)
+\end{itemize}
+\end{exampleblock}
+
+\textbf{Limitaciones:} Canal cuántico dedicado (fibra $<$ 100-200 km sin repetidores). No escala como PQC.
+\end{frame}
+
+% ============================================================
+\section{Conclusiones}
+% ============================================================
+
+\begin{frame}{Conclusiones Principales}
+\begin{enumerate}
+\item \textbf{Amenaza real pero no inmediata}
+\begin{itemize}
+\item Algoritmos cuánticos (Shor, Grover) comprometen criptografía asimétrica actual
+\item Limitaciones tecnológicas (qubits, errores, coherencia) impiden implementación inmediata
+\item Riesgo de "harvest now, decrypt later" requiere acción \textbf{urgente hoy}
+\end{itemize}
+
+\vspace{0.3cm}
+\item \textbf{Transición necesaria y en curso}
+\begin{itemize}
+\item Criptografía post-cuántica ya estandarizada (NIST FIPS 203, 204, 205, 2024)
+\item Implementación híbrida recomendada para transición segura
+\item Proceso de migración completa: 10-20 años (infraestructura global)
+\end{itemize}
+
+\vspace{0.3cm}
+\item \textbf{Herramientas educativas y de investigación}
+\begin{itemize}
+\item Qiskit permite simulación accesible y prototipado
+\item Validación experimental de conceptos teóricos
+\item Preparación de workforce para era cuántica
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Trabajo Futuro}
+\textbf{Líneas de investigación propuestas:}
+\begin{itemize}
+\item Implementación y evaluación de rendimiento de PQC en sistemas reales (TLS, SSH, VPN)
+\item Análisis de seguridad de implementaciones híbridas (combinación clásico + PQC)
+\item Simulación de ataques cuánticos a escala mayor (30-40 qubits)
+\item Desarrollo de protocolos QKD con hardware accesible (FPGA, fotónica integrada)
+\item Análisis de side-channel attacks en algoritmos PQC (timing, power, cache)
+\item Optimización de corrección de errores cuánticos (códigos topológicos, LDPC)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{block}{Meta a largo plazo}
+Desarrollar infraestructura criptográfica robusta que sea segura en el paradigma post-cuántico, combinando algoritmos PQC eficientes con protocolos cuánticos cuando sea ventajoso.
+\end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Referencias}
+\scriptsize
+\raggedright
+
+\begin{thebibliography}{99}
+
+\bibitem{nielsen}
+M. A. Nielsen and I. L. Chuang,
+\textit{Quantum Computation and Quantum Information},
+Cambridge University Press, 2010.
+
+\bibitem{nist}
+NIST,
+\textit{Post-Quantum Cryptography Standardization},
+\url{https://csrc.nist.gov/projects/post-quantum-cryptography}
+
+\bibitem{nist-fips}
+NIST,
+\textit{FIPS 203, 204, 205: Module-Lattice-Based Key-Encapsulation Mechanism, Digital Signature Algorithm, Stateless Hash-Based Digital Signature},
+August 2024.
+
+\bibitem{qiskit}
+IBM Qiskit,
+\textit{Quantum Computing Framework},
+\url{https://qiskit.org/}
+
+% AGREGADO: Referencias sobre complejidad y límites
+\bibitem{bennett1997}
+C. H. Bennett et al.,
+\textit{Strengths and Weaknesses of Quantum Computing},
+SIAM Journal on Computing, 1997.
+
+\bibitem{mosca2018}
+M. Mosca,
+\textit{Cybersecurity in an Era with Quantum Computers: Will We Be Ready?},
+IEEE Security \& Privacy, 2018.
+
+\bibitem{cloudflare}
+Nick Sullivan,
+\textit{Primer on Elliptic Curve Cryptography},
+Cloudflare Blog, 2013.
+
+% criptografia
+
+\bibitem{omondi}
+Omondi, Amos. (2020). \textit{Cryptography Arithmetic: Algorithms and Hardware Architectures}.
+
+\bibitem{computerphile-prime}
+Computerphile, \textit{Prime Numbers \& RSA Encryption Algorithm}, YouTube, \url{http://youtube.com/watch?v=JD72Ry60eP4}
+
+\bibitem{freecodecamp-euclid}
+freeCodeCamp, \textit{Euclidian GCD Algorithm — Greatest Common Divisor}, \url{https://www.freecodecamp.org/news/euclidian-gcd-algorithm-greatest-common-divisor/}
+
+\bibitem{brilliant-euclid}
+Brilliant.org, \textit{Extended Euclidean Algorithm}, \url{https://brilliant.org/wiki/extended-euclidean-algorithm/}
+
+\bibitem{cpalg-euclid}
+e-maxx / CP-Algorithms, \textit{Extended Euclid (Extended GCD)}, \url{https://cp-algorithms.com/algebra/extended-euclid-algorithm.html}
+
+\bibitem{ninjaone-dh}
+NinjaOne, \textit{Intercambio de claves Diffie-Hellman — ¿Qué es?}, \url{https://www.ninjaone.com/es/it-hub/endpoint-security/intercambio-de-claves-diffie-hellman-que-es/}
+
+\bibitem{academia-lab-dh}
+Academia-Lab, \textit{Intercambio de llaves Diffie-Hellman (Guía)}, \url{https://academia-lab.com/enciclopedia/intercambio-de-llaves-diffie-hellman/}
+
+\end{thebibliography}
+\end{frame}
+
+\end{document}

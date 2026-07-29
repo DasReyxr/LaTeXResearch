@@ -1,0 +1,120 @@
+% Bitácora: Raíces primitivas y orden multiplicativo
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage[spanish]{babel}
+\usepackage{microtype}
+\title{Bitácora: Raíces primitivas y orden multiplicativo}
+\author{Generada por asistencia — contenido pedagógico}
+\date{\today}
+\begin{document}
+\maketitle
+\begin{abstract}
+Este documento recoge, de forma clara y ordenada, las definiciones, explicaciones y ejemplos relativos al concepto de \emph{orden multiplicativo} y \emph{raíces primitivas} módulo $n$. Incluye demostraciones cortas, el criterio práctico para probar primitividad y ejemplos desarrollados paso a paso (incluyendo el algoritmo de Euclides cuando procede).
+\end{abstract}
+
+\section{Introducción}
+En teoría de números y criptografía es fundamental entender cuándo un entero $a$ es invertible módulo $n$, cuál es su orden multiplicativo y qué significa que un número sea una raíz primitiva (generador del grupo multiplicativo de unidades módulo $n$). Esta bitácora explica estos conceptos con pruebas y ejemplos.
+
+\section{Números coprimos y el algoritmo euclidiano}
+\begin{definition}
+Decimos que $a$ y $n$ son \emph{coprimos} (o primos relativos) si $\gcd(a,n)=1$. Cuando esto ocurre, $a$ tiene inverso multiplicativo módulo $n$; es decir existe $b$ tal que $ab\equiv1\pmod n$.
+\end{definition}
+
+\subsection{Algoritmo de Euclides (ejemplo)}
+Calcular $\gcd(8,15)$ usando el algoritmo de Euclides:
+\[
+\begin{aligned}
+15 &= 8\cdot 1 + 7\\
+8  &= 7\cdot 1 + 1\\
+7  &= 1\cdot 7 + 0
+\end{aligned}
+\]
+El último resto no nulo es $1$, así $\gcd(8,15)=1$, por tanto $8$ y $15$ son coprimos.
+
+\section{Orden multiplicativo}
+\begin{definition}
+Sea $n\ge 2$ y $a$ un entero con $\gcd(a,n)=1$. La \emph{orden multiplicativa} de $a$ módulo $n$, denotada $\operatorname{ord}_n(a)$, es el menor entero positivo $d$ tal que
+\[a^d\equiv1\pmod n.\]
+\end{definition}
+
+\subsection{Propiedad importante: la orden divide $\varphi(n)$}
+Sea $\varphi(n)$ la función totiente de Euler (el número de enteros entre $1$ y $n$ coprimos con $n$). Una consecuencia de la teoría de grupos finitos (o directamente de la identidad de Euler) es:
+\[a^{\varphi(n)}\equiv1\pmod n.\]
+Si $d=\operatorname{ord}_n(a)$, escribimos $\varphi(n)=qd+r$ con $0\le r<d$. Entonces
+\[1=a^{\varphi(n)}=a^{qd+r}=\bigl(a^d\bigr)^q a^r\equiv a^r\pmod n.\]
+Por la minimalidad de $d$ debe ser $r=0$, por tanto $d\mid\varphi(n)$. En palabras: la orden de $a$ es un divisor de $\varphi(n)$.
+
+\section{Raíz primitiva (generador)}
+\begin{definition}
+Un entero $g$ es una \emph{raíz primitiva} módulo $n$ si $\gcd(g,n)=1$ y
+\[\operatorname{ord}_n(g)=\varphi(n).\]
+Es decir, las potencias de $g$ generan todas las unidades módulo $n$.
+\end{definition}
+
+\subsection{Criterio práctico para comprobar primitividad}
+Sea $m=\varphi(n)$ y factorícala en primos
+\[m=\prod_{i=1}^k p_i^{e_i},\]
+donde los $p_i$ son los primos distintos que dividen $m$. No es necesario probar todos los divisores de $m$: basta comprobar para cada primo distinto $p_i$ que
+\[g^{m/p_i}\not\equiv1\pmod n.\]
+Si alguna de estas potencias fuera congruente a $1$, entonces la orden de $g$ dividiría $m/p_i<m$, por tanto no sería primitiva. Si ninguna da $1$, ningún divisor propio de $m$ puede ser la orden, y entonces la orden debe ser exactamente $m$.
+
+\paragraph{Por qué basta probar los primos distintos} Supongamos que existe un divisor propio $d$ de $m$ tal que $g^d\equiv1$. Entonces $d$ comparte con $m$ un primo $p$ tal que el exponente de $p$ en $d$ es menor que en $m$, y por tanto $d\mid m/p$. Luego $g^{m/p}\equiv1$. Esto muestra que probar los cocientes $m/p_i$ detecta cualquier divisor propio posible de $m$.
+
+\section{Ejemplos detallados}
+\subsection{Ejemplo: $n=13$, $a=2$}
+Aquí $n=13$ es primo, por lo que
+\[\varphi(13)=12=2^2\cdot3.\]
+Los primos distintos que dividen $m=12$ son $2$ y $3$. Según el criterio práctico basta comprobar
+\[2^{12/2}=2^6\quad\text{y}\quad 2^{12/3}=2^4\pmod{13}.\]
+Cálculos:
+\[2^6=64\equiv12\not\equiv1\pmod{13},\qquad 2^4=16\equiv3\not\equiv1\pmod{13}.\]
+Como ninguna potencia con exponente $12/2=6$ ni $12/3=4$ da $1$, no existe divisor propio de $12$ que sea la orden de $2$. Dado que la orden divide $12$, concluimos
+\[\operatorname{ord}_{13}(2)=12,\]
+es decir, $2$ es raíz primitiva módulo $13$.
+
+\subsection{Ejemplo: $n=8$}
+Aquí $\varphi(8)=4$. Las unidades módulo 8 son $1,3,5,7$. 
+Estas son las unidades porque son exactamente los enteros $a$ con $1\le a<8$ tales que $\gcd(a,8)=1$ (tienen inverso multiplicativo módulo $8$). Como $8=2^3$, cualquier múltiplo de $2$ no es coprimo con $8$, por eso las únicas opciones son los impares: $1,3,5,7$. Además $\varphi(8)=4$ coincide con el número de unidades.
+
+Cálculo del MCD con el algoritmo de Euclides:
+\[
+\begin{aligned}
+\gcd(1,8)&=1\quad(\text{trivial})\\[4pt]
+8&=3\cdot2+2\\
+3&=2\cdot1+1\\
+2&=1\cdot2+0\quad\Rightarrow\ \gcd(3,8)=1\\[6pt]
+8&=5\cdot1+3\\
+5&=3\cdot1+2\\
+3&=2\cdot1+1\\
+2&=1\cdot2+0\quad\Rightarrow\ \gcd(5,8)=1\\[6pt]
+8&=7\cdot1+1\\
+7&=1\cdot7+0\quad\Rightarrow\ \gcd(7,8)=1
+\end{aligned}
+\]
+Por tanto todas las comprobaciones dan $1$, confirmando que $1,3,5,7$ son unidades módulo $8$.
+Probamos las potencias:
+\[3^2=9\equiv1,\quad 5^2=25\equiv1,\quad 7^2=49\equiv1\pmod8.\]
+Todas las órdenes son $1$ o $2$, por tanto no existe elemento de orden $4$ y no hay raíz primitiva módulo $8$. Este caso coincide con la clasificación: raíces primitivas existen sólo para $n=1,2,4,p^k,2p^k$ con $p$ primo impar.
+
+\section{Resumen y recomendaciones para el examen/práctica}
+\begin{itemize}[noitemsep]
+\item Para decidir si $g$ es raíz primitiva módulo $n$: factoriza $m=\varphi(n)$ (sólo hasta obtener los primos distintos), y para cada primo $p\mid m$ comprueba si $g^{m/p}\not\equiv1$. Si todas las comprobaciones fallan (es decir, nunca sale $1$), $g$ es primitiva.
+\item No necesitas comprobar todos los divisores de $m$, sólo los cocientes $m/p$ para cada primo distinto $p\mid m$.
+\item Usa el algoritmo de Euclides para verificar $\gcd(a,n)=1$ cuando tengas dudas; si el gcd no es $1$ entonces $a$ no es invertible y no tiene orden.
+\end{itemize}
+
+\section{Posibles ampliaciones}
+Si quieres, puedo:
+\begin{enumerate}
+\item Añadir demostraciones más formales (por ejemplo usando teoría de grupos finitos).
+\item Incluir un algoritmo en pseudocódigo para comprobar primitividad (factorización de $\varphi(n)$ + tests rápidos de potencias módulo $n$).
+\item Generar una versión en formato Beamer lista para pegar en tus diapositivas.
+\end{enumerate}
+
+\end{document}

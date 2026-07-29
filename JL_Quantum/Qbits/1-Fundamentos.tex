@@ -1,0 +1,353 @@
+\documentclass[aspectratio=169]{beamer}
+
+% =========================
+% TEMA
+% =========================
+\usetheme{SimplePlus}
+
+% =========================
+% IDIOMA (SOLO polyglossia)
+% =========================
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+
+% =========================
+% FUENTES (Unicode real)
+% =========================
+\setmainfont{Latin Modern Roman}
+
+% =========================
+% MATEMÁTICAS (FORZADAS A IMAGEN)
+% =========================
+\usepackage{amsmath, amssymb}
+\usepackage{bm}
+
+% Evita que Canva intente "leer" el math
+\usepackage{graphicx}
+
+% =========================
+% HIPERVÍNCULOS
+% =========================
+\usepackage{hyperref}
+
+
+% Información de la presentación
+\title{Fundamentos Matemáticos de Criptografía}
+\subtitle{Reporte de Investigación Exploratoria}
+\author{Contreras Reyes Orlando \and García Barrera Iker Emiliano}
+\institute{Universidad Autónoma de Aguascalientes \\ Ingeniería Electrónica}
+\date{\today}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+\titlepage
+\end{frame}
+
+% Índice
+\begin{frame}{Contenido}
+\tableofcontents
+\end{frame}
+
+% ============================================================
+
+% ============================================================
+
+\begin{frame}{Motivación}
+\begin{block}{¿Por qué es importante?}
+Los sistemas criptográficos modernos como RSA y Diffie-Hellman se fundamentan en propiedades de la teoría de números. Comprender estos conceptos es esencial para entender cómo funcionan y por qué son seguros.
+\end{block}
+
+\vspace{0.5cm}
+
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Conceptos clave:}
+\begin{itemize}
+\item Aritmética modular
+\item Números coprimos y función totiente
+\item Orden multiplicativo
+\item Raíces primitivas
+\item Algoritmo Euclídeo Extendido
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Aplicaciones:}
+\begin{itemize}
+\item Intercambio de claves (Diffie-Hellman)
+\item Cifrado asimétrico (RSA)
+\item Cálculo de inversos modulares
+\item Generación de claves seguras
+\end{itemize}
+\end{columns}
+\end{frame}
+
+% ============================================================
+% ------- Teoría de Números -------
+\section{Arimtetica Modular}
+
+% ============================================================
+\begin{frame}{Aritmetica Modular}
+\begin{block}{Definición - Aritmética Modular}
+    La aritmética modular es un sistema de aritmética para enteros, donde los números "vuelven a empezar" después de alcanzar un cierto valor llamado el módulo. 
+    Definase la expresión
+    $$c= a \pmod b \quad \equiv \quad a = n\cdot b + c$$
+\textbf{Propiedades}
+    \begin{itemize}
+        \item Si $a \equiv b \pmod n$ y $c \equiv d \pmod n$, entonces 
+        \begin{itemize}
+            \item $a\pm c \equiv b\pm d \pmod n$
+            \item $a\cdot c \equiv b\cdot d \pmod n$
+        \end{itemize}
+    \end{itemize}
+\end{block}
+
+\begin{exampleblock}{Ejemplo cotidiano}
+    Un ejemplo que se muestra en nuestro día a día es el formato de reloj 24 Horas, de forma que si se lee 15 horas nuestra mente automáticamente desarrolla este algoritmo
+    $$15  \pmod {12} =3 \quad \equiv \quad 15=1\cdot 12+3$$
+\end{exampleblock}
+    
+\end{frame}
+
+\begin{frame}{Aritmetica Modular Ejemplo Visual}
+\begin{block}{Prime Numbers \& RSA Encryption Algorithm - Computerphile}
+\centering
+\vspace{2mm}
+\noindent\makebox[\linewidth]{\rule{0pt}{3.8cm}} % reserva 5.5cm de alto
+\vspace{2mm}
+\end{block}
+\begin{block}{Crestomatía}
+    Extraido de \url{http://youtube.com/watch?v=JD72Ry60eP4} \\\textit{Prime Numbers \& RSA Encryption Algorithm - Computerphile}
+\end{block}
+    
+\end{frame}
+% gcd 
+\subsection{Número coprimo y función totiente}
+\begin{frame}{Número coprimo y función totiente}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{block}{Definición - Número coprimo}
+Un entero $a$ es coprimo con $n$ si $\gcd(a,n)=1$. Estos son los elementos invertibles módulo $n$ (las unidades).
+\end{block}
+
+\textbf{Ejemplo (algoritmo euclidiano):} calcular $\gcd(8,15)$
+\[
+\begin{aligned}
+15 &= 8\cdot1 + 7\\
+8  &= 7\cdot1 + 1\\
+7  &= 1\cdot7 + 0
+\end{aligned}
+\]
+El último resto no nulo es $1$, por tanto $\gcd(8,15)=1$ y $8$ y $15$ son coprimos.
+
+\column{0.5\textwidth}
+\begin{block}{Función totiente $\varphi(n)$}
+La función totiente de Euler $\varphi(n)$ cuenta cuántos enteros $1\le k\le n$ son coprimos con $n$ (es decir, el número de unidades módulo $n$).
+\end{block}
+
+\textbf{Propiedades rápidas:}
+\begin{itemize}
+\item Si $p$ es primo, $\varphi(p)=p-1$.
+\item Si $p$ es primo y $e\ge1$, $\varphi(p^e)=p^e-p^{e-1}=p^{e-1}(p-1)$.
+\item Si $\gcd(a,b)=1$ entonces $\varphi(ab)=\varphi(a)\varphi(b)$.
+\end{itemize}
+
+\textbf{Ejemplo:} $\varphi(8)=4$ (unidades $1,3,5,7$),\quad $\varphi(13)=12$.
+\end{columns}
+\end{frame}
+\subsection{Orden multiplicativo}
+\begin{frame}{Orden multiplicativo}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{alertblock}{Teorema - Generalización de Euler}
+Si $\gcd(a,n)=1$, entonces\\ 
+$a^{\varphi(n)}\equiv 1 \pmod n$.
+\end{alertblock}
+\begin{block}{Definición - Orden multiplicativo}
+Para $\gcd(a,n)=1$, la orden $\operatorname{ord}_n(a)$ es el \textbf{mínimo} $d>0$ tal que $a^d\equiv1\pmod n$.
+\end{block}
+\scriptsize Fuentes: \cite{eulertheorem}
+% https://brilliant.org/wiki/eulers-theorem/
+
+\normalsize
+\textbf{Propiedades:}
+\begin{itemize}
+\item $\operatorname{ord}_n(a)$ siempre divide a $\varphi(n)$
+\item Los divisores de $\varphi(n)$ son los únicos valores posibles para $\operatorname{ord}_n(a)$
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{exampleblock}{Ejemplo: $n=7$, $a=3$}
+Sabemos que $\varphi(7)=6$, por Euler: $3^6 \equiv 1 \pmod 7$.
+
+Pero ¿es 6 el \textbf{mínimo}? Verificamos:
+\[
+\begin{aligned}
+3^1 &\equiv 3 \pmod 7\\
+3^2 &\equiv 2 \pmod 7\\
+3^3 &\equiv 6 \pmod 7\\
+3^4 &\equiv 4 \pmod 7\\
+3^5 &\equiv 5 \pmod 7\\
+3^6 &\equiv 1 \pmod 7 \quad \checkmark
+\end{aligned}
+\]
+$\therefore \operatorname{ord}_7(3)=6$
+\end{exampleblock}
+\end{columns}
+\end{frame}
+\subsection{Raíces Primitivas}
+\begin{frame}{Raíz Primitiva}
+    \begin{columns}[c]
+\column{0.55\textwidth}
+\begin{block}{Definición - Pequeño Teorema de Fermat}
+Si se cumple que $p$ es primo, $a \in \mathbb{N}$ y
+$a$ no es múltiplo de $p$, entonces 
+$$a^{p-1}   \equiv 1 \pmod p$$
+
+\end{block}
+
+\begin{block}{Definición - Raíz primitiva}
+Sea $p$ primo. Un entero $g$ es \emph{raíz primitiva} módulo $p$ si $\operatorname{ord}_p(g) = \varphi(p) = p-1$, las potencias $g^1, g^2, \dots, g^{p-1} \pmod{p}$ son todas distintas.
+\end{block}
+\scriptsize Fuentes: \cite{omondi,wolfram,Fermatito}
+% https://mathworld.wolfram.com/EuclideanAlgorithm.html
+% https://homepages.math.uic.edu/~leon/mcs425-s08/handouts/PrimitiveElements.pdf
+
+\begin{exampleblock}{Ejemplo 1: $p=5 \ g=2$ }
+$\varphi(5)=4$. Todas las $1\le n\le4$ son unidades. Tomando $a=2$ en la imagen
+\end{exampleblock}
+
+\column{0.45\textwidth}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Qbits/src/Fermat.png}
+    \caption{Pequeño Teorema de Fermat}
+\end{figure}
+\end{columns}
+
+\end{frame}
+
+\subsection{Existencia de raíces primitivas}
+\begin{frame}{Existencia de raíces primitivas}
+
+
+
+\begin{alertblock}{Teorema - Existencia de raíces primitivas}
+Existen raíces primitivas módulo $n$ si  $n \in \{1,2,4,p^k,2p^k\}$ con $k \ge 1$ y $p$ primo impar.
+\end{alertblock}
+\begin{exampleblock}{Ejemplo - Existencia de Raíces Primitivas}
+\textbf{Ejemplo: $n=9=3^2$ (caso $p^k$)}
+
+$\varphi(9)=9-3=6$. Buscamos $g$ tal que $\operatorname{ord}_9(g)=6$. Probando $g=2$:
+\[
+2^1\equiv2,\; 2^2\equiv4,\; 2^3\equiv8,\; 2^4\equiv7,\; 2^5\equiv5,\; 2^6\equiv1 \pmod9 \therefore  g = 2 \text{ es raíz mod } 9
+\]
+
+\textbf{Ejemplo: $n=18=2\cdot3^2$ (caso $2p^k$)}
+
+$\varphi(18)=\varphi(2)\cdot\varphi(9)=1\cdot6=6$. Buscamos $g$ tal que $\operatorname{ord}_{18}(g)=6$. Probando $g=5$:
+\[
+5^1\equiv5,\; 5^2\equiv7,\; 5^3\equiv17,\; 5^4\equiv13,\; 5^5\equiv11,\; 5^6\equiv1 \pmod{18} \therefore  g = 5 \text{ es raíz mod } 18
+\]
+
+\end{exampleblock}
+
+\end{frame}
+\subsection{Algoritmo Euclídeo Extendido}
+\begin{frame}{Algoritmo Euclídeo Extendido — Lema de Bézout}
+    \begin{block}{Lema de Bézout}
+      Para cualesquiera enteros $a,b$ no ambos cero, existe una combinación lineal
+      $$ax+by = \gcd(a,b) \quad x,y\in\mathbb{Z}$$
+      En particular, si $\gcd(a,b)=1$ entonces existen $x,y$ tales que $ax+by=1$.
+    \end{block}
+    \textbf{Resumen del método:}
+    \begin{enumerate}
+      \item Ejecutar divisiones sucesivas $r_{i-2}=q_i r_{i-1}+r_i$ hasta obtener $r_n=0$.
+      \item El último resto no nulo $r_{n-1}$ es $\gcd(a,b)$. Retro-sustituir las igualdades anteriores para escribir $r_{n-1}=ax+by$.
+    \end{enumerate}
+ 
+
+    \begin{block}{Importancia}
+      - Provee inversos multiplicativos módulo $n$ cuando $\gcd(a,n)=1$.\\
+      - Base para el cálculo del inverso modular mediante la retro-sustitución.
+    \end{block}
+    \scriptsize Fuentes: \cite{freecodecamp-euclid,brilliant-euclid,cpalg-euclid}
+% https://www.freecodecamp.org/news/euclidian-gcd-algorithm-greatest-common-divisor/
+% https://brilliant.org/wiki/extended-euclidean-algorithm/
+% https://cp-algorithms.com/algebra/extended-euclid-algorithm.html
+    
+\end{frame}
+
+\begin{frame}{Ejemplo: Euclídeo Extendido (60,\,7)}
+\begin{exampleblock}{Cálculo paso a paso}
+Aplicamos divisiones sucesivas:
+\[
+  \begin{array}{rcl}
+    60 &=& 7\cdot 8 + 4\\
+    7  &=& 4\cdot 1 + 3\\
+    4  &=& 3\cdot 1 + 1\\
+    3  &=& 1\cdot 3 + 0
+  \end{array}
+\]
+Retro-sustitución para escribir $1$ como combinación de $60$ y $7$:
+\[
+  \begin{aligned}
+    1 &= 4-3\\
+      &= 4-(7-4) = 2\cdot4 - 7\\
+      &= 2(60-7\cdot8)-7 = 2\cdot60 -17\cdot7.
+  \end{aligned}
+\]
+Por tanto $\gcd(60,7)=1$ y una representación es $2\cdot60 + (-17)\cdot7 = 1$,
+Se puede expresar entonces como  $7^{-1}\bmod 60 \equiv -17 \equiv 43 \pmod {60}$.
+\end{exampleblock}
+\vspace{6pt}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Referencias}
+\scriptsize
+\raggedright
+
+\setbeamertemplate{bibliography item}[text]
+\newcounter{romanbib}
+\renewcommand{\theromanbib}{\Roman{romanbib}}
+\makeatletter
+\makeatother
+
+\begin{thebibliography}{99}
+
+% --- Teorema de Euler y Orden Multiplicativo ---
+\bibitem{eulertheorem}
+Brilliant.org, \textit{Euler's Theorem}, \url{https://brilliant.org/wiki/eulers-theorem/}
+
+% --- Raíces Primitivas y Teorema de Fermat ---
+\bibitem{omondi}
+Omondi, Amos. (2020). \textit{Cryptography Arithmetic: Algorithms and Hardware Architectures}.
+
+\bibitem{wolfram}
+Wolfram Alpha, \textit{Euclidean Algorithm}, \url{https://mathworld.wolfram.com/EuclideanAlgorithm.html}
+
+\bibitem{Fermatito}
+University of Illinois at Chicago, \textit{Primitive Elements and Indices in Finite Fields}, 
+\url{https://homepages.math.uic.edu/~leon/mcs425-s08/handouts/PrimitiveElements.pdf}
+
+% --- Algoritmo Euclídeo Extendido ---
+\bibitem{freecodecamp-euclid}
+freeCodeCamp, \textit{Euclidian GCD Algorithm — Greatest Common Divisor}, \url{https://www.freecodecamp.org/news/euclidian-gcd-algorithm-greatest-common-divisor/}
+
+\bibitem{brilliant-euclid}
+Brilliant.org, \textit{Extended Euclidean Algorithm}, \url{https://brilliant.org/wiki/extended-euclidean-algorithm/}
+
+\bibitem{cpalg-euclid}
+e-maxx / CP-Algorithms, \textit{Extended Euclid (Extended GCD)}, \url{https://cp-algorithms.com/algebra/extended-euclid-algorithm.html}
+
+% --- Referencias adicionales ---
+
+\end{thebibliography}
+\end{frame}
+
+\end{document}

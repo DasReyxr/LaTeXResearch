@@ -1,0 +1,942 @@
+\documentclass[aspectratio=169]{beamer}
+
+% =========================
+% TEMA
+% =========================
+\usetheme{SimplePlus}
+
+% =========================
+% IDIOMA (SOLO polyglossia)
+% =========================
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+
+% =========================
+% FUENTES (Unicode real)
+% =========================
+\setmainfont{Latin Modern Roman}
+
+% =========================
+% MATEMÁTICAS (FORZADAS A IMAGEN)
+% =========================
+\usepackage{amsmath, amssymb}
+\usepackage{bm}
+
+% Evita que Canva intente "leer" el math
+\usepackage{graphicx}
+
+% =========================
+% HIPERVÍNCULOS
+% =========================
+\usepackage{hyperref}
+
+
+% Información de la presentación
+\title{Computación Cuántica y su Impacto en la Criptografía Moderna}
+\subtitle{Reporte de Investigación Exploratoria}
+\author{Contreras Reyes Orlando \and García Barrera Iker Emiliano}
+\institute{Universidad Autónoma de Aguascalientes \\ Ingeniería Electrónica}
+\date{\today}
+
+\begin{document}
+
+% Diapositiva de título
+\begin{frame}
+\titlepage
+\end{frame}
+
+% Índice
+\begin{frame}{Contenido}
+\tableofcontents
+\end{frame}
+
+% ============================================================
+\section{Introducción}
+% ============================================================
+
+\begin{frame}{Motivación}
+\begin{block}{¿Por qué es importante?}
+La computación cuántica representa un cambio paradigmático que amenaza la seguridad de los sistemas criptográficos actuales.
+\end{block}
+
+\vspace{0.5cm}
+
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{Objetivos:}
+\begin{itemize}
+\item Comprender fundamentos cuánticos
+\item Analizar algoritmos relevantes
+\item Evaluar impacto en criptografía
+\item Explorar soluciones post-cuánticas
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Metodología:}
+\begin{itemize}
+\item Revisión teórica
+\item Simulación con Qiskit
+\item Análisis comparativo
+\item Evaluación de riesgos
+\end{itemize}
+\end{columns}
+\end{frame}
+
+
+
+% ============================================================
+\section{Criptografía Clásica}
+% ============================================================
+\subsection{Algoritmos Simétricos vs Asimétricos}
+\begin{frame}{Algoritmos Simétricos vs Asimétricos}
+\begin{columns}[c]
+\column{0.45\textwidth}
+\textbf{Simétrica}
+\begin{itemize}
+\item Misma clave para cifrar/descifrar
+\item Rápida y eficiente
+\item Problema: distribución de claves
+\item Ejemplo: AES
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{Asimétrica}
+\begin{itemize}
+\item Clave pública + clave privada
+\item Más lenta
+\item Facilita intercambio seguro
+\item Ejemplo: RSA, ECC
+\end{itemize}
+
+\column{0.55\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{Qbits/src/CriptografiaSimetricayAsimetrica.png}
+\caption{Diferencias entre métodos de encriptación}
+\end{figure}
+\end{columns}
+
+\vspace{0.1cm}
+\begin{alertblock}{Práctica común}
+Combinación híbrida: asimétrica para intercambio de claves + simétrica para datos.
+\end{alertblock}
+\end{frame}
+% ============================================================
+% ------- RSA, ECC, Diffie-Hellman -------
+% ============================================================
+
+\begin{frame}{RSA: Fundamentos}
+\begin{columns}[c]
+\column{0.55\textwidth}
+\begin{block}{Seguridad basada en factorización}
+RSA se basa en la dificultad de factorizar números grandes.
+\end{block}
+
+\textbf{Construcción:}
+\begin{enumerate}
+\item Elegir primos grandes $p, q$: \quad $n = pq$
+\item Calcular totiente: \quad $\phi(n) = (p-1)(q-1)$
+\item Seleccionar $e$ y calcular $d$ usando algoritmo euclidiano extendido
+\end{enumerate}
+
+\textbf{Cifrado/Descifrado:}
+\begin{align*}
+\text{Cifrado:} \quad & c = m^e \bmod n \\
+\text{Descifrado:} \quad & m = c^d \bmod n
+\end{align*}
+
+\column{0.45\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{Euc GCD.png}
+\caption{Algoritmo Euclidiano (GCD)}
+\end{figure}
+
+\vspace{0.2cm}
+\begin{itemize}
+\item Clave pública: $(e, n)$
+\item Clave privada: $(d, n)$
+\end{itemize}
+\end{columns}
+\vspace{3pt}
+\scriptsize Fuente: \cite{academia-lab-dh}
+% https://academia-lab.com/enciclopedia/intercambio-de-llaves-diffie-hellman/
+\end{frame}
+
+
+
+\begin{frame}{RSA Ejemplo}
+
+\begin{exampleblock}{Ejemplo numérico (pequeño)}
+Elijamos primos $p=7$, $q=11$. Entonces $n=pq=77$ y $\varphi(n)=(p-1)(q-1)=6\cdot10$ $\varphi(n)=60$.
+Tomamos $e=7$ (con $\gcd(e,\varphi(n))=1$, como se muestra en el calculo inferior). \\
+\[
+60=7\cdot8+4,\quad 7=4\cdot1+3,\quad 4=3\cdot1+1, 3= 1\cdot3+0 \quad \text{GCD}(60,7)=1
+\]
+Calculamos $d\equiv e^{-1}\pmod{60}$ usando Euclides extendido y se obtiene $d\equiv 43\pmod{60}$.
+
+Sea el mensaje $m=13$. Ciframos:
+\[
+c\equiv 13^7 \pmod{77}=62.
+\]
+Descifrando,
+\[
+m\equiv c^{43}\pmod{77}=13,
+\]
+recuperando el mensaje original. Así $c=m^e\bmod n$ y $m=c^d\bmod n$ con la notación estándar RSA.
+\end{exampleblock}
+
+\end{frame}
+
+
+
+% https://academia-lab.com/enciclopedia/intercambio-de-llaves-diffie-hellman/
+
+\begin{frame}{Criptografía de Curva Elíptica (ECC)}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\begin{block}{Ventaja sobre RSA}
+Misma seguridad con claves más cortas $\rightarrow$ mayor eficiencia.
+\end{block}
+
+\textbf{Fundamento matemático:}
+\begin{itemize}
+\item Curvas: $y^2 = x^3 + ax + b$
+\item Problema del logaritmo discreto en curvas elípticas
+\item Operación de grupo sobre puntos
+\end{itemize}
+
+\vspace{0.2cm}
+
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Qbits/src/ECCRSA.png}
+\caption{Comparación con respecto a los bits de encriptación}
+\end{figure}
+
+\vspace{0.3cm}
+\centering
+\textcolor{blue}{Ideal para dispositivos móviles e IoT}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Diffie-Hellman}
+\begin{columns}[c]
+\column{0.55\textwidth}
+\begin{definition}
+Es un protocolo criptográfico que permite a dos partes intercambiar una clave por un canal público 
+\end{definition}
+\vspace{0.2cm}
+\scriptsize Fuentes: \cite{ninjaone-dh}
+% https://www.ninjaone.com/es/it-hub/endpoint-security/intercambio-de-claves-diffie-hellman-que-es/
+
+\vspace{0.2cm}
+\textbf{Aplicaciones:}
+\begin{itemize}
+\item VPN
+\item Secure Shell (SSH)
+\item Capa Socket Seguros SSL
+\end{itemize}
+
+
+\vspace{0.2cm}
+
+\column{0.45\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\linewidth]{Qbits/src/DiffieHellman.png}
+    \caption{Analogía del intercambio de claves DH}
+    \label{fig:placeholder}
+\end{figure}
+
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Diffie-Hellman Ejemplo}
+\begin{block}{Definición}
+Se presentan a dos personas Alice y Bob con sus respectivas claves privadas $a=3$ y $b=4$, ambos aceptan usar los valores $p=23$ y $g=5$  de forma pública
+
+\end{block}
+
+\begin{exampleblock}{Ejemplo criptográfico}
+Alice y Bob transmiten un valor A y B respectivamente con x como su clave privada
+$$X=g^x \text{ mod }(p) \quad A=5^4 \text{ mod }(23)=4 \quad B=5^3 \text{ mod }(23)=10$$
+Con los valores transmitidos, Alice obtiene B y Bob obtiene A
+$$s=A^b \text{ mod }(p)=B^a \text{ mod }(p)$$
+Si se realizan las operaciones se obtendrá entonces
+$$s=10^4 \text{ mod }(23)=18 \quad s=4^3 \text{ mod }(23)=18$$
+
+\end{exampleblock}
+% https://academia-lab.com/enciclopedia/intercambio-de-llaves-diffie-hellman/
+\vspace{0.3cm}
+
+
+\end{frame}
+
+% ============================================================
+\section{Fundamentos de Computación Cuántica}
+% ============================================================
+
+\begin{frame}{Bit Clásico vs Qubit}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{Qbits/src/I1.png}
+\caption{Bit clásico: niveles de voltaje}
+\end{figure}
+
+\textbf{Bit Clásico}
+\begin{itemize}
+\item Estado: 0 o 1
+\item Determinista
+\item Base física: voltaje, corriente
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{Qbits/src/I2.png}
+\caption{Qubit: superposición de estados}
+\end{figure}
+
+\textbf{Qubit}
+\begin{itemize}
+\item Estado: superposición
+\item Probabilístico
+\item Base física: estados cuánticos
+\end{itemize}
+\end{columns}
+
+\vspace{0.3cm}
+\begin{block}{Estado del Qubit}
+\[
+|\psi\rangle = \alpha|0\rangle + \beta|1\rangle, \quad |\alpha|^2 + |\beta|^2 = 1
+\]
+\end{block}
+\end{frame}
+
+\begin{frame}{Superposición Cuántica}
+\begin{columns}[c]
+\column{0.55\textwidth}
+\begin{definition}
+Un sistema cuántico puede existir simultáneamente en múltiples estados hasta que se realiza una medición.
+\end{definition}
+
+\vspace{0.2cm}
+\textbf{Propiedades clave:}
+\begin{itemize}
+\item Coherencia cuántica permite interferencia
+\item Amplificación de soluciones correctas
+\item Supresión de soluciones incorrectas
+\end{itemize}
+
+\vspace{0.2cm}
+\begin{exampleblock}{Paralelismo cuántico}
+Un sistema de $n$ qubits puede representar $2^n$ estados simultáneamente
+\end{exampleblock}
+
+\column{0.45\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Qbits/src/I3ge.png}
+\caption{Ilustración conceptual de la superposición}
+\end{figure}
+
+\vspace{0.2cm}
+\begin{figure}
+\centering
+\includegraphics[width=0.3\textwidth]{Qbits/src/I4.png}
+\caption{Colapso del estado tras medición}
+\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Entrelazamiento Cuántico}
+\begin{block}{Definición}
+Correlación cuántica entre qubits que no puede explicarse clásicamente.
+\end{block}
+
+\textbf{Estado de Bell (ejemplo):}
+\[
+|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)
+\]
+
+\vspace{0.1cm}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\textbf{Características:}
+\begin{itemize}
+\item Correlación perfecta
+\item Medición instantánea
+\item No separable
+\item Base de QKD
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Aplicaciones:}
+\begin{itemize}
+\item Teleportación cuántica
+\item Distribución de claves
+\item Aceleración de algoritmos
+\item Comunicación segura
+\end{itemize}
+\end{columns}
+
+%\vspace{0.1cm}
+\begin{alertblock}{Propiedad fundamental}
+Si medimos un qubit y obtenemos 0, ¡el otro qubit colapsa instantáneamente a 0!
+\end{alertblock}
+\end{frame}
+
+% ============================================================
+\section{Algoritmos Cuánticos}
+% ============================================================
+
+\begin{frame}{Ventaja Cuántica}
+\begin{definition}
+Capacidad de resolver ciertos problemas más eficientemente que cualquier algoritmo clásico conocido.
+\end{definition}
+
+\vspace{0.3cm}
+\textbf{Importantes aclaraciones:}
+\begin{itemize}
+\item No es superioridad universal
+\item Depende de la estructura del problema
+\item Requiere explotar fenómenos cuánticos
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{block}{Fuentes de aceleración}
+\begin{itemize}
+\item Superposición $\rightarrow$ paralelismo
+\item Interferencia $\rightarrow$ amplificación/supresión
+\item Entrelazamiento $\rightarrow$ correlaciones no clásicas
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Algoritmo de Deutsch-Jozsa}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\begin{block}{Problema}
+Determinar si $f:\{0,1\}^n \to \{0,1\}$ es constante o balanceada.
+\end{block}
+
+\textbf{Comparación de complejidad:}
+\begin{itemize}
+\item \textcolor{red}{Clásico}: $2^{n-1} + 1$ evaluaciones (peor caso)
+\item \textcolor{green}{Cuántico}: 1 evaluación
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Importancia histórica}
+Primer ejemplo de separación exponencial entre computación clásica y cuántica.
+\end{exampleblock}
+
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Qbits/src/I5.png}
+\caption{Diagrama del algoritmo Deutsch-Jozsa}
+\end{figure}
+
+%\vspace{0.2cm}
+\textbf{Limitación práctica:}
+\begin{itemize}
+\item Problema artificial
+\item Valor principalmente pedagógico
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Algoritmo de Grover}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\begin{block}{Problema}
+Búsqueda en base de datos no estructurada de $N$ elementos.
+\end{block}
+
+\textbf{Aceleración cuadrática:}
+\begin{itemize}
+\item \textcolor{red}{Clásico}: $O(N)$ evaluaciones
+\item \textcolor{green}{Cuántico}: $O(\sqrt{N})$ evaluaciones
+\end{itemize}
+
+%\vspace{0.1cm}
+\begin{exampleblock}{Impacto en criptografía}
+\begin{itemize}
+\item Ataques de fuerza bruta más eficientes
+\item AES-128 $\rightarrow$ seguridad efectiva de 64 bits
+\item AES-256 $\rightarrow$ seguridad efectiva de 128 bits
+\end{itemize}
+\end{exampleblock}
+
+\column{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{Qbits/src/I6.png}
+\caption{Algoritmo de Grover}
+\end{figure}
+
+\vspace{0.3cm}
+\begin{alertblock}{Mitigación}
+Duplicar tamaño de claves simétricas para mantener seguridad equivalente.
+\end{alertblock}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Algoritmo de Shor}
+\begin{columns}[c]
+\column{0.55\textwidth}
+\begin{block}{Problema}
+Factorización de enteros y logaritmo discreto.
+\end{block}
+
+\textbf{Complejidad:}
+\begin{itemize}
+\item \textcolor{red}{Mejor clásico (GNFS)}: Exponencial
+\item \textcolor{green}{Shor}: $O(n^3)$ (polinomial)
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{alertblock}{Impacto devastador}
+\textbf{Sistemas vulnerables:}
+\begin{itemize}
+\item RSA
+\item Diffie-Hellman
+\item Criptografía de Curva Elíptica (ECC)
+\item DSA, ECDSA
+\end{itemize}
+\end{alertblock}
+
+\column{0.45\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Qbits/src/I7.png}
+\caption{Algoritmo de Shor en Qiskit}
+\end{figure}
+
+\vspace{0.3cm}
+\textcolor{blue}{\textbf{Implicación:}} Toda la infraestructura de clave pública actual está en riesgo.
+\end{columns}
+\end{frame}
+
+% ============================================================
+\section{Impacto en la Criptografía}
+% ============================================================
+
+\begin{frame}{Amenazas a Sistemas Actuales}
+
+\begin{columns}[t]
+
+% -------- Columna izquierda --------
+\column{0.52\textwidth}
+
+\textbf{Criptografía Asimétrica}
+\begin{itemize}
+\item[\textcolor{red}{$\times$}] RSA vulnerable (Shor)
+\item[\textcolor{red}{$\times$}] ECC vulnerable (Shor)
+\item[\textcolor{red}{$\times$}] DH vulnerable (Shor)
+\item Seguridad completamente comprometida
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Criptografía Simétrica}
+\begin{itemize}
+\item[\textcolor{orange}{!}] AES parcialmente afectado (Grover)
+\item[\textcolor{orange}{!}] SHA debilitado (Grover)
+\item Requiere claves más largas
+\item Aún viable con ajustes
+\end{itemize}
+
+% -------- Columna derecha --------
+\column{0.48\textwidth}
+
+\centering
+\includegraphics[width=0.5\textwidth]{Qbits/src/I8.png}
+
+\vspace{0.05cm}
+{\scriptsize Complejidad computacional Clásica vs Cuántica}
+
+\vspace{0.25cm}
+
+\begin{block}{Reducción de seguridad efectiva}
+\small
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Sistema} & \textbf{Bits nominales} & \textbf{Bits efectivos} \\
+\hline
+AES-128 & 128 & 64 \\
+AES-256 & 256 & 128 \\
+RSA-2048 & $\sim$112 & \textcolor{red}{0} \\
+\hline
+\end{tabular}
+\end{block}
+
+\end{columns}
+\end{frame}
+
+
+% ======================
+
+\begin{frame}{Limitaciones Tecnológicas Actuales}
+\begin{block}{¿Por qué no es una amenaza inmediata?}
+Hardware cuántico actual tiene importantes restricciones.
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Desafíos técnicos:}
+\begin{itemize}
+\item \textbf{Pocos qubits}: IBM Quantum tiene $\sim$127-433 qubits
+\item \textbf{Altas tasas de error}: Fidelidad 99-99.9\% (insuficiente)
+\item \textbf{Decoherencia}: Tiempo de coherencia 50-200 $\mu$s
+\item \textbf{Corrección de errores}: Requiere miles de qubits físicos por qubit lógico
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Requisitos para Shor en RSA-2048}
+\begin{itemize}
+\item $\sim$10$^6$ qubits lógicos
+\item $\sim$10$^9$ qubits físicos (con corrección de errores)
+\item Tecnología actual: muy lejos de estos números
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Amenaza de "Harvest Now, Decrypt Later"}
+\begin{alertblock}{Escenario de riesgo}
+Adversarios pueden almacenar datos cifrados hoy y descifrarlos cuando tengan acceso a computadoras cuánticas suficientemente potentes.
+\end{alertblock}
+
+\vspace{0.3cm}
+\textbf{Implicaciones:}
+\begin{itemize}
+\item Datos sensibles con valor a largo plazo están en riesgo
+\item Secretos gubernamentales, militares, financieros
+\item Información de salud, propiedad intelectual
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{block}{Urgencia de transición}
+\begin{itemize}
+\item No podemos esperar a que existan computadoras cuánticas potentes
+\item La migración a criptografía post-cuántica debe comenzar \textbf{ahora}
+\item NIST estima 10-20 años para transición completa
+\end{itemize}
+\end{block}
+\end{frame}
+
+% ============================================================
+\section{Simulación con Qiskit}
+% ============================================================
+
+\begin{frame}{Plataforma Qiskit}
+\begin{block}{¿Qué es Qiskit?}
+Framework Python de IBM para programación cuántica y simulación.
+\end{block}
+
+\textbf{Componentes principales:}
+\begin{itemize}
+\item \textbf{Qiskit Terra}: Construcción de circuitos
+\item \textbf{Qiskit Aer}: Simuladores de alto rendimiento
+\item \textbf{IBM Runtime}: Acceso a hardware real
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{columns}[c]
+\column{0.5\textwidth}
+\textbf{Simulador AerSimulator:}
+\begin{itemize}
+\item Libre de ruido
+\item Estados cuánticos ideales
+\item Reproducible
+\item Límite: $\sim$30 qubits
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Hardware Real:}
+\begin{itemize}
+\item 27-433 qubits (IBM)
+\item Errores de puerta: 1-3\%
+\item Decoherencia
+\item Acceso limitado/costoso
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Ejemplos de Circuitos}
+\textbf{1. Estado de superposición $|+\rangle$:}
+\[
+H|0\rangle = \frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)
+\]
+
+\vspace{0.3cm}
+\textbf{2. Estado de Bell $|\Phi^+\rangle$:}
+\[
+|00\rangle \xrightarrow{H \otimes I} \frac{1}{\sqrt{2}}(|00\rangle + |10\rangle) \xrightarrow{\text{CNOT}} \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)
+\]
+
+\vspace{0.3cm}
+\begin{block}{Resultados de medición}
+\begin{itemize}
+\item Estado $|+\rangle$: 50\% probabilidad de 0, 50\% de 1
+\item Estado Bell: 50\% probabilidad de 00, 50\% de 11 (nunca 01 o 10)
+\end{itemize}
+\end{block}
+
+\vspace{0.2cm}
+\textcolor{blue}{La firma del entrelazamiento es la ausencia de ciertos resultados.}
+\end{frame}
+
+\begin{frame}{Convergencia Estadística}
+\begin{block}{Error de muestreo}
+Para $n$ mediciones (shots), el error estándar es:
+\[
+\sigma = \frac{1}{2\sqrt{n}}
+\]
+\end{block}
+
+\vspace{0.1cm}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Shots} & \textbf{Error $\sigma$} & \textbf{Error relativo} \\
+\hline
+10 & 0.158 & 31.6\% \\
+100 & 0.050 & 10.0\% \\
+1,024 & 0.016 & 3.1\% \\
+10,000 & 0.005 & 1.0\% \\
+\hline
+\end{tabular}
+\end{center}
+
+%\vspace{0.3cm}
+\begin{exampleblock}{Implicación práctica}
+Mayor número de shots $\rightarrow$ mejor aproximación a probabilidades teóricas, pero mayor tiempo de ejecución.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Comparación: Clásico vs Cuántico}
+\textbf{Representación de estado:}
+\begin{itemize}
+\item $n$ bits clásicos: $n$ valores binarios
+\item $n$ qubits: $2^n$ amplitudes complejas
+\end{itemize}
+
+\vspace{0.3cm}
+\begin{block}{Crecimiento exponencial de recursos}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Qubits} & \textbf{Dimensión} & \textbf{Memoria} \\
+\hline
+10 & $2^{10} = 1,024$ & 16 KB \\
+20 & $2^{20} \approx 10^6$ & 16 MB \\
+30 & $2^{30} \approx 10^9$ & 17 GB \\
+\hline
+\end{tabular}
+\end{center}
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Consecuencia:}
+\begin{itemize}
+\item Simulación clásica inviable para $n > 50$
+\item Hardware cuántico mantiene complejidad lineal
+\end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Criptografía Post-Cuántica}
+% ============================================================
+
+\begin{frame}{Estrategias de Defensa}
+\begin{block}{Criptografía Post-Cuántica (PQC)}
+Algoritmos seguros frente a adversarios cuánticos, pero implementables en hardware clásico.
+\end{block}
+
+\textbf{Familias principales:}
+\begin{enumerate}
+\item \textbf{Basados en retículas} (Lattice-based)
+\begin{itemize}
+\item Problema: encontrar vector más corto (SVP)
+\item Ejemplo: CRYSTALS-Kyber (KEM), CRYSTALS-Dilithium (firma)
+\end{itemize}
+
+\item \textbf{Basados en códigos} (Code-based)
+\begin{itemize}
+\item Problema: decodificación de códigos aleatorios
+\item Ejemplo: Classic McEliece
+\end{itemize}
+
+\item \textbf{Basados en hash} (Hash-based)
+\begin{itemize}
+\item Firmas usando funciones hash
+\item Ejemplo: SPHINCS+
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Proceso de Estandarización NIST}
+\begin{block}{Timeline}
+\begin{itemize}
+\item 2016: Convocatoria de propuestas
+\item 2017-2022: Rondas de evaluación (3 rondas)
+\item 2022: Selección de finalistas
+\item 2024: Publicación de estándares
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+\textbf{Algoritmos seleccionados:}
+\begin{itemize}
+\item \textcolor{green}{\textbf{CRYSTALS-Kyber}}: Encapsulación de claves (KEM)
+\item \textcolor{green}{\textbf{CRYSTALS-Dilithium}}: Firmas digitales
+\item \textcolor{green}{\textbf{SPHINCS+}}: Firmas sin estado (hash-based)
+\item \textcolor{green}{\textbf{FALCON}}: Firmas digitales (lattice-based)
+\end{itemize}
+
+%\vspace{0.3cm}
+\begin{alertblock}{Recomendación}
+Implementación híbrida: combinar algoritmos clásicos + post-cuánticos durante transición.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Distribución Cuántica de Claves (QKD)}
+\begin{block}{Seguridad basada en física}
+QKD usa principios cuánticos para establecer claves secretas con seguridad incondicional.
+\end{block}
+
+\textbf{Protocolo BB84:}
+\begin{enumerate}
+\item Alice envía qubits en bases aleatorias ($+$ o $\times$)
+\item Bob mide en bases aleatorias
+\item Comunicación pública: comparan bases (no valores)
+\item Conservan bits donde coincidieron bases
+\end{enumerate}
+
+\vspace{0.3cm}
+\begin{exampleblock}{Ventaja fundamental}
+\begin{itemize}
+\item Cualquier intercepción perturba el estado cuántico
+\item Detección garantizada de espionaje
+\item No depende de complejidad computacional
+\end{itemize}
+\end{exampleblock}
+
+\textbf{Limitación:} Requiere canal cuántico (fibra óptica, espacio libre).
+\end{frame}
+
+% ============================================================
+\section{Conclusiones}
+% ============================================================
+
+\begin{frame}{Conclusiones Principales}
+\begin{enumerate}
+\item \textbf{Amenaza real pero futura}
+\begin{itemize}
+\item Algoritmos cuánticos (Shor, Grover) comprometen criptografía actual
+\item Limitaciones tecnológicas actuales impiden implementación inmediata
+\item Riesgo de "harvest now, decrypt later" requiere acción urgente
+\end{itemize}
+
+\vspace{0.3cm}
+\item \textbf{Transición necesaria}
+\begin{itemize}
+\item Criptografía post-cuántica ya disponible (NIST)
+\item Implementación híbrida recomendada
+\item Proceso de migración tomará 10-20 años
+\end{itemize}
+
+\vspace{0.3cm}
+\item \textbf{Herramientas educativas}
+\begin{itemize}
+\item Qiskit permite simulación accesible
+\item Validación de conceptos teóricos
+\item Preparación para era cuántica
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Trabajo Futuro}
+\textbf{Líneas de investigación propuestas:}
+\begin{itemize}
+\item Implementación de algoritmos post-cuánticos en sistemas reales
+\item Evaluación de rendimiento PQC vs clásica
+\item Simulación de ataques cuánticos a escala mayor
+\item Desarrollo de protocolos QKD con hardware accesible (FPGA)
+\item Análisis de vulnerabilidades en implementaciones híbridas
+\end{itemize}
+
+\vspace{0.5cm}
+\begin{block}{Meta a largo plazo}
+Desarrollar e implementar algoritmos cuánticos aplicados a problemas reales de criptografía y seguridad de la información.
+\end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Referencias}
+\scriptsize
+\raggedright
+
+\begin{thebibliography}{99}
+
+\bibitem{nielsen}
+M. A. Nielsen and I. L. Chuang,
+\textit{Quantum Computation and Quantum Information},
+Cambridge University Press, 2010.
+
+\bibitem{nist}
+NIST,
+\textit{Post-Quantum Cryptography Standardization},
+\url{https://csrc.nist.gov/projects/post-quantum-cryptography}
+
+\bibitem{qiskit}
+IBM Qiskit,
+\textit{Quantum Computing Framework},
+\url{https://qiskit.org/}
+
+\bibitem{cloudflare}
+Nick Sullivan,
+\textit{Primer on Elliptic Curve Cryptography},
+Cloudflare Blog, 2013.
+
+% criptografi
+
+\bibitem{omondi}
+Omondi, Amos. (2020). \textit{Cryptography Arithmetic: Algorithms and Hardware Architectures}.
+
+\bibitem{computerphile-prime}
+Computerphile, \textit{Prime Numbers \& RSA Encryption Algorithm}, YouTube, \url{http://youtube.com/watch?v=JD72Ry60eP4}
+% http://youtube.com/watch?v=JD72Ry60eP4
+
+\bibitem{freecodecamp-euclid}
+freeCodeCamp, \textit{Euclidian GCD Algorithm — Greatest Common Divisor}, \url{https://www.freecodecamp.org/news/euclidian-gcd-algorithm-greatest-common-divisor/}
+% https://www.freecodecamp.org/news/euclidian-gcd-algorithm-greatest-common-divisor/
+
+\bibitem{brilliant-euclid}
+Brilliant.org, \textit{Extended Euclidean Algorithm}, \url{https://brilliant.org/wiki/extended-euclidean-algorithm/}
+% https://brilliant.org/wiki/extended-euclidean-algorithm/
+
+\bibitem{cpalg-euclid}
+e-maxx / CP-Algorithms, \textit{Extended Euclid (Extended GCD)}, \url{https://cp-algorithms.com/algebra/extended-euclid-algorithm.html}
+% https://cp-algorithms.com/algebra/extended-euclid-algorithm.html
+
+\bibitem{ninjaone-dh}
+NinjaOne, \textit{Intercambio de claves Diffie-Hellman — ¿Qué es?}, \url{https://www.ninjaone.com/es/it-hub/endpoint-security/intercambio-de-claves-diffie-hellman-que-es/}
+% https://www.ninjaone.com/es/it-hub/endpoint-security/intercambio-de-claves-diffie-hellman-que-es/
+
+\bibitem{academia-lab-dh}
+Academia-Lab, \textit{Intercambio de llaves Diffie-Hellman (Guía)}, \url{https://academia-lab.com/enciclopedia/intercambio-de-llaves-diffie-hellman/}
+% https://academia-lab.com/enciclopedia/intercambio-de-llaves-diffie-hellman/
+
+\end{thebibliography}
+\end{frame}
+
+\end{document}

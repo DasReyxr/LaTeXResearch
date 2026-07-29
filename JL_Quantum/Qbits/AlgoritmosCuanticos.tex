@@ -1,0 +1,639 @@
+\documentclass[12pt]{article}
+
+% ------------------------
+% Paquetes básicos
+% ------------------------
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Computacon Cuantica y su Impacto en la Criptografia},
+    pdfauthor={Iker García}, 
+    bookmarks=true,
+    pdfpagemode=FullScreen,
+}
+
+\geometry{margin=1in}
+\onehalfspacing
+
+% ------------------------
+% Información del documento
+% ------------------------
+\title{%
+Computación Cuántica y su Impacto en la Criptografía Moderna\\
+\large Reporte de Investigación Exploratoria
+}
+
+\author{%
+Contreras Reyes Orlando & García Barrera Iker Emiliano\\
+Ingeniería Electrónica\\
+Universidad Autónoma de Aguascalientes
+}
+
+\date{\today}
+
+% ------------------------
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+Este documento pretende explorar los fundamentos de la computación cuántica y su impacto en la criptografía moderna. Se analizan los principios básicos de la computación cuántica, incluyendo qubits, superposición y entrelazamiento, así como algoritmos cuánticos relevantes como los de Shor y Grover. Además, se discuten las amenazas que la computación cuántica representa para los sistemas criptográficos actuales y las estrategias emergentes para mitigar estos riesgos mediante la criptografía post-cuántica. Todo esto para tener buenas bases teóricas y prácticas sobre el tema y desarrollar posibles algoritmos cuánticos en un futuro. \\
+
+Asimismo, se presenta el uso de la plataforma Qiskit como herramienta para la simulación de circuitos cuánticos y el análisis de sus resultados probabilísticos, lo que permite compararlos directamente con los métodos clásicos estudiados en secciones anteriores. Este enfoque tiene como objetivo introducir al lector en la computación cuántica desde una perspectiva práctica, facilitando la comprensión de conceptos abstractos mediante experimentación controlada.
+
+% Escribir aquí el resumen del trabajo.
+% (Objetivo, metodología general y conclusiones esperadas)
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ========================
+\section{Criptografía Clásica}
+\subsection{Algoritmos simétricos y asimétricos}
+Los algoritmos se pueden dividir en dos grandes grupos: simétricos y asimétricos. La principal diferencia entre ambos radica en la gestión de las claves de cifrado y descifrado. En los algoritmos simétricos se utiliza la misma clave para ambos procesos, mientras que en los asimétricos se emplean dos claves distintas: una pública y una privada. \\
+
+El principal problema de la criptografía simétrica es la distribución de claves, ya que si un tercero obtiene la clave puede descifrar la información. En la criptografía asimétrica este problema se mitiga mediante el uso de una clave pública para cifrar y una privada para descifrar; de esta forma, solo el propietario de la clave privada puede acceder a la información.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\linewidth]{Qbits/src/CriptografiaSimetricayAsimetrica.png}
+    \caption{Diferencias entre metodos de encriptación}
+    \label{fig:placeholder}
+\end{figure}
+
+
+Por ello, el algoritmo debe ser lo suficientemente complejo para que un adversario no pueda obtener la clave privada a partir de la pública en un tiempo razonable. Esto es especialmente importante frente a métodos como la fuerza bruta o la ingeniería social. Una ventaja de la criptografía simétrica es su mayor velocidad para cifrar grandes volúmenes de datos en comparación con la asimétrica, que suele ser más lenta por la complejidad de sus operaciones matemáticas. En la práctica, se emplea a menudo una combinación de ambos: criptografía asimétrica para el intercambio seguro de claves y criptografía simétrica para el cifrado eficiente de los datos. \cite{redeszone}
+
+\subsubsection{RSA}
+Para el cifrado RSA se eligen valores grandes definidos como el producto de dos números primos, de modo que su factorización resulte costosa. Denotamos
+\begin{equation}
+    n = pq,
+    \label{eq:pq}
+\end{equation}
+donde, como se mencionó, $p$ y $q$ son primos distintos, muy grandes y seleccionados al azar.
+
+Además se utiliza la función totiente de Euler, $\phi$, que indica cuántos enteros positivos menores que un número son coprimos con él. La función totiente puede entenderse como la cantidad de enteros positivos que tienen 1 como máximo común divisor (MCD) con el número dado. Para obtener el MCD de dos números se emplea el algoritmo euclidiano, ilustrado en la siguiente figura:
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.3\linewidth]{Euc GCD.png}
+    \caption{Algoritmo Eucliadeano (GCD)}
+    \label{fig:placeholder}
+\end{figure}
+\cite{freecodecamp_gcd}
+Dos propiedades importantes de la función totiente $\phi$ son las siguientes:
+\begin{itemize}
+    \item Totiente de un primo
+    $$\phi(p)=p-1$$
+    \item Producto de totientes de numeros coprimos
+    $$\phi(mn)=\phi(m)\phi(n)$$    
+\end{itemize}
+Utilizando estas propiedades se obtiene el totiente de $n$ definido en \eqref{eq:pq}:
+\begin{equation}
+    \phi(n)=(p-1)(q-1)
+\end{equation}
+Finalmente se obtienen los números $e$ y $d$ aplicando el algoritmo euclidiano extendido. Con ellos se definen las fórmulas de cifrado y descifrado:
+\begin{itemize}
+    \item Encriptacion
+    $$\text{enc}(x)= x^e \mod (n)$$
+    \item Desencriptacion
+    $$\text{des}(y)=y^d \mod (n)$$
+\end{itemize}
+Las claves públicas son $(e,n)$ y las privadas $(d,n)$. La seguridad del RSA se basa en la dificultad de factorizar $n$ en sus primos constituyentes $p$ y $q$, lo que hace que obtener la clave privada a partir de la pública sea computacionalmente inviable para valores grandes de $n$. 
+\cite{geeksforgeeks_rsa}
+
+\subsubsection{Criptografía de curva elíptica}
+La Criptografia de la Curva Elíptica (ECC, por sus siglas en inglés) es un enfoque de criptografía de clave pública basado en las propiedades matemáticas de las curvas elípticas definidas sobre campos finitos. A diferencia de otros métodos como RSA, que se basan en la factorización de números grandes, ECC utiliza la dificultad del problema del logaritmo discreto en curvas elípticas para garantizar la seguridad. Prácticamente todos los sistemas ECC utilizan curvas definidas por ecuaciones de la forma:
+\[y^2 = x^3 + ax + b\]
+donde $a$ y $b$ son constantes que definen la curva específica. Los puntos en la curva, junto con un punto especial llamado punto en el infinito, forman un grupo abeliano bajo una operación de suma definida geométricamente. La seguridad de ECC se basa en la dificultad de resolver el problema del logaritmo discreto en este grupo, es decir, dado un punto $P$ en la curva y un múltiplo $Q = kP$, encontrar el entero $k$ es computacionalmente difícil.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Qbits/src/ECCRSA.png}
+    \caption{Comparación con respecto a los bits de encriptación}
+    \label{fig:placeholder}
+\end{figure}
+\subsection{Seguridad basada en complejidad computacional}
+Otro tema importante es la seguridad basada en la complejidad computacional. Muchos sistemas criptográficos se fundamentan en la dificultad de ciertos problemas matemáticos para garantizar la seguridad de la información. Estos problemas son considerados difíciles porque no se conocen algoritmos eficientes para resolverlos en un tiempo razonable, especialmente cuando los parámetros involucrados son lo suficientemente grandes.
+\cite{elipticcurve}
+% ========================
+\section{Fundamentos de la Computación Cuántica}
+
+Para comprender el impacto de la computación cuántica en áreas como la criptografía, es necesario introducir los conceptos fundamentales que la distinguen de la computación clásica. En esta sección se presentan las ideas básicas sobre la representación y manipulación de la información desde una perspectiva física y matemática, siguiendo el enfoque propuesto por Nielsen y Chuang \cite{nielsen}. En particular, se analiza la diferencia entre el bit clásico y el qubit, así como los fenómenos de superposición, medición y entrelazamiento, los cuales constituyen la base del poder computacional cuántico.
+
+\subsection{Bit clásico y qubit}
+
+Los bits clásicos constituyen la unidad fundamental de información en las computadoras tradicionales. Desde el punto de vista físico, un bit se implementa mediante sistemas macroscópicos estables, como niveles de voltaje o estados de un transistor, donde cada estado lógico corresponde a un valor bien definido: 0 o 1. Esta representación binaria permite el almacenamiento y procesamiento confiable de información, pero limita al sistema a describir únicamente configuraciones deterministas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Qbits/src/I1.png}
+    \caption{Representación de los valores lógicos 0 y 1 mediante niveles de voltaje}
+    \label{fig:bit_voltaje}
+\end{figure}
+
+En contraste, la computación cuántica utiliza como unidad básica de información al qubit (bit cuántico). Un qubit se describe matemáticamente como un vector normalizado en un espacio de Hilbert complejo de dimensión dos. Sus estados base se denotan mediante la notación de Dirac como $\lvert 0 \rangle$ y $\lvert 1 \rangle$. A diferencia del bit clásico, el estado de un qubit no está restringido a uno de estos valores, sino que puede encontrarse en una superposición coherente de ambos.
+
+Esta diferencia conceptual implica que el estado de un qubit contiene más información estructural que un bit clásico, aunque no más información medible directamente. La Figura \ref{fig:bit_vs_qubit} ilustra la diferencia entre la representación clásica y cuántica de la información.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Qbits/src/I2.png}
+    \caption{Diferencia entre la representación de bits clásicos y qubits}
+    \label{fig:bit_vs_qubit}
+\end{figure}
+
+La posibilidad de superponer estados constituye uno de los principios clave que permite el desarrollo de algoritmos cuánticos con ventajas computacionales respecto a sus equivalentes clásicos. A continuación se analiza este concepto con mayor detalle.
+
+\subsection{Superposición cuántica}
+
+La superposición cuántica es un principio fundamental de la mecánica cuántica según el cual un sistema puede existir simultáneamente en múltiples estados. En el caso de un qubit, su estado general puede escribirse como
+\[
+\lvert \psi \rangle = \alpha \lvert 0 \rangle + \beta \lvert 1 \rangle,
+\]
+donde $\alpha$ y $\beta$ son amplitudes complejas que satisfacen la condición de normalización
+\[
+|\alpha|^2 + |\beta|^2 = 1.
+\]
+
+Desde una interpretación probabilística, los valores $|\alpha|^2$ y $|\beta|^2$ representan las probabilidades de obtener los resultados 0 o 1 al medir el qubit en la base computacional. Sin embargo, mientras no se realice una medición, el sistema conserva la coherencia cuántica, lo que permite interferencias constructivas y destructivas entre amplitudes. Esta propiedad es explotada por los algoritmos cuánticos para amplificar soluciones correctas y suprimir las incorrectas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Qbits/src/I3ge.png}
+    \caption{Ilustración conceptual de la superposición de un qubit}
+    \label{fig:superposicion}
+\end{figure}
+
+\subsection{Medición y colapso del estado}
+
+La medición es el proceso mediante el cual se extrae información clásica de un sistema cuántico. De acuerdo con el postulado de medición de la mecánica cuántica, al medir un qubit en superposición en la base computacional, el estado colapsa a uno de los estados base $\lvert 0 \rangle$ o $\lvert 1 \rangle$. La probabilidad de cada resultado está dada por el cuadrado del módulo de la amplitud correspondiente, es decir, $|\alpha|^2$ y $|\beta|^2$.
+
+Este colapso implica una pérdida irreversible de la coherencia cuántica, lo que limita la cantidad de información que puede extraerse de un sistema cuántico. Por esta razón, los algoritmos cuánticos deben diseñarse cuidadosamente para maximizar la probabilidad de obtener el resultado deseado antes de la medición final.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Qbits/src/I4.png}
+    \caption{Proceso de medición y colapso del estado cuántico}
+    \label{fig:medicion}
+\end{figure}
+
+\subsection{Entrelazamiento cuántico}
+
+El entrelazamiento cuántico es un fenómeno en el cual el estado de un sistema compuesto de múltiples qubits no puede describirse como el producto de los estados individuales de cada qubit. En estos casos, la medición de uno de los qubits afecta instantáneamente el estado del otro, independientemente de la distancia que los separe.
+
+Un ejemplo clásico de entrelazamiento es el estado de Bell
+\[
+\lvert \Phi^+ \rangle = \frac{1}{\sqrt{2}}(\lvert 00 \rangle + \lvert 11 \rangle),
+\]
+en el cual los resultados de medición de ambos qubits están perfectamente correlacionados. Estas correlaciones no tienen análogo clásico y constituyen un recurso fundamental para la computación y la criptografía cuánticas.
+El entrelazamiento permite tareas imposibles en la computación clásica, como la teleportación cuántica y la distribución cuántica de claves, y desempeña un papel central en la aceleración de ciertos algoritmos cuánticos.
+
+% ========================
+\section{Algoritmos Cuánticos Relevantes}
+
+Una de las principales motivaciones para el estudio de la computación cuántica es la existencia de algoritmos que, para ciertos problemas específicos, ofrecen ventajas significativas respecto a los algoritmos clásicos. Estas ventajas no se manifiestan como una aceleración universal, sino que dependen de la estructura matemática del problema. En esta sección se presentan algunos de los algoritmos cuánticos más representativos, con énfasis en aquellos que tienen implicaciones directas en la criptografía moderna, siguiendo el tratamiento presentado por Nielsen y Chuang \cite{nielsen}.
+
+\subsection{Ventaja cuántica}
+
+El término \textit{ventaja cuántica} se refiere a la capacidad de un algoritmo cuántico para resolver un problema de manera más eficiente que cualquier algoritmo clásico conocido. Esta ventaja suele medirse en términos de complejidad computacional, comparando el número de operaciones necesarias en función del tamaño del problema.
+
+Es importante destacar que la ventaja cuántica no implica que las computadoras cuánticas sean superiores para todas las tareas. Por el contrario, la mayoría de los algoritmos clásicos no presentan mejoras significativas al ser implementados en un modelo cuántico. Las ventajas aparecen únicamente en problemas con estructuras específicas que permiten explotar fenómenos como la superposición, la interferencia y el entrelazamiento.
+
+\subsection{Algoritmo de Deutsch--Jozsa}
+
+El algoritmo de Deutsch--Jozsa es uno de los primeros ejemplos históricos que demuestra una separación clara entre la computación clásica y la cuántica. El problema consiste en determinar si una función booleana $f:\{0,1\}^n \rightarrow \{0,1\}$ es constante o balanceada, bajo la promesa de que pertenece a una de estas dos categorías.
+
+Clásicamente, en el peor de los casos se requieren $2^{n-1} + 1$ evaluaciones de la función para garantizar una respuesta correcta. En contraste, el algoritmo cuántico de Deutsch--Jozsa resuelve el problema con una sola evaluación de la función utilizando un circuito cuántico que explota la superposición de estados de entrada.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Qbits/src/I5.png}
+    \caption{Diagrama del algoritmo}
+    \label{fig:placeholder}
+\end{figure}
+
+Aunque este algoritmo no tiene aplicaciones prácticas directas en criptografía, su importancia radica en demostrar cómo la interferencia cuántica puede utilizarse para extraer información global de una función de manera eficiente, sentando las bases conceptuales para algoritmos cuánticos más avanzados.
+
+\subsection{Algoritmo de Grover}
+
+El algoritmo de Grover aborda el problema de la búsqueda en una base de datos no estructurada. Dado un conjunto de $N$ elementos y una función que identifica una solución correcta, el algoritmo clásico requiere, en promedio, $\mathcal{O}(N)$ evaluaciones para encontrarla. Grover demostró que un algoritmo cuántico puede resolver este problema en $\mathcal{O}(\sqrt{N})$ evaluaciones, lo que representa una aceleración cuadrática.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Qbits/src/I6.png}
+    \caption{Algoritmo de Grover}
+    \label{fig:placeholder}
+\end{figure}
+
+Este resultado tiene implicaciones directas en la criptografía, particularmente en ataques por fuerza bruta contra funciones hash y cifrados simétricos. Aunque la mejora es polinómica y no exponencial, reduce significativamente el nivel de seguridad efectivo de estos sistemas. Por ejemplo, un sistema con una clave de $n$ bits ofrece una seguridad equivalente a $n/2$ bits frente a un adversario cuántico que utilice el algoritmo de Grover.
+
+\subsection{Algoritmo de Shor}
+
+El algoritmo de Shor constituye uno de los resultados más relevantes de la computación cuántica debido a su impacto directo en la criptografía de clave pública. Este algoritmo permite factorizar números enteros y resolver el problema del logaritmo discreto en tiempo polinomial, tareas para las cuales no se conocen algoritmos clásicos eficientes.
+
+La seguridad de sistemas criptográficos ampliamente utilizados, como RSA y la criptografía de curva elíptica, se basa en la dificultad computacional de estos problemas. La existencia del algoritmo de Shor implica que, en presencia de una computadora cuántica suficientemente grande y libre de errores, estos sistemas dejarían de ser seguros.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Qbits/src/I7.png}
+    \caption{Algoritmo de Shor en Qiskit}
+    \label{fig:placeholder}
+\end{figure}
+
+Aunque actualmente las limitaciones tecnológicas impiden la implementación práctica del algoritmo de Shor para tamaños de clave reales, su existencia ha motivado el desarrollo de la criptografía post-cuántica, cuyo objetivo es diseñar esquemas seguros incluso frente a adversarios cuánticos.
+
+
+% ========================
+% ========================
+\section{Impacto de la Computación Cuántica en la Criptografía}
+
+La aparición de algoritmos cuánticos eficientes para ciertos problemas computacionalmente difíciles ha generado un profundo impacto en el campo de la criptografía moderna. Muchos de los esquemas criptográficos actualmente en uso se basan en supuestos de complejidad que dejan de ser válidos en el modelo de computación cuántica. En esta sección se analizan las principales amenazas que la computación cuántica representa para la criptografía actual, así como la reducción de complejidad asociada a ataques cuánticos y las limitaciones tecnológicas que, hasta el momento, impiden su implementación práctica a gran escala.
+
+\subsection{Amenazas a la criptografía actual}
+
+La seguridad de numerosos sistemas criptográficos se fundamenta en la dificultad computacional de ciertos problemas matemáticos, tales como la factorización de enteros grandes y el cálculo del logaritmo discreto. Algoritmos de clave pública ampliamente utilizados, como RSA, Diffie--Hellman y la criptografía de curva elíptica, dependen directamente de la complejidad de estos problemas para garantizar su seguridad.
+
+La existencia del algoritmo de Shor demuestra que estos problemas pueden resolverse en tiempo polinomial utilizando una computadora cuántica ideal. Como consecuencia, un adversario con acceso a una computadora cuántica suficientemente potente podría comprometer la confidencialidad y autenticidad de comunicaciones protegidas mediante estos esquemas. Este escenario representa una amenaza fundamental para la infraestructura criptográfica actual, incluyendo protocolos de seguridad utilizados en comunicaciones, comercio electrónico y sistemas gubernamentales.
+
+\subsection{Reducción de complejidad y fuerza bruta}
+
+Además de los sistemas de clave pública, la computación cuántica también afecta a los esquemas criptográficos simétricos y a las funciones hash. En estos casos, el algoritmo de Grover proporciona una aceleración cuadrática para ataques por fuerza bruta. Mientras que un ataque clásico requiere un número de operaciones proporcional a $2^n$ para una clave de $n$ bits, un adversario cuántico puede reducir esta complejidad a aproximadamente $2^{n/2}$.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Qbits/src/I8.png}
+    \caption{Gráfica de complejidad computacional Clásica vs Cuántica}
+    \label{fig:placeholder}
+\end{figure}
+
+Aunque esta mejora no es exponencial, tiene implicaciones prácticas importantes. Para mantener un nivel de seguridad equivalente frente a ataques cuánticos, es necesario incrementar el tamaño de las claves y los valores de salida de las funciones hash. De esta manera, la computación cuántica no invalida completamente la criptografía simétrica, pero obliga a una reevaluación de los parámetros de seguridad utilizados actualmente.
+
+\subsection{Limitaciones tecnológicas actuales}
+
+A pesar del impacto teórico de los algoritmos cuánticos sobre la criptografía, la implementación práctica de ataques cuánticos a gran escala enfrenta importantes limitaciones tecnológicas. Las computadoras cuánticas actuales cuentan con un número reducido de qubits, presentan altas tasas de error y sufren fenómenos de decoherencia que limitan la profundidad de los circuitos ejecutables. \\
+
+En particular, la ejecución del algoritmo de Shor para romper claves criptográficas de tamaño real requeriría miles o millones de qubits lógicos con corrección de errores, una capacidad que aún se encuentra fuera del alcance de la tecnología disponible. Estas limitaciones implican que, si bien la amenaza cuántica es real desde un punto de vista teórico, su impacto práctico es aún limitado en el corto plazo. \\
+
+No obstante, debido a la posibilidad de almacenar información cifrada hoy y descifrarla en el futuro con computadoras cuánticas más avanzadas, resulta necesario iniciar la transición hacia esquemas criptográficos resistentes a ataques cuánticos.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Qbits/src/I9.png}
+    \caption{Computadora IBM con 127 cubits}
+    \label{fig:placeholder}
+\end{figure}
+% ========================
+
+% ============================================================================
+% SECCIÓN 6: SIMULACIÓN CUÁNTICA CON QISKIT
+% ============================================================================
+
+\section{Simulación Cuántica con Qiskit}
+
+Este capítulo describe la implementación práctica de los conceptos teóricos mediante Qiskit, el framework de computación cuántica de IBM. Se presenta el entorno de simulación, la construcción de circuitos cuánticos, el análisis de mediciones probabilísticas y una comparación con métodos clásicos.
+
+% ============================================================================
+\subsection{Descripción del Entorno de Simulación}
+
+\subsubsection{Framework Qiskit}
+
+Qiskit es un framework Python para programación cuántica con arquitectura modular:
+
+\begin{itemize}
+    \item \textbf{Qiskit Terra}: Construcción y compilación de circuitos
+    \item \textbf{Qiskit Aer}: Simuladores de alto rendimiento
+    \item \textbf{Qiskit IBM Runtime}: Interfaz con hardware cuántico real
+\end{itemize}
+
+Se utilizó Qiskit Terra (v1.0.0) y Qiskit Aer (v0.13.0) para las simulaciones.
+
+\subsubsection{Simulador AerSimulator}
+
+El simulador \texttt{AerSimulator} mantiene el estado cuántico completo:
+\begin{equation}
+|\psi\rangle = \sum_{i=0}^{2^n-1} \alpha_i |i\rangle, \quad \sum_{i=0}^{2^n-1} |\alpha_i|^2 = 1
+\end{equation}
+
+Características principales:
+\begin{itemize}
+    \item \textbf{Libre de ruido}: No incluye errores de puerta, decoherencia ni errores de medición
+    \item \textbf{Limitación exponencial}: Memoria $= 2^n \times 16$ bytes. Para $n=30$: $\sim 17$ GB
+\end{itemize}
+
+\subsubsection{Comparación: Simulador vs Hardware Real}
+
+\begin{table}[H]
+\centering
+\caption{Comparación entre AerSimulator y hardware cuántico real (IBM Quantum)}
+\label{tab:sim_vs_hardware}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Característica} & \textbf{AerSimulator} & \textbf{Hardware Real} \\
+\hline
+\hline
+Número de qubits & Hasta $\sim$30 (RAM dependiente) & 27-433 (IBM) \\
+\hline
+Fidelidad de puerta & Ideal (100\%) & 99\% - 99.9\% \\
+\hline
+Tiempo de coherencia & Infinito & $50-200$ $\mu$s \\
+\hline
+Errores de medición & Ninguno & $\sim 1-3\%$ \\
+\hline
+Tiempo de ejecución & Inmediato & Minutos-horas (cola) \\
+\hline
+Costo & Gratis (local) & Créditos/acceso limitado \\
+\hline
+Reproducibilidad & Perfecta (seed fijo) & Variable (ruido) \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Justificación del uso de simulador}: Para fines didácticos, el simulador permite verificar predicciones teóricas sin ruido, facilita análisis de estados intermedios y proporciona resultados reproducibles.
+
+% ============================================================================
+\subsection{Construcción de Circuitos Cuánticos}
+
+\subsubsection{Representación de Circuitos}
+
+Un circuito cuántico representa la composición de operadores unitarios:
+\begin{equation}
+U_{\text{total}} = U_m \cdots U_2 \cdot U_1
+\end{equation}
+
+\subsubsection{Ejemplo 1: Creación del Estado $|+\rangle$}
+
+Preparar estado de superposición $|+\rangle = \frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)$:
+
+Análisis: $|+\rangle = H|0\rangle = \frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)$
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Qbits/src/I10.png}
+    \caption{Circuito cuántico para preparar el estado $|+\rangle$ mediante puerta Hadamard.}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsubsection{Ejemplo 2: Estado de Bell $|\Phi^+\rangle$}
+
+Crear entrelazamiento máximo entre dos qubits:
+
+Transformación: $|00\rangle \xrightarrow{H \otimes I} \frac{1}{\sqrt{2}}(|00\rangle + |10\rangle) \xrightarrow{\text{CNOT}} \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle) = |\Phi^+\rangle$
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Qbits/src/I11.png}
+    \caption{Circuito cuántico para crear el estado de Bell mediante Hadamard y CNOT.}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsubsection{Ejemplo 3: Protocolo BB84 (simplificado)}
+
+Implementación básica de preparación y medición en bases aleatorias:
+
+Cuando Alice y Bob eligen la misma base, Bob recupera el bit correctamente con probabilidad 1.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Qbits/src/I12.png}
+    \caption{Ejemplo de circuito BB84 mostrando preparación, transmisión y medición.}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsubsection{Herramientas de Análisis}
+
+Qiskit proporciona métodos para analizar circuitos:
+\begin{verbatim}
+depth = qc.depth()          # Profundidad del circuito
+ops = qc.count_ops()        # Conteo de puertas
+n_qubits = qc.num_qubits    # Número de qubits
+\end{verbatim}
+
+% ============================================================================
+\subsection{Medición de Probabilidades}
+
+\subsubsection{Postulado de Medición}
+
+Para un estado $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$, la medición produce:
+\begin{itemize}
+    \item Resultado 0 con probabilidad $P(0) = |\alpha|^2$
+    \item Resultado 1 con probabilidad $P(1) = |\beta|^2$
+    \item Colapso del estado al resultado medido
+\end{itemize}
+
+\subsubsection{Error Estadístico}
+
+El error estándar para un observable binario es:
+\begin{equation}
+\sigma = \frac{1}{2\sqrt{n}}
+\end{equation}
+
+\begin{table}[H]
+\centering
+\caption{Error esperado en función del número de shots}
+\label{tab:error_shots}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Shots ($n$)} & \textbf{Error $\sigma$} & \textbf{Error relativo (\%)} \\
+\hline
+10 & 0.158 & 31.6\% \\
+100 & 0.050 & 10.0\% \\
+1,024 & 0.016 & 3.1\% \\
+10,000 & 0.005 & 1.0\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{Qbits/src/figura_convergencia.png}
+    \caption{Convergencia estadística: error vs número de shots (10, 100, 1024, 10000).}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsubsection{Distribuciones de Probabilidad}
+
+\paragraph{Estado Entrelazado (Bell)} Para $|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$:
+\begin{equation}
+P(00) = P(11) = \frac{1}{2}, \quad P(01) = P(10) = 0
+\end{equation}
+
+La ausencia de resultados $01$ y $10$ es la firma del entrelazamiento.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Qbits/src/figura_histograma_bell.png}
+    \caption{Distribución de probabilidades del estado de Bell $|\Phi^+\rangle$ mostrando correlación perfecta.}
+    \label{fig:placeholder}
+\end{figure}
+
+% ============================================================================
+\subsection{Comparación con Métodos Clásicos}
+
+\subsubsection{Representación de Estado}
+
+\begin{table}[H]
+\centering
+\caption{Recursos computacionales para representar estados}
+\label{tab:recursos_estado}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Qubits ($n$)} & \textbf{Espacio} & \textbf{Memoria} \\
+\hline
+1 & $\mathbb{C}^2$ & 32 bytes \\
+10 & $\mathbb{C}^{1024}$ & 16 KB \\
+20 & $\mathbb{C}^{1,048,576}$ & 16 MB \\
+30 & $\mathbb{C}^{1,073,741,824}$ & 17 GB \\
+\hline
+\end{tabular}
+\end{table}
+
+El espacio cuántico crece exponencialmente: $\dim(\mathcal{H}^{\otimes n}) = 2^n$
+
+\subsubsection{Complejidad de Operaciones}
+
+\begin{itemize}
+    \item \textbf{Hardware cuántico}: $O(d)$ tiempo para profundidad $d$
+    \item \textbf{Simulación clásica}: $O(g \cdot 2^n)$ para $g$ puertas en $n$ qubits
+\end{itemize}
+
+Para $n=50$: simulación clásica requiere $\sim 10^{15}$ operaciones mientras hardware cuántico mantiene complejidad lineal.
+
+\subsubsection{Algoritmo de Grover: Ventaja Cuadrática}
+
+\begin{table}[H]
+\centering
+\caption{Comparación búsqueda: Grover vs clásico}
+\label{tab:grover_vs_clasico}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{$N$} & \textbf{Clásico} & \textbf{Grover} & \textbf{Speedup} \\
+\hline
+$10^6$ & $5 \times 10^5$ & 1,000 & $500\times$ \\
+$10^9$ & $5 \times 10^8$ & 31,623 & $\sim 16,000\times$ \\
+$2^{128}$ (AES) & $2^{127}$ & $2^{64}$ & $2^{63}\times$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Factorización: Shor vs Clásico}
+
+\begin{itemize}
+    \item \textbf{Mejor clásico} (GNFS): $O(\exp(c \cdot b^{1/3} (\log b)^{2/3}))$
+    \item \textbf{Shor cuántico}: $O(b^3)$ (polinomial)
+\end{itemize}
+
+Para RSA-2048: método clásico requiere miles de años, Shor es factible con $\sim 10^6$ qubits lógicos.
+
+\subsubsection{Protocolo BB84: Seguridad Cuántica}
+
+\textbf{Ventaja}: BB84 establece clave segura sin canal seguro previo, usando canal cuántico + canal público autenticado. La seguridad se basa en las leyes de la mecánica cuántica, no en complejidad computacional.
+
+\subsubsection{Conclusión}
+
+El simulador Qiskit proporciona:
+\begin{itemize}
+    \item \checkmark Verificación de predicciones teóricas
+    \item \checkmark Reproducibilidad perfecta
+    \item \checkmark Acceso a estados intermedios
+    \item \checkmark Sin costo ni tiempo de espera
+\end{itemize}
+
+\textbf{Limitación}: Restringido a $n \lesssim 30$ qubits. Para aplicaciones a gran escala, hardware cuántico real es indispensable.
+
+% ============================================================================
+% FIN DE LA SECCIÓN 6
+% ============================================================================
+
+
+% ========================
+\section{Líneas de Investigación Futuras}
+En esta sección se describen algunas de las principales direcciones de investigación relacionadas con la criptografía en la era cuántica.
+
+\subsection{Criptografía post-cuántica}
+
+La criptografía post-cuántica tiene como objetivo el diseño de esquemas criptográficos que sean seguros frente a adversarios clásicos y cuánticos. A diferencia de la criptografía cuántica, estos sistemas pueden implementarse en hardware y software clásicos, lo que facilita su adopción a corto y mediano plazo.
+
+Entre las principales familias de criptografía post-cuántica se encuentran los esquemas basados en retículas, códigos correctores de errores, funciones hash y sistemas multivariados. Estos enfoques se basan en problemas matemáticos para los cuales no se conocen algoritmos cuánticos eficientes, ni siquiera utilizando computación cuántica ideal. La estandarización de estos algoritmos, como el proceso liderado por el NIST, constituye una línea de investigación activa y de gran relevancia práctica.
+
+\subsection{Distribución cuántica de claves (QKD)}
+
+La distribución cuántica de claves (Quantum Key Distribution, QKD) representa un enfoque fundamentalmente distinto para la seguridad de la información, al utilizar principios físicos en lugar de supuestos de complejidad computacional. Protocolos como BB84 permiten a dos partes generar una clave secreta compartida cuya seguridad se basa en las leyes de la mecánica cuántica.
+
+Una de las características más relevantes de QKD es la capacidad de detectar la presencia de un espía, ya que cualquier intento de interceptar los qubits transmitidos introduce perturbaciones medibles en el sistema. Aunque la implementación práctica de QKD enfrenta desafíos técnicos, como pérdidas en el canal y limitaciones de distancia, esta tecnología constituye una alternativa prometedora para aplicaciones que requieren altos niveles de seguridad.
+
+Algo tambien a destacar es la presencia de las FPGAs (Field Programmable Gate Arrays) en la implementación de sistemas QKD, ya que permiten una mayor flexibilidad y velocidad en el procesamiento de señales cuánticas, facilitando la integración de componentes ópticos y electrónicos necesarios para la transmisión y recepción de qubits.
+\cite{quantumFPGA}
+
+\subsection{Simulación de ataques cuánticos}
+
+Otra línea de investigación relevante consiste en la simulación de ataques cuánticos utilizando herramientas de software, como simuladores cuánticos basados en computación clásica. Mediante plataformas como Qiskit, es posible estudiar el comportamiento de algoritmos cuánticos como Grover y Shor en escenarios de pequeña escala, así como analizar su impacto teórico sobre sistemas criptográficos simplificados.
+
+Estas simulaciones permiten evaluar la reducción de complejidad asociada a ataques cuánticos, estudiar los efectos del ruido y las limitaciones del hardware, y comparar el desempeño de algoritmos clásicos y cuánticos. Aunque no reemplazan la ejecución en hardware cuántico real, constituyen una herramienta valiosa para la investigación académica y la formación en computación cuántica.
+
+% ========================
+
+% Síntesis de resultados
+% Reflexión crítica
+% Trabajo futuro
+
+% ========================
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{redeszone}
+RedesZone,
+\textit{Criptografía: algoritmos clave simétrica y asimétrica},
+Disponible en:
+\url{https://www.redeszone.net/tutoriales/seguridad/criptografia-algoritmos-clave-simetrica-asimetrica/}.
+
+\bibitem{freecodecamp_gcd}
+freeCodeCamp,
+\textit{Euclidian GCD algorithm — Greatest Common Divisor},
+Disponible en:
+\url{https://www.freecodecamp.org/news/euclidian-gcd-algorithm-greatest-common-divisor/}.
+
+\bibitem{geeksforgeeks_rsa}
+GeeksforGeeks,
+\textit{RSA Algorithm (Cryptography)},
+Disponible en:
+\url{https://www.geeksforgeeks.org/computer-networks/rsa-algorithm-cryptography/}.
+
+\bibitem{nielsen}
+M. A. Nielsen and I. L. Chuang,
+\textit{Quantum Computation and Quantum Information},
+Cambridge University Press, 2010.
+
+\bibitem{elipticcurve}
+Nick Sullivan
+\textit{A (Relatively Easy To Understand) Primer on Elliptic Curve Cryptography}
+Disponible en:
+\url{https://blog.cloudflare.com/a-relatively-easy-to-understand-primer-on-elliptic-curve-cryptography/}
+
+\bibitem{quantumFPGA}
+Quantum Future Lab - University of Padua
+\textit{FPGA for Quantum}
+Disponible en:
+\url{https://quantumfuture.dei.unipd.it/research/fpga-for-quantum/}
+\end{thebibliography}
+
+
+\end{document}
