@@ -1,7 +1,6 @@
 % Bitácora: Raíces primitivas y orden multiplicativo
 \documentclass[12pt]{article}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+
 \input{generalconfig.tex}
 \title{Bitácora: FFT}
 \author{Contreras Reyes Orlando}
@@ -250,7 +249,7 @@ $$
 w = e^{-(2\pi i) / N}
 $$
 es una raíz de la unidad, lo que significa que $w^N = 1$. Esto se debe a que $w$ representa un punto en el plano complejo que se encuentra en la circunferencia unitaria, y al elevarlo a la potencia $N$, se completa una vuelta completa alrededor de la circunferencia, regresando al punto inicial. Esta propiedad es fundamental para el funcionamiento de la DFT y la FFT, ya que permite descomponer una señal en sus componentes de frecuencia utilizando estas raíces de la unidad.
-
+\newpage
 \subsection{DFT Aplicada}
 Definiendose $$
 W_N = e^{-(2\pi j) / N}
@@ -287,11 +286,43 @@ x[3]
 \end{bmatrix}
 \Rightarrow \vec{X}=\widehat{\text{W}^{kn}_4} \vec{x}
 $$
+\noindent
+\begin{minipage}[t]{0.4\textwidth}
+    \textbf{Calculando Factores :} \\[0.2cm]
+    $W^0 = W^4 = +1$ \\
+    $W^1 = -\text{i}$ \\
+    $W^2 = -1$ \\
+    $W^3 = +\text{i}$ \\
+
+\end{minipage}
+\begin{minipage}[t]{0.4\textwidth}
+    \textbf{Valores adicionales:} \\[0.2cm]
+    $W^6 = W^{4+2} = W^2 = -1$ \\
+    $W^9 = W^{4*2+1}=W^1 = -\text{i}$
+\end{minipage}
+
+Quedando en una matriz de la siguiente forma:
+$$
+\begin{bmatrix}       
+1 & 1 & 1 & 1 \\
+1 & -i & -1 & i \\
+1 & -1 & 1 & -1 \\
+1 & i & -1 & -i
+\end{bmatrix}
+$$
+
+\newpage
 \subsubsection{Linea Continua}
-\begin{figure}
+Considerando la linea continua como el vector 
+$$
+\vec{x} = \begin{bmatrix} x[0] \\ x[1] \\ x[2] \\ x[3] \end{bmatrix} = \begin{bmatrix} 3 \\ 3 \\ 3 \\ 3 \end{bmatrix}
+$$
+
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=0.7\linewidth]{src/LineaCont.png}
-    \label{fig:placeholder}
+    \includegraphics[width=0.5\linewidth]{src/LineaContIN.png}
+    \caption{LineaContIN}
+    \label{fig:LineaContIN}
 \end{figure}
 
 $$
@@ -314,58 +345,7 @@ X[3]
 3 \\
 3
 \end{bmatrix}
-$$
-\section*{Cálculo de la DFT ($N=4$)}
-
-% Bloque superior de ecuaciones de la DFT
-\begin{align*}
-X[0] &= x[0]W_4^{0 \cdot 0} + x[1]W_4^{0 \cdot 1} + x[2]W_4^{0 \cdot 2} + x[3]W_4^{0 \cdot 3} \\
-X[1] &= x[0]W_4^{1 \cdot 0} + x[1]W_4^{1 \cdot 1} + x[2]W_4^{1 \cdot 2} + x[3]W_4^{1 \cdot 3} \\
-X[2] &= x[0]W_4^{2 \cdot 0} + x[1]W_4^{2 \cdot 1} + x[2]W_4^{2 \cdot 2} + x[3]W_4^{2 \cdot 3} \\
-X[3] &= x[0]W_4^{3 \cdot 0} + x[1]W_4^{3 \cdot 1} + x[2]W_4^{3 \cdot 2} + x[3]W_4^{3 \cdot 3}
-\end{align*}
-
-\vspace{0.5cm}
-
-% Definición del factor de giro (Twiddle Factor) centrado
-\begin{equation*}
-W_N = e^{-2\pi \text{j} / N}
-\end{equation*}
-
-\vspace{0.5cm}
-
-% Sección inferior organizada en columnas
-\noindent
-\begin{minipage}[t]{0.3\textwidth}
-    \textbf{Datos de entrada:} \\[0.2cm]
-    $N = 4$ \\[0.2cm]
-    $x[0] = 3$ \\
-    $x[1] = 3$ \\
-    $x[2] = 3$ \\
-    $x[3] = 3$
-\end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-    \textbf{Factores de giro ($W_4 = W$):} \\[0.2cm]
-    $W^0 = +1$ \\
-    $W^1 = -\text{i}$ \\
-    $W^2 = -1$ \\
-    $W^3 = +\text{i}$ \\
-    $W^4 = +1$
-\end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-    \textbf{Valores adicionales:} \\[0.2cm]
-    $W^6 = -1$ \\
-    $W^9 = -\text{i}$
-\end{minipage}
-
-$$
-\begin{bmatrix}
-X[0] \\
-X[1] \\
-X[2] \\
-X[3]
-\end{bmatrix}
-=
+=   
 \begin{bmatrix}       
 1 & 1 & 1 & 1 \\
 1 & -i & -1 & i \\
@@ -407,6 +387,13 @@ X[3]
 0
 \end{bmatrix}
 $$
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{src/LineaOUT.png}
+    \caption{LineaOUT}
+    \label{fig:LineaOUT}
+\end{figure}
+\subsubsection{Propiedades de la DFT}
 Ademas esto nos sirve de evidencia para ver que las propiedades aplicadas en la presentación funcionaron
 \begin{figure}[!h]
     \centering
@@ -432,6 +419,7 @@ $$
 1 & -\text{W}_4^{1} & -1 & \text{W}_4^{1}
 \end{bmatrix}
 $$
+\newpage
 \subsubsection{Senoidal con 4 puntos}
 Para la senoidal de 4 puntos obtendremos los siguientes puntos del vector
 $$\begin{bmatrix}
@@ -514,7 +502,7 @@ X[3]
 \end{bmatrix}
 $$
 
-De resultado se obtuvo un vector de mangitudes imaginarias. Es aqui donde nos damos cuenta que la DFT no solo mide la amplitud o magnitud, sino que también mide la fase de la señal, lo que se refleja en la parte imaginaria del resultado. En este caso, la senoidal de 4 puntos tiene una fase que se refleja en los valores imaginarios obtenidos en el resultado de la DFT. Esto es importante para entender que la DFT no solo proporciona información sobre la frecuencia y amplitud de las componentes de una señal, sino también sobre su fase
+De resultado se obtuvo un vector de mangitudes imaginarias. Es aqui donde nos damos cuenta que la DFT no solo mide la amplitud o magnitud, sino que también mide la fase de la señal, lo que se refleja en la parte imaginaria del resultado.
 Podemos representar entonces la señal transformada mediante la siguiente ecuación
 
 $$
@@ -564,7 +552,7 @@ X =
 \end{bmatrix},
 $$
 
-las magnitudes son
+las magnitudes y fases correspondientes
 
 $$
 |X| =
@@ -574,11 +562,7 @@ $$
 0\\
 2
 \end{bmatrix},
-$$
-
-y las fases correspondientes son
-
-$$
+\quad 
 \Phi =
 \begin{bmatrix}
 0\\
@@ -623,30 +607,19 @@ X =
 \end{bmatrix}
 $$
 
-
-
-Se observa que la energía de la señal se concentra únicamente en las componentes \(k=1\) y \(k=3\), las cuales presentan la misma magnitud pero fases opuestas. Esto demuestra que la DFT permite determinar no solo la amplitud de las componentes frecuenciales presentes en una señal, sino también el desfase asociado a cada una de ellas.
-
-En caso de que fueran 5 puntos es decir $N=5$ se tendría que calcular la matriz de Fourier para 5 puntos, lo que implicaría calcular las potencias de \(W_5\) y luego multiplicar esta matriz por el vector de entrada correspondiente a la señal muestreada. Esto nos permitiría obtener la DFT de la señal en el caso de tener 5 puntos, lo que nos daría información sobre las componentes frecuenciales presentes en la señal y sus respectivas fases. Además que para 5 multiplos los coeficientes de $W_N$ se vuelven más complejos, lo que puede resultar en una DFT con componentes frecuenciales más variadas y con fases más complejas, dependiendo de la señal de entrada.
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.5\linewidth]{src/SIn5.png}
-    
-    \label{fig:placeholder}
+    \includegraphics[width=\linewidth]{src/SinOUT.png}
+    \caption{SinOUT}
+    \label{fig:SinOUT}
 \end{figure}
-A continuacion se muestra el codigo para un $N =5$
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.8\linewidth]{src/Coef5.png}
-    
-    \label{fig:placeholder}
-\end{figure}
+
 \subsubsection{Pulso Cuadrado}
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.8\linewidth]{src/Pulso.png}
-    
-    \label{fig:placeholder}
+    \includegraphics[width=0.6\linewidth]{src/PulsoIN.png}
+    \caption{PulsoIN}
+    \label{fig:PulsoIN}
 \end{figure}
 Ya una vez con la Matriz definida($\widehat{\text{W}^{kn}_N}$) solo quedaría sustituir el vector de la señal muestreada $\vec{x}$.
 Si definimos un pulso en el intervalo $n=2$, es decir
@@ -697,104 +670,24 @@ X[3]
 0 \\
 3i -3
 \end{bmatrix}
+=
+\begin{bmatrix}
+6 \\
+3\sqrt{2}\angle -\dfrac{3\pi}{4} \\
+0 \\
+3\sqrt{2}\angle \dfrac{\pi}{4}
+\end{bmatrix}
 $$
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=.82\linewidth]{src/PulsoOUT.png}
+    \caption{PulsoOUT}
+    \label{fig:PulsoOUT}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\subsection{Ejemplo de DFT de 4 Puntos}
-
-Considérese la secuencia:
-
-\[
-x(n)=\{1,2,3,4\}
-\]
-
-Con \(N=4\), la DFT se calcula mediante:
-
-\[
-X(k)=\sum_{n=0}^{3} x(n)e^{-j\frac{2\pi}{4}kn}
-\]
-
-\textbf{Cálculo de \(X(0)\)}
-
-\[
-X(0)=1+2+3+4
-\]
-
-\[
-X(0)=10
-\]
-
-\textbf{Cálculo de \(X(1)\)}
-
-\[
-X(1)=1+2e^{-j\pi/2}+3e^{-j\pi}+4e^{-j3\pi/2}
-\]
-
-Usando:
-
-\[
-e^{-j\pi/2}=-j
-\]
-
-\[
-e^{-j\pi}=-1
-\]
-
-\[
-e^{-j3\pi/2}=j
-\]
-
-se obtiene:
-
-\[
-X(1)=1-2j-3+4j
-\]
-
-\[
-X(1)=-2+2j
-\]
-
-\textbf{Cálculo de \(X(2)\)}
-
-\[
-X(2)=1+2e^{-j\pi}+3e^{-j2\pi}+4e^{-j3\pi}
-\]
-
-\[
-X(2)=1-2+3-4
-\]
-
-\[
-X(2)=-2
-\]
-
-\textbf{Cálculo de \(X(3)\)}
-
-\[
-X(3)=1+2e^{-j3\pi/2}+3e^{-j3\pi}+4e^{-j9\pi/2}
-\]
-
-\[
-X(3)=1+2j-3-4j
-\]
-
-\[
-X(3)=-2-2j
-\]
-
-
-La DFT de la secuencia:
-
-\[
-x(n)=\{1,2,3,4\}
-\]
-
-es:
-
-\[
-X(k)=\{10,\,-2+2j,\,-2,\,-2-2j\}
-\]
+\newpage
 \section{Algoritmos}
 
 \subsection{¿Qué es un algoritmo?}
@@ -810,14 +703,14 @@ Este constituye el ejemplo más elemental de un algoritmo cuantitativo secuencia
 \begin{algorithm}[H]
 \caption{Suma de dos números}
 \begin{algorithmic}[1]
-    \REQUIRE Dos números reales, $A$ y $B$.
-    \ENSURE El resultado de la adición de ambos números.
-    \STATE \textbf{Inicio}
-    \STATE Leer o recibir el primer número: $A$
-    \STATE Leer o recibir el segundo número: $B$
-    \STATE Calcular la suma de ambos valores: $Resultado \leftarrow A + B$
-    \STATE Mostrar o retornar el valor de $Resultado$
-    \STATE \textbf{Fin}
+    \Require Dos números reales, $A$ y $B$.
+    \Ensure El resultado de la adición de ambos números.
+    \State \textbf{Inicio}
+    \State Leer o recibir el primer número: $A$
+    \State Leer o recibir el segundo número: $B$
+    \State Calcular la suma de ambos valores: $Resultado \leftarrow A + B$
+    \State Mostrar o retornar el valor de $Resultado$
+    \State \textbf{Fin}
 \end{algorithmic}
 \end{algorithm}
 
@@ -838,18 +731,18 @@ Si no tenemos el operador multiplicativo y se asume una implementación basada e
 \begin{algorithm}[H]
 \caption{Multiplicación mediante sumas sucesivas}
 \begin{algorithmic}[1]
-    \REQUIRE Dos números enteros positivos, el multiplicando $A$ y el multiplicador $B$.
-    \ENSURE El producto $Producto = A \times B$.
-    \STATE \textbf{Inicio}
-    \STATE Leer los valores de $A$ y $B$
-    \STATE Inicializar la variable acumuladora: $Producto \leftarrow 0$
-    \STATE Inicializar el contador de iteraciones: $i \leftarrow 0$
-    \WHILE{$i < B$}
-        \STATE Acumular el valor de $A$: $Producto \leftarrow Producto + A$
-        \STATE Incrementar el contador: $i \leftarrow i + 1$
-    \ENDWHILE
-    \STATE Mostrar o retornar el valor de $Producto$
-    \STATE \textbf{Fin}
+    \Require Dos números enteros positivos, el multiplicando $A$ y el multiplicador $B$.
+    \Ensure El producto $Producto = A \times B$.
+    \State \textbf{Inicio}
+    \State Leer los valores de $A$ y $B$
+    \State Inicializar la variable acumuladora: $Producto \leftarrow 0$
+    \State Inicializar el contador de iteraciones: $i \leftarrow 0$
+    \While{$i < B$}
+        \State Acumular el valor de $A$: $Producto \leftarrow Producto + A$
+        \State Incrementar el contador: $i \leftarrow i + 1$
+    \EndWhile
+    \State Mostrar o retornar el valor de $Producto$
+    \State \textbf{Fin}
 \end{algorithmic}
 \end{algorithm}
 
@@ -884,18 +777,18 @@ Para realizar la adición de dos matrices, $A$ y $B$, es una condición obligato
 \begin{algorithm}[H]
 \caption{Suma de dos matrices}
 \begin{algorithmic}[1]
-    \REQUIRE Matrices $A$ y $B$ de dimensiones $m \times n$.
-    \ENSURE Matriz resultante $C$ de dimensiones $m \times n$, donde $C[i][j] = A[i][j] + B[i][j]$.
-    \STATE \textbf{Inicio}
-    \STATE Validar que las dimensiones de $A$ y $B$ sean idénticas ($m \times n$).
-    \STATE Declarar una nueva matriz $C$ de dimensiones $m \times n$.
-    \FOR{cada fila $i$ desde $0$ hasta $m-1$}
-        \FOR{cada columna $j$ desde $0$ hasta $n-1$}
-            \STATE Calcular: $C[i][j] \leftarrow A[i][j] + B[i][j]$
-        \ENDFOR
-    \ENDFOR
-    \STATE Retornar la matriz resultante $C$
-    \STATE \textbf{Fin}
+    \Require Matrices $A$ y $B$ de dimensiones $m \times n$.
+    \Ensure Matriz resultante $C$ de dimensiones $m \times n$, donde $C[i][j] = A[i][j] + B[i][j]$.
+    \State \textbf{Inicio}
+    \State Validar que las dimensiones de $A$ y $B$ sean idénticas ($m \times n$).
+    \State Declarar una nueva matriz $C$ de dimensiones $m \times n$.
+    \For{cada fila $i$ desde $0$ hasta $m-1$}
+        \For{cada columna $j$ desde $0$ hasta $n-1$}
+            \State Calcular: $C[i][j] \leftarrow A[i][j] + B[i][j]$
+        \EndFor
+    \EndFor
+    \State Retornar la matriz resultante $C$
+    \State \textbf{Fin}
 \end{algorithmic}
 \end{algorithm}
 
@@ -927,20 +820,20 @@ El algoritmo implementa el cálculo del producto punto de las filas de $A$ por l
 \begin{algorithm}[H]
 \caption{Multiplicación de dos matrices}
 \begin{algorithmic}[1]
-    \REQUIRE Matriz $A$ de dimensiones $m \times n$ y Matriz $B$ de dimensiones $n \times p$.
-    \ENSURE Matriz resultante $C$ de dimensiones $m \times p$.
-    \STATE \textbf{Inicio}
-    \STATE Validar que el número de columnas de $A$ sea igual al número de filas de $B$.
-    \STATE Declarar la matriz $C$ de dimensiones $m \times p$ e inicializar todos sus elementos en $0$.
-    \FOR{cada fila $i$ desde $0$ hasta $m-1$}
-        \FOR{cada columna $j$ desde $0$ hasta $p-1$}
-            \FOR{cada elemento de acoplamiento $k$ desde $0$ hasta $n-1$}
-                \STATE Calcular el acumulado: $C[i][j] \leftarrow C[i][j] + (A[i][k] \times B[k][j])$
-            \ENDFOR
-        \ENDFOR
-    \ENDFOR
-    \STATE Retornar la matriz resultante $C$
-    \STATE \textbf{Fin}
+    \Require Matriz $A$ de dimensiones $m \times n$ y Matriz $B$ de dimensiones $n \times p$.
+    \Ensure Matriz resultante $C$ de dimensiones $m \times p$.
+    \State \textbf{Inicio}
+    \State Validar que el número de columnas de $A$ sea igual al número de filas de $B$.
+    \State Declarar la matriz $C$ de dimensiones $m \times p$ e inicializar todos sus elementos en $0$.
+    \For{cada fila $i$ desde $0$ hasta $m-1$}
+        \For{cada columna $j$ desde $0$ hasta $p-1$}
+            \For{cada elemento de acoplamiento $k$ desde $0$ hasta $n-1$}
+                \State Calcular el acumulado: $C[i][j] \leftarrow C[i][j] + (A[i][k] \times B[k][j])$
+            \EndFor
+        \EndFor
+    \EndFor
+    \State Retornar la matriz resultante $C$
+    \State \textbf{Fin}
 \end{algorithmic}
 \end{algorithm}
 

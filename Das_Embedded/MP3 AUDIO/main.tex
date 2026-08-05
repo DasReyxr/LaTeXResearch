@@ -1,0 +1,467 @@
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}% Math and Physical Sciences Numbered
+
+\input{generalconfig.tex}
+
+\begin{document}
+
+\title[Article Title]{Archivos de Audio MP3: Codificación y su Implementación en Microcontroladores}
+
+\author*[1,2]{\fnm{Contreras R} \sur{Orlando}}\email{\{al348390,al464376\}@edu.uaa.mx}
+
+\affil[3]{\orgdiv{Department of Electronic Systems}, \orgname{UAA}, \orgaddress{\street{Av. Universidad 940}, \city{Aguascalientes}, \postcode{20131}, \state{Aguascalientes}, \country{México}}}
+
+%%==================================%%
+%% Sample for unstructured abstract %%
+%%==================================%%
+
+\abstract{El presente reporte estudia el formato de audio comprimido \textit{MPEG-1/2 Audio Layer III} (MP3), desarrollado principalmente por el Fraunhofer Institut für Integrierte Schaltungen (IIS) bajo el liderazgo de Karlheinz Brandenburg. Se abordan los fundamentos psicoacústicos que sustentan la compresión con pérdida, la estructura binaria de la trama MP3, la arquitectura interna del codificador (banco de filtros híbrido, MDCT, modelo psicoacústico, cuantización no uniforme, codificación de Huffman y reservorio de bits) y la del decodificador correspondiente. Se presentan además dos estrategias de implementación práctica en microcontroladores: decodificación por hardware dedicado mediante el códec VS1053b vía SPI, y decodificación por software utilizando el decodificador de punto fijo Helix sobre un periférico I2S con salida DMA. Finalmente se discuten ventajas y desventajas frente a otros formatos de audio, sus aplicaciones actuales, y se listan recursos verificados para su implementación en plataformas STM32/HAL.}
+
+\keywords{MP3, MPEG-1 Layer III, Codificación de audio, Psicoacústica, MDCT, Huffman, VS1053, STM32, I2S, Helix.}
+
+\maketitle
+
+\section{Introducción}\label{sec1}
+El formato \textbf{MP3} (\textit{MPEG-1 Audio Layer III}, y posteriormente \textit{MPEG-2 Audio Layer III}) es un esquema de compresión de audio con pérdida diseñado para reducir drásticamente el tamaño de los archivos de audio digital manteniendo una calidad percibida cercana a la del material sin comprimir. A diferencia de la compresión sin pérdida (como FLAC), MP3 aprovecha las limitaciones del sistema auditivo humano --el llamado \textbf{modelo psicoacústico}-- para descartar de forma deliberada e irreversible la información que un oyente promedio no percibiría, logrando reducciones de tamaño de entre el 75\% y el 95\% respecto al audio de calidad CD, dependiendo de la tasa de bits elegida.
+
+Puntos clave que se desarrollan en este reporte:
+\begin{itemize}
+    \item MP3 combina un \textbf{banco de filtros híbrido} (polifase + MDCT) con un \textbf{modelo psicoacústico} para concentrar los bits disponibles en las regiones del espectro donde el oído es más sensible.
+    \item La trama MP3 es un contenedor autocontenido de 32 bits de cabecera más datos de audio, lo que permite decodificar el flujo a partir de cualquier punto (streaming).
+    \item En microcontroladores, la decodificación de MP3 puede resolverse mediante \textbf{un chip decodificador dedicado} (descarga completa de cómputo) o mediante un \textbf{decodificador por software de punto fijo}, ejecutado directamente en el núcleo Cortex-M.
+    \item Todas las patentes asociadas a MP3 expiraron en 2017, por lo que su codificación y decodificación son hoy de uso libre.
+\end{itemize}
+
+MP3 sigue siendo relevante en el ámbito de sistemas embebidos porque, a diferencia de formatos más modernos como AAC u Opus, cuenta con decodificadores de referencia extremadamente maduros, ligeros y de código abierto, además de un ecosistema de silicio dedicado (como el VS1053b) pensado específicamente para microcontroladores de bajos recursos.
+
+\begin{comment}
+--------------------------------------------------------------
+ IMAGEN 1: Buscar una fotografía o diagrama de un reproductor
+ MP3 portátil clásico (años 2000) junto a un microcontrolador
+ moderno con módulo decodificador MP3 (p. ej. VS1053), para
+ ilustrar la evolución del formato desde el consumo masivo
+ hasta su uso actual en proyectos embebidos.
+ Buscar en: "classic portable mp3 player 2000s", "VS1053 module
+ embedded project photo"
+--------------------------------------------------------------%
+\end{comment}
+
+\section{Breve Historia}\label{sec:history}
+El desarrollo del algoritmo que se convertiría en MP3 comenzó en 1987 como una colaboración entre el Fraunhofer IIS-A y la Universidad de Erlangen-Núremberg, dentro del marco del programa europeo EUREKA 147 orientado a la radiodifusión digital de audio (DAB). La propuesta de Fraunhofer, conocida como \textbf{ASPEC} (\textit{Adaptive Spectral Perceptual Entropy Coding}), compitió contra otras arquitecturas --principalmente \textbf{MUSICAM}, de Philips y el Institut für Rundfunktechnik-- dentro del proceso de estandarización que el \textit{Moving Picture Experts Group} (MPEG) inició en 1988 bajo la ISO.
+
+Tras evaluaciones comparativas, el MPEG decidió en 1990 combinar ambas propuestas en una familia de tres capas de codificación de complejidad creciente: la \textbf{Capa I} (una variante simplificada de MUSICAM), la \textbf{Capa II} (MUSICAM optimizado, adoptado por DAB) y la \textbf{Capa III} (basada en ASPEC, con mayor eficiencia de compresión a costa de mayor complejidad computacional). El estándar se formalizó en agosto de 1993 como \textbf{ISO/IEC 11172-3}, dentro del conjunto MPEG-1. En 1995 se publicó la extensión \textbf{ISO/IEC 13818-3} (MPEG-2), que añadió tasas de muestreo más bajas y compatibilidad retroactiva.
+
+El nombre de archivo \texttt{.mp3} se adoptó formalmente el 14 de julio de 1995, mediante una votación interna en Fraunhofer IIS. La verdadera explosión de popularidad del formato llegó a partir de 1995 con la proliferación de Internet como medio de distribución de música, y se consolidó con la aparición de codificadores de alta calidad y libres de restricciones prácticas como \textbf{LAME} (1998), y de reproductores portátiles dedicados a finales de esa década. Es relevante destacar, desde una perspectiva de propiedad intelectual, que la totalidad de las patentes que protegían las técnicas de codificación y decodificación MP3 expiraron a nivel internacional el 23 de abril de 2017, lo que eliminó cualquier restricción de licenciamiento para su uso comercial o educativo.
+
+\begin{comment}
+--------------------------------------------------------------
+ IMAGEN 2: Buscar una línea de tiempo o infografía histórica
+ del desarrollo de MP3, mostrando los hitos: 1987 inicio en
+ Fraunhofer/Universidad de Erlangen, 1988 fundación de MPEG,
+ 1993 publicación de ISO/IEC 11172-3, 1995 adopción del nombre
+ ".mp3" y aparición de LAME, 2017 expiración de patentes.
+ Buscar en: "MP3 history timeline Fraunhofer infographic",
+ "mp3-history.com timeline"
+--------------------------------------------------------------%
+\end{comment}
+
+\begin{figure}[!h]
+    \centering
+% \includegraphics[width=0.85\linewidth]{src/MP3Timeline.png}
+    \caption{Línea de tiempo del desarrollo histórico del formato MP3}
+    \label{fig:timeline}
+\end{figure}
+
+\section{Conceptos Básicos}\label{sec:basics}
+
+\subsection{Compresión con Pérdida y Percepción Auditiva}
+MP3 es un codificador \textbf{perceptual}: no busca reconstruir la señal original de forma matemáticamente exacta, sino producir una señal que, al ser escuchada por un humano, resulte indistinguible (o casi) de la original. Esto se logra explotando dos fenómenos del sistema auditivo:
+
+\begin{itemize}
+    \item \textbf{Enmascaramiento en frecuencia:} un tono intenso en una banda de frecuencia reduce la capacidad del oído para percibir tonos más débiles en bandas cercanas. El codificador calcula, para cada subbanda, un \textit{umbral de enmascaramiento} y permite que el ruido de cuantización quede oculto bajo ese umbral.
+    \item \textbf{Enmascaramiento temporal:} un sonido intenso enmascara sonidos más débiles que ocurren inmediatamente antes (\textit{pre-enmascaramiento}) o después (\textit{post-enmascaramiento}) de él en el tiempo, lo que permite relajar la precisión de codificación en esas ventanas temporales.
+\end{itemize}
+
+El \textbf{modelo psicoacústico} del codificador (el estándar define dos variantes, Modelo 1 y Modelo 2, siendo este último el más sofisticado) analiza el espectro de la señal y produce, por cada banda o grupo de bandas, una \textit{relación señal-a-máscara} (SMR, \textit{Signal-to-Mask Ratio}) que el bloque de asignación de bits utiliza para decidir cuántos bits invertir en cada región espectral.
+
+\subsection{Tasa de Bits: CBR, VBR y ABR}
+El estándar Layer III admite tasas de bits desde 8 hasta 320 kbit/s por canal, y permite que la tasa cambie de una trama a otra (\textit{bitrate switching}). Esto da lugar a tres modos de operación comunes en los codificadores:
+\begin{itemize}
+    \item \textbf{CBR (\textit{Constant Bitrate}):} todas las tramas usan la misma tasa de bits nominal; simplifica el \textit{seek} y el cálculo de duración, a costa de desperdiciar bits en pasajes simples y limitarlos en pasajes complejos.
+    \item \textbf{VBR (\textit{Variable Bitrate}):} el codificador asigna más bits a los segmentos perceptualmente complejos y menos a los silencios o segmentos simples, optimizando la relación calidad/tamaño total del archivo.
+    \item \textbf{ABR (\textit{Average Bitrate}):} un híbrido que intenta alcanzar una tasa promedio objetivo permitiendo variaciones locales, similar en espíritu a VBR pero con un tamaño de archivo más predecible.
+\end{itemize}
+
+\subsection{Frecuencias de Muestreo Soportadas}
+Dependiendo de la versión del estándar, MP3 admite las siguientes frecuencias de muestreo: 32, 44.1 y 48 kHz bajo MPEG-1; 16, 22.05 y 24 kHz bajo MPEG-2; y 8, 11.025 y 12 kHz bajo la extensión no oficial conocida como ``MPEG 2.5'', creada por Fraunhofer para cubrir aplicaciones de muy baja tasa de bits (por ejemplo, voz).
+
+\section{Estructura y Arquitectura Técnica}\label{sec:architecture}
+
+\subsection{Estructura de la Trama (Frame)}\label{sec:frame}
+Un archivo MP3 es, en esencia, una secuencia continua de \textbf{tramas} independientes entre sí; cada trama contiene un número fijo de muestras de audio (1152 para Layer III en MPEG-1) y puede, en principio, decodificarse sin necesidad de tramas anteriores --propiedad clave que hace a MP3 idóneo para \textit{streaming}--. Cada trama comienza con una \textbf{cabecera} de 32 bits, cuyos campos se describen en la Tabla \ref{tab:frame_header}.
+
+\begin{comment}
+--------------------------------------------------------------
+ IMAGEN 3: Buscar un diagrama de bits de la cabecera de trama
+ MP3 (32 bits), mostrando de izquierda a derecha los campos:
+ syncword (11-12 bits), version ID, layer, protection bit,
+ bitrate index, sampling rate index, padding, private bit,
+ channel mode, mode extension, copyright, original/copy,
+ emphasis, alineados sobre una regla de bits 0-31.
+ Buscar en: "mp3 frame header bit diagram 32 bits",
+ "MPEG audio frame header structure diagram"
+--------------------------------------------------------------%
+\end{comment}
+
+\begin{figure}[!h]
+    \centering
+% \includegraphics[width=\linewidth]{src/MP3FrameHeader.png}
+    \caption{Estructura de bits de la cabecera de trama MP3 (32 bits)}
+    \label{fig:frame_header}
+\end{figure}
+
+\begin{table}[!h]
+\centering
+\caption{Campos de la cabecera de trama MP3 (ISO/IEC 11172-3)}
+\label{tab:frame_header}
+\begin{tabularx}{\linewidth}{|>{\RaggedRight\arraybackslash}p{2.6cm}|>{\RaggedRight\arraybackslash}p{1.6cm}|Y|}
+\hline
+\textbf{Campo} & \textbf{Tamaño} & \textbf{Descripción} \\ \hline
+Syncword & 11--12 bits & Patrón fijo de bits en 1 (\texttt{0xFFE} u \texttt{0xFFF}) que marca el inicio de una trama válida. \\ \hline
+Version ID & 2 bits & Distingue MPEG-1, MPEG-2 y la extensión MPEG 2.5. \\ \hline
+Layer & 2 bits & Indica la capa de codificación (I, II o III). \\ \hline
+Protection bit & 1 bit & Si vale 0, la cabecera es seguida de un CRC de 16 bits; si vale 1, no hay CRC. \\ \hline
+Bitrate index & 4 bits & Índice a una tabla de tasas de bits válidas (8 a 320 kbit/s para Layer III). \\ \hline
+Sampling rate index & 2 bits & Índice a la frecuencia de muestreo (p. ej. 44.1 kHz). \\ \hline
+Padding bit & 1 bit & Indica si la trama incluye un byte de relleno adicional para cuadrar la duración exacta. \\ \hline
+Private bit & 1 bit & Sin uso definido por el estándar; libre para el codificador. \\ \hline
+Channel mode & 2 bits & Estéreo, estéreo conjunto (\textit{joint stereo}), dual mono o mono. \\ \hline
+Mode extension & 2 bits & Parámetros adicionales de estéreo conjunto (\textit{intensity stereo}/\textit{M/S stereo}). \\ \hline
+Copyright / Original & 1 + 1 bits & Banderas informativas sin efecto en la decodificación. \\ \hline
+Emphasis & 2 bits & Curva de preénfasis aplicada (raramente usada en la práctica). \\ \hline
+\end{tabularx}
+\end{table}
+
+El tamaño en bytes de una trama Layer III (MPEG-1) se calcula como:
+\begin{equation}\label{eq:framelen}
+    \text{FrameLen} = \left\lfloor \frac{144 \times \text{BitRate}}{\text{SampleRate}} \right\rfloor + \text{Padding}
+\end{equation}
+Por ejemplo, para 192 kbit/s y 44.1 kHz con padding activo, FrameLen $= \lfloor 144 \times 192000 / 44100 \rfloor + 1 = 627$ bytes. Para MPEG-2/2.5 Layer III, donde cada trama contiene 576 muestras en lugar de 1152, la constante 144 se sustituye por 72.
+
+A continuación de la cabecera (y del CRC opcional) se encuentra la \textbf{información lateral} (\textit{side information}: 17 bytes en mono, 32 en estéreo), que incluye el puntero \texttt{main\_data\_begin} --un desplazamiento negativo en bytes que permite que los datos de audio de una trama ``tomen prestado'' espacio no utilizado de tramas anteriores mediante el mecanismo de \textbf{reservorio de bits} (sección \ref{sec:encoder})-- así como los factores de escala y las tablas de Huffman seleccionadas para cada uno de los dos \textbf{gránulos} (\textit{granules}) de 576 muestras que componen cada trama.
+
+\subsection{Arquitectura del Codificador}\label{sec:encoder}
+El códec MPEG-1 Layer III procesa el audio PCM de entrada en dos rutas paralelas, ilustradas en la Figura \ref{fig:encoder_block}: una hacia el \textbf{banco de filtros}, que transforma la señal al dominio de la frecuencia, y otra hacia el \textbf{modelo psicoacústico}, que analiza esa misma señal (típicamente mediante una FFT independiente) para calcular umbrales de enmascaramiento.
+
+\begin{comment}
+--------------------------------------------------------------
+ IMAGEN 4: Buscar el diagrama de bloques clásico del codificador
+ MPEG-1 Layer III, mostrando: entrada PCM dividiéndose hacia
+ (a) banco de filtros polifase + MDCT y (b) modelo psicoacústico
+ vía FFT; seguido de cuantización no uniforme con doble lazo
+ (control de distorsión y control de tasa), codificación de
+ Huffman, reservorio de bits, y multiplexado final en el
+ formato de trama.
+ Buscar en: "MPEG-1 Layer III encoder block diagram",
+ "MP3 encoder psychoacoustic model filterbank quantization
+ huffman diagram"
+--------------------------------------------------------------%
+\end{comment}
+
+\begin{figure}[!h]
+    \centering
+% \includegraphics[width=\linewidth]{src/EncoderBlockDiagram.png}
+    \caption{Diagrama de bloques del codificador MPEG-1 Layer III}
+    \label{fig:encoder_block}
+\end{figure}
+
+Las etapas principales son:
+
+\begin{itemize}
+    \item \textbf{Banco de filtros híbrido (polifase + MDCT):} primero, un banco de filtros polifase de 32 subbandas (512 coeficientes FIR) divide la señal en bandas de frecuencia de igual ancho, heredado de las Capas I y II. Sobre cada subbanda se aplica adicionalmente una \textbf{Transformada de Coseno Discreta Modificada} (MDCT) de 18 o 6 puntos (según el tipo de bloque), refinando la resolución en frecuencia hasta 576 líneas espectrales por gránulo. Esta combinación --exclusiva de Layer III-- es la que le da su ventaja de compresión frente a las Capas I y II.
+    \item \textbf{Conmutación de ventanas (\textit{block switching}):} el codificador puede alternar entre bloques \textit{largos} (mejor resolución en frecuencia, adecuados para señales estacionarias) y bloques \textit{cortos} (mejor resolución temporal, usados en transitorios como percusiones, para evitar el artefacto de \textit{pre-eco}), así como bloques \textit{mixtos} que combinan ambos en distintas regiones espectrales de un mismo gránulo.
+    \item \textbf{Codificación estéreo conjunta:} en modo \textit{joint stereo}, el codificador puede aplicar \textbf{M/S stereo} (codificando la suma y diferencia de los canales L/R en lugar de L y R por separado) y/o \textbf{intensity stereo} (compartiendo información de envolvente espectral entre canales en las frecuencias altas, donde el oído es menos sensible a la localización precisa), reduciendo aún más la redundancia entre canales.
+    \item \textbf{Cuantización no uniforme y doble lazo anidado:} los coeficientes MDCT se cuantizan con una ley de potencia (exponente 3/4) que distribuye el error de cuantización de forma más perceptualmente uniforme que una cuantización lineal. Un \textbf{lazo de distorsión} interno ajusta los \textit{factores de escala} por banda hasta que el ruido de cuantización cae por debajo del umbral de enmascaramiento, mientras que un \textbf{lazo de tasa} externo ajusta el tamaño del paso de cuantización global hasta que el número de bits resultante se ajusta al presupuesto disponible para el gránulo.
+    \item \textbf{Codificación de Huffman:} los valores cuantizados se codifican mediante uno de 32 conjuntos de tablas de Huffman predefinidas por el estándar (codificación sin pérdida sobre datos ya cuantizados), seleccionando para cada gránulo las tablas que minimizan el número de bits resultante.
+    \item \textbf{Reservorio de bits (\textit{bit reservoir}):} dado que el flujo de salida debe respetar en promedio la tasa de bits nominal, pero algunos gránulos requieren más bits que otros, el codificador mantiene un ``banco'' de bits no utilizados en tramas simples que puede prestar a tramas más complejas, mejorando la calidad global sin abandonar una tasa de bits promedio constante.
+\end{itemize}
+
+\subsection{Arquitectura del Decodificador}\label{sec:decoder}
+El decodificador realiza esencialmente el proceso inverso, y --a diferencia del codificador, cuyo diseño interno (modelo psicoacústico, estrategia de cuantización) queda abierto a cada implementación-- está completamente especificado bit a bit por el estándar, garantizando que cualquier decodificador conforme produzca una salida equivalente:
+
+\begin{enumerate}
+    \item Localización del \textit{syncword} y validación de la cabecera de trama.
+    \item Lectura de la información lateral y, usando el puntero \texttt{main\_data\_begin}, recuperación de los datos principales (que pueden ubicarse física\-mente en tramas anteriores gracias al reservorio de bits).
+    \item Decodificación de Huffman (proceso inverso al de codificación) para recuperar los valores cuantizados.
+    \item Descuantización (aplicando la ley de potencia inversa y los factores de escala) para recuperar una aproximación de los coeficientes espectrales.
+    \item Procesamiento estéreo inverso (deshacer \textit{M/S} o \textit{intensity stereo} según corresponda).
+    \item \textbf{IMDCT} (Transformada de Coseno Discreta Modificada Inversa) por subbanda, seguida de \textit{traslape y suma} (\textit{overlap-add}) para eliminar el aliasing introducido por la MDCT en el codificador.
+    \item \textbf{Banco de filtros de síntesis} (polifase inverso) que combina las 32 subbandas de vuelta en una señal PCM de tiempo continuo, lista para enviarse a un DAC.
+\end{enumerate}
+
+\begin{comment}
+--------------------------------------------------------------
+ IMAGEN 5: Buscar un diagrama de flujo del decodificador MPEG-1
+ Layer III, mostrando la secuencia: entrada de bitstream ->
+ decodificación Huffman -> descuantización -> procesamiento
+ estéreo -> IMDCT + overlap-add -> banco de filtros de síntesis
+ -> salida PCM.
+ Buscar en: "MP3 decoder flow diagram Huffman IMDCT synthesis
+ filterbank", "MPEG layer 3 decoder block diagram"
+--------------------------------------------------------------%
+\end{comment}
+
+\begin{figure}[!h]
+    \centering
+% \includegraphics[width=\linewidth]{src/DecoderFlowDiagram.png}
+    \caption{Diagrama de flujo del decodificador MPEG-1 Layer III}
+    \label{fig:decoder_flow}
+\end{figure}
+
+Esta asimetría --decodificador estrictamente especificado, codificador libre-- es la razón por la cual codificadores de distintas épocas y calidades (como LAME) han podido mejorar sustancialmente su desempeño con el tiempo sin romper la compatibilidad con decodificadores existentes, y es también la que permite implementar decodificadores extremadamente ligeros en microcontroladores de recursos limitados.
+
+\section{Implementaciones}\label{sec:implementations}
+Para reproducir audio MP3 desde un microcontrolador existen, en la práctica, dos estrategias complementarias: delegar la decodificación a un \textbf{chip dedicado} vía un bus serial, o ejecutar un \textbf{decodificador de software} directamente sobre el núcleo del microcontrolador y enviar el PCM resultante a un DAC/códec externo mediante I2S.
+
+\subsection{Decodificación por Hardware Dedicado: VS1053b}\label{sec:vs1053}
+El \textbf{VS1053b} (VLSI Solution) es un códec de audio de un solo chip que decodifica MP3, Ogg Vorbis, AAC, WMA y WAV/ADPCM íntegramente en su propio núcleo DSP interno (VS\_DSP4), sin requerir ningún cómputo de decodificación por parte del microcontrolador anfitrión. Este último únicamente necesita transmitir el archivo MP3 en bruto (byte a byte) a través de una interfaz \textbf{SPI}, mientras el VS1053b se encarga de la decodificación completa y entrega el audio ya en una salida DAC estéreo integrada, lista para un amplificador de audífonos.
+
+La interfaz del VS1053b se divide en dos canales SPI lógicos, seleccionados por líneas de \textit{chip select} independientes:
+\begin{itemize}
+    \item \textbf{SCI (\textit{Serial Control Interface}, pin \texttt{XCS}):} para leer/escribir los registros de control de 16 bits del chip (modo de operación, volumen, tono de graves/agudos, etc.).
+    \item \textbf{SDI (\textit{Serial Data Interface}, pin \texttt{XDCS}):} para transmitir los datos comprimidos del archivo MP3.
+    \item \textbf{DREQ:} línea de salida del VS1053b que indica al microcontrolador si el chip tiene espacio disponible en su buffer interno (al menos 32 bytes) para recibir más datos, evitando así un desbordamiento del buffer.
+\end{itemize}
+
+\begin{comment}
+--------------------------------------------------------------
+ IMAGEN 6: Buscar un diagrama de conexión de hardware entre un
+ microcontrolador STM32 (Blackpill/Nucleo) y un módulo VS1053b,
+ mostrando las líneas SCK, MOSI, MISO, XCS, XDCS, DREQ, RESET
+ y la alimentación, junto con la salida de audio hacia un
+ conector de audífonos o amplificador.
+ Buscar en: "VS1053 module wiring diagram microcontroller SPI",
+ "VS1053b breakout pinout STM32"
+--------------------------------------------------------------%
+\end{comment}
+
+\begin{figure}[!h]
+    \centering
+% \includegraphics[width=0.75\linewidth]{src/VS1053Wiring.png}
+    \caption{Conexión SPI entre un microcontrolador STM32 y el módulo decodificador VS1053b}
+    \label{fig:vs1053_wiring}
+\end{figure}
+
+El siguiente ejemplo, basado en el driver HAL de STM32, ilustra la escritura de un registro SCI del VS1053b esperando explícitamente la señal DREQ antes de cada transacción, evitando saturar el buffer interno del chip:
+
+\codeheader{vs1053.c -- Escritura de registro SCI vía SPI/HAL}
+\begin{lstlisting}[style=algorithmstyle]
+#define VS1053_SCI_WRITE_COMMAND  0x02
+
+void VS1053_WriteRegister(uint8_t registerAddress, uint16_t registerValue)
+{
+    uint8_t commandByte      = VS1053_SCI_WRITE_COMMAND;
+    uint8_t addressByte      = registerAddress;
+    uint8_t valueHighByte    = (uint8_t)(registerValue >> 8);
+    uint8_t valueLowByte     = (uint8_t)(registerValue & 0x00FF);
+
+    // Esperar a que el VS1053b este listo para recibir un comando SCI
+    while (HAL_GPIO_ReadPin(VS1053_DREQ_GPIO_Port, VS1053_DREQ_Pin) == GPIO_PIN_RESET)
+    {
+        // Espera activa; DREQ en alto indica buffer disponible
+    }
+
+    HAL_GPIO_WritePin(VS1053_XCS_GPIO_Port, VS1053_XCS_Pin, GPIO_PIN_RESET);
+
+    HAL_SPI_Transmit(&hspi2, &commandByte,   1, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(&hspi2, &addressByte,   1, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(&hspi2, &valueHighByte, 1, HAL_MAX_DELAY);
+    HAL_SPI_Transmit(&hspi2, &valueLowByte,  1, HAL_MAX_DELAY);
+
+    HAL_GPIO_WritePin(VS1053_XCS_GPIO_Port, VS1053_XCS_Pin, GPIO_PIN_SET);
+}
+
+void VS1053_SendAudioDataChunk(const uint8_t *mp3DataChunk, uint16_t chunkLength)
+{
+    while (HAL_GPIO_ReadPin(VS1053_DREQ_GPIO_Port, VS1053_DREQ_Pin) == GPIO_PIN_RESET)
+    {
+        // Esperar espacio disponible en el buffer de datos del VS1053b
+    }
+
+    HAL_GPIO_WritePin(VS1053_XDCS_GPIO_Port, VS1053_XDCS_Pin, GPIO_PIN_RESET);
+    HAL_SPI_Transmit(&hspi2, (uint8_t *)mp3DataChunk, chunkLength, HAL_MAX_DELAY);
+    HAL_GPIO_WritePin(VS1053_XDCS_GPIO_Port, VS1053_XDCS_Pin, GPIO_PIN_SET);
+}
+\end{lstlisting}
+
+Puntos clave del ejemplo:
+\begin{itemize}
+    \item Cada transacción respeta explícitamente el protocolo de \textit{handshake} por \texttt{DREQ}, evitando el uso de retardos fijos (\textit{delays} arbitrarios) que podrían provocar pérdida de datos o bloqueos.
+    \item El registro \texttt{SCI\_MODE} (dirección \texttt{0x00}) es el que típicamente se configura primero, estableciendo el bit \texttt{SM\_SDINEW} para usar el protocolo de datos moderno del chip.
+    \item Al delegar toda la decodificación al VS1053b, el microcontrolador anfitrión queda libre para tareas adicionales (interfaz de usuario, lectura de tarjeta SD, control de otros periféricos), a costa de un mayor costo de materiales por incluir un chip dedicado.
+\end{itemize}
+
+\subsection{Decodificación por Software: Decodificador Helix de Punto Fijo}\label{sec:helix}
+Cuando no se desea (o no se puede) incluir un chip decodificador dedicado, es posible decodificar MP3 íntegramente en software sobre el propio núcleo Cortex-M, siempre que este cuente con una instrucción de multiplicación larga (32×32 bits a 64 bits) y suficiente memoria Flash/RAM. La opción más utilizada en proyectos embebidos es el \textbf{decodificador Helix MP3} de RealNetworks (posteriormente liberado como código abierto), disponible tanto en variante de \textbf{punto flotante} como de \textbf{punto fijo}; esta última está optimizada específicamente para procesadores ARM y no requiere unidad de punto flotante (FPU), lo que la hace viable incluso en microcontroladores de gama baja (p. ej. STM32F1). Existen también alternativas más compactas como \texttt{minimp3} (biblioteca de una sola cabecera, con soporte SIMD opcional) para casos donde se cuenta con más margen de cómputo.
+
+El flujo típico de un reproductor MP3 por software en un STM32 combina tres subsistemas: lectura del archivo desde una tarjeta SD mediante \textbf{FatFs}, decodificación de tramas mediante Helix, y salida de las muestras PCM resultantes hacia un DAC/códec externo mediante el periférico \textbf{I2S} en modo DMA circular con doble buffer (\textit{ping-pong}), de forma que mientras una mitad del buffer se transmite por DMA, la otra se rellena con la siguiente porción decodificada.
+
+\begin{comment}
+--------------------------------------------------------------
+ IMAGEN 7: Buscar un diagrama de arquitectura de software para
+ un reproductor MP3 embebido, mostrando el flujo: tarjeta SD
+ (FatFs) -> buffer de tramas MP3 comprimidas -> decodificador
+ Helix (software, Cortex-M) -> buffer PCM de doble buffer
+ (ping-pong) -> DMA -> periferico I2S -> DAC/amplificador
+ externo -> audifonos o bocina.
+ Buscar en: "embedded mp3 player software architecture diagram
+ STM32 I2S DMA", "Helix MP3 decoder STM32 block diagram"
+--------------------------------------------------------------%
+\end{comment}
+
+\begin{figure}[!h]
+    \centering
+% \includegraphics[width=\linewidth]{src/SoftwareDecoderArchitecture.png}
+    \caption{Arquitectura de software de un reproductor MP3 embebido con decodificador Helix y salida I2S}
+    \label{fig:software_architecture}
+\end{figure}
+
+\codeheader{mp3\_player.c -- Ciclo de decodificacion con Helix y salida I2S por DMA}
+\begin{lstlisting}[style=algorithmstyle]
+static HMP3Decoder    mp3DecoderHandle;
+static MP3FrameInfo   mp3FrameInfo;
+
+static uint8_t        compressedInputBuffer[MP3_INPUT_BUFFER_SIZE];
+static int16_t        pcmOutputBuffer[2][PCM_HALF_BUFFER_SAMPLES];
+static uint8_t        activePcmBufferHalf = 0;
+
+void MP3Player_Init(void)
+{
+    mp3DecoderHandle = MP3InitDecoder();
+}
+
+void MP3Player_DecodeNextFrame(void)
+{
+    uint8_t *readPointer = compressedInputBuffer;
+    int      bytesLeftInBuffer = MP3_INPUT_BUFFER_SIZE;
+
+    // Localizar el inicio de una trama valida dentro del buffer comprimido
+    int syncOffset = MP3FindSyncWord(readPointer, bytesLeftInBuffer);
+    if (syncOffset < 0)
+    {
+        FatFs_RefillCompressedBuffer(compressedInputBuffer, MP3_INPUT_BUFFER_SIZE);
+        return;
+    }
+
+    readPointer        += syncOffset;
+    bytesLeftInBuffer   -= syncOffset;
+
+    int decodeResult = MP3Decode(mp3DecoderHandle,
+                                  &readPointer,
+                                  &bytesLeftInBuffer,
+                                  pcmOutputBuffer[activePcmBufferHalf],
+                                  0);
+
+    if (decodeResult == ERR_MP3_NONE)
+    {
+        MP3GetLastFrameInfo(mp3DecoderHandle, &mp3FrameInfo);
+        activePcmBufferHalf ^= 1; // Alternar el buffer ping-pong
+    }
+
+    FatFs_ConsumeCompressedBytes(compressedInputBuffer, MP3_INPUT_BUFFER_SIZE - bytesLeftInBuffer);
+}
+
+// Callback disparado por HAL cuando el DMA de I2S termina de transmitir
+// la primera o segunda mitad del buffer circular
+void HAL_I2S_TxHalfCpltCallback(I2S_HandleTypeDef *hi2s)
+{
+    MP3Player_DecodeNextFrame(); // Rellenar la mitad recien liberada
+}
+
+void HAL_I2S_TxCpltCallback(I2S_HandleTypeDef *hi2s)
+{
+    MP3Player_DecodeNextFrame(); // Rellenar la otra mitad del buffer
+}
+\end{lstlisting}
+
+Puntos clave del ejemplo:
+\begin{itemize}
+    \item \texttt{MP3FindSyncWord} y \texttt{MP3Decode} corresponden a la API pública del decodificador Helix; el diseño explícito de sincronización de trama es necesario porque el flujo MP3 no garantiza alineación exacta entre los límites del buffer de lectura y los límites de trama.
+    \item El uso de \texttt{HAL\_I2S\_TxHalfCpltCallback} y \texttt{HAL\_I2S\_TxCpltCallback} implementa el patrón de \textit{doble buffer}: la decodificación de la siguiente porción de audio ocurre mientras el DMA transmite la porción ya decodificada, evitando cortes audibles (\textit{glitches}) por bloqueos de CPU.
+    \item Cada trama Layer III entrega siempre 1152 muestras por canal, por lo que el tamaño de \texttt{pcmOutputBuffer} debe dimensionarse en consecuencia (1152 $\times$ 2 canales para estéreo).
+\end{itemize}
+
+\section{Ventajas y Desventajas}\label{sec:proscons}
+
+\begin{table}[!h]
+\centering
+\caption{Ventajas y desventajas del formato MP3}
+\label{tab:proscons}
+\begin{tabular}{|p{6.8cm}|p{6.8cm}|}
+\hline
+\textbf{Ventajas} & \textbf{Desventajas} \\ \hline
+Compatibilidad prácticamente universal: décadas de soporte en hardware y software de todo tipo. & Eficiencia de compresión inferior a códecs modernos (AAC, Opus) a la misma tasa de bits. \\ \hline
+Sin restricciones de patentes desde abril de 2017; libre para cualquier uso. & Formato exclusivamente perceptual/con pérdida; no apto para archivado de precisión o edición profesional intensiva. \\ \hline
+Ecosistema maduro de decodificadores abiertos y ligeros (Helix, minimp3) aptos para microcontroladores de bajos recursos. & El decodificador está rígidamente especificado bit a bit; toda la innovación posible recae únicamente en el codificador. \\ \hline
+Disponibilidad de silicio dedicado (VS1053b y similares) que descarga por completo el cómputo del microcontrolador anfitrión. & No soporta de forma nativa audio multicanal más allá de estéreo/dual mono (a diferencia de MPEG-2 Multichannel). \\ \hline
+Estructura de trama autocontenida, ideal para streaming y reproducción desde cualquier punto del archivo. & Tasa de bits máxima limitada a 320 kbit/s, insuficiente para audio de muy alta resolución. \\ \hline
+Codificadores de referencia libres y de alta calidad (LAME) ampliamente disponibles. & La codificación completa (modelo psicoacústico + doble lazo de cuantización) es computacionalmente costosa para ejecutarse en tiempo real en un microcontrolador; en la práctica casi siempre se opta por decodificar, no codificar, en el dispositivo embebido. \\ \hline
+\end{tabular}
+\end{table}
+
+\section{Aplicaciones y Uso Actual}\label{sec:applications}
+Aunque su papel central en la distribución masiva de música ha sido parcialmente desplazado por el streaming con códecs más eficientes, MP3 mantiene un uso extendido en múltiples contextos:
+
+\begin{itemize}
+    \item \textbf{Reproductores portátiles y dispositivos de consumo:} gran parte del catálogo musical distribuido comercialmente sigue disponible en MP3, y prácticamente todo reproductor de audio embebido conserva soporte para decodificarlo.
+    \item \textbf{Sistemas embebidos de anuncios de voz:} paneles informativos, sistemas de transporte público y electrodomésticos que reproducen mensajes de voz pregrabados suelen almacenar dichos mensajes en MP3 por su balance entre tamaño de archivo y calidad de voz.
+    \item \textbf{Juguetes y dispositivos IoT con audio:} módulos económicos basados en el VS1053b, DFPlayer Mini u otros decodificadores dedicados se emplean en proyectos de hobbistas y productos de bajo costo para reproducir efectos de sonido, alarmas o mensajes desde una tarjeta microSD.
+    \item \textbf{Infoentretenimiento automotriz:} unidades principales (\textit{head units}) que reproducen música desde memorias USB o tarjetas SD suelen incluir decodificación MP3 como formato mínimo garantizado.
+    \item \textbf{Proyectos educativos y de branch IEEE:} el par VS1053b + STM32, o bien Helix + I2S, constituye una plataforma accesible para introducir a estudiantes de ingeniería electrónica en el procesamiento digital de señales de audio, el manejo de periféricos SPI/I2S y el uso de sistemas de archivos embebidos (FatFs) sobre tarjetas SD.
+\end{itemize}
+
+\section{Referencias y Recursos para Profundizar}\label{sec:references}
+A continuación se listan fuentes primarias y recursos prácticos para profundizar en lo revisado en este reporte, organizados por categoría.
+
+\subsection{Estándares y especificaciones oficiales}
+\begin{itemize}
+    \item ISO/IEC, \textit{ISO/IEC 11172-3:1993 -- Information technology -- Coding of moving pictures and associated audio for digital storage media at up to about 1.5 Mbit/s -- Part 3: Audio} (vista previa oficial del estándar): \url{https://webstore.ansi.org/preview-pages/ISO/preview_ISO+IEC+11172-3-1993.pdf}
+    \item Borrador de comité (CD) de ISO/IEC 11172-3, con la descripción detallada de la estructura de trama y las tres capas de codificación: \url{https://course.ece.cmu.edu/~ece796/documents/MPEG-1_Audio_CD.doc}
+    \item ANSI Blog, \textit{ISO/IEC 11172 Specifications for MPEG-1} (panorama de las partes del estándar, incluida la Parte 3 de audio): \url{https://blog.ansi.org/ansi/iso-iec-11172-mpeg-1-coding-15-mbits/}
+    \item Fraunhofer IIS, página oficial del formato mp3 (historia y estado actual): \url{https://www.iis.fraunhofer.de/en/ff/amm/consumer-electronics/mp3.html}
+\end{itemize}
+
+\subsection{Datasheets de hardware relevante}
+\begin{itemize}
+    \item VLSI Solution, \textit{VS1053b -- Ogg Vorbis/MP3/AAC/WMA/MIDI Audio Codec} (datasheet completo del decodificador dedicado): \url{https://www.vlsi.fi/fileadmin/datasheets/vs1053.pdf}
+    \item Copia alternativa del datasheet VS1053b (Adafruit): \url{https://cdn-shop.adafruit.com/datasheets/vs1053.pdf}
+\end{itemize}
+
+\subsection{Guías e implementación en STM32/HAL}
+\begin{itemize}
+    \item GitHub, \textit{eziya/STM32\_HAL\_VS1053} -- librería del VS1053 para el driver HAL de STM32: \url{https://github.com/eziya/STM32_HAL_VS1053}
+    \item GitHub, \textit{kattaliraees/VS1053-STM32} -- ejemplo de interfaz de 7 líneas (SPI, DREQ, reset) entre VS1053/VS1063 y STM32: \url{https://github.com/kattaliraees/VS1053-STM32}
+    \item Phipps Electronics, \textit{How to Play a WAV File on STM32} -- referencia práctica de reproducción de audio PCM vía I2S/DMA con FatFs sobre SD, extensible al buffer de salida de un decodificador MP3: \url{https://www.phippselectronics.com/how-to-play-a-wav-file-on-stm32/}
+    \item Stm32World Wiki, \textit{STM32 Music Player} -- notas de diseño sobre configuración de frecuencia I2S y lectura de encabezados de audio: \url{https://stm32world.com/wiki/STM32_Music_Player}
+    \item ControllersTech, \textit{STM32 WAV Player Using USB Host} -- ejemplo completo de I2S + FatFs + códec CS43L22 en placas STM32 Discovery: \url{https://controllerstech.com/waveplayer-using-stm32-discovery/}
+\end{itemize}
+
+\subsection{Librerías y herramientas de software}
+\begin{itemize}
+    \item GitHub, \textit{chmorgan/libhelix-mp3} -- decodificador MP3 de punto fijo de RealNetworks, optimizado para ARM: \url{https://github.com/chmorgan/libhelix-mp3}
+    \item Silicon Labs, \textit{AN1112: Helix MP3 Decoder on Series 1 EFM32 MCU Devices} -- nota de aplicación con la integración completa del decodificador Helix sobre un microcontrolador de bajos recursos: \url{https://www.silabs.com/documents/public/application-notes/an1112-efm32-helix-mp3-decoder.pdf}
+    \item GitHub, \textit{pschatzmann/arduino-libhelix} -- envoltorio de Helix orientado a proyectos Arduino, ESP32 y STM32 con salida I2S: \url{https://github.com/pschatzmann/arduino-libhelix}
+    \item GitHub, \textit{lieff/minimp3} -- decodificador MP3 minimalista de una sola cabecera, alternativa ligera a Helix: \url{https://github.com/lieff/minimp3}
+    \item SourceForge, \textit{LAME MP3 Encoder} -- codificador MP3 de referencia, libre de patentes desde 2017: \url{https://lame.sourceforge.io/}
+\end{itemize}
+
+\begin{comment}
+    Recursos adicionales considerados pero no incluidos por no ser
+    verificables o no ser primarios:
+    https://wiki.hydrogenaudio.org/index.php?title=MP3
+    https://id3.org/mp3Frame
+\end{comment}
+
+\section{Conclusión}\label{sec:conclusion}
+MP3 se mantiene, más de tres décadas después de su concepción, como uno de los formatos de audio comprimido más ubicuos gracias a la combinación de un diseño técnico sólido --banco de filtros híbrido, modelo psicoacústico y codificación entrópica-- con un decodificador rigurosamente especificado que ha permitido implementaciones extremadamente ligeras y confiables. Para el trabajo con microcontroladores, esta madurez se traduce en dos caminos igualmente viables: delegar la decodificación a silicio dedicado como el VS1053b, minimizando la carga de cómputo del sistema anfitrión, o ejecutar un decodificador de software de punto fijo como Helix directamente sobre el núcleo Cortex-M, apoyado en una salida I2S con DMA. La expiración de todas las patentes asociadas en 2017 elimina además cualquier barrera de licenciamiento, consolidando a MP3 como una opción práctica y de bajo riesgo legal para proyectos de instrumentación, dispositivos IoT con audio, y trabajos educativos en sistemas embebidos.
+
+\end{document}
