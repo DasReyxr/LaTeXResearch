@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+\definecolor{UAARed}{RGB}{204,0,51}
+\definecolor{UAAGray}{RGB}{102,102,102}
+
+\begin{document}
+\begin{tikzpicture}
+    % Fondo
+    \fill[UAARed!10] (0,0) rectangle (4,2);
+    
+    % Texto UAA
+    \node[text=UAARed, font=\Large\bfseries] at (2,1.2) {UAA};
+    \node[text=UAAGray, font=\scriptsize] at (2,0.6) {Universidad Autónoma};
+    \node[text=UAAGray, font=\scriptsize] at (2,0.3) {de Aguascalientes};
+    
+    % Marco
+    \draw[UAARed, thick] (0,0) rectangle (4,2);
+\end{tikzpicture}
+\end{document}

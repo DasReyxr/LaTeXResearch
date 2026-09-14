@@ -1,0 +1,153 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{ConfigMP}
+
+% ================================
+% INFORMACIÓN DEL DOCUMENTO
+% ================================
+% Sustituya los valores por la información correspondiente
+
+% Información del miniproyecto
+\newcommand{\claveproyecto}{MP-26-XXX}
+\newcommand{\tituloproyecto}{Escriba un titulo claro, especifico y representativo del trabajo realizado}
+\newcommand{\autores}{Incluya los nombres completos en el orden de participacion y use superindices}
+\newcommand{\adscripciones}{Indique departamento o programa, institucion}
+
+\begin{document}
+
+% ================================
+% TÍTULO Y INFORMACIÓN DEL PROYECTO
+% ================================
+\doctitle{Sustituya los textos entre corchetes y elimine las orientaciones antes de entregar el reporte final.}
+
+\projectdata{\claveproyecto}{\tituloproyecto}{\autores}{\adscripciones}
+
+% ================================
+% INTRODUCCIÓN
+% ================================
+\section{Introduccion}
+
+\begin{sectioncontent}
+Presente el contexto, los antecedentes esenciales, la relevancia y la justificacion del miniproyecto. Cierre con el proposito y el alcance del trabajo e incorpore las citas correspondientes.
+\end{sectioncontent}
+
+\vspace{10pt}
+
+% ================================
+% OBJETIVOS
+% ================================
+\section{Objetivos}
+
+\begin{sectioncontent}
+Formule un objetivo general y, cuando corresponda, objetivos especificos con verbos en infinitivo. Deben ser claros, verificables y congruentes con la metodologia y los resultados.
+
+\subsection*{Objetivo General}
+Escriba aqui el objetivo general
+
+\subsection*{Objetivos Especificos}
+\begin{itemize}
+    \item Objetivo especifico 1
+    \item Objetivo especifico 2
+    \item Objetivo especifico 3
+\end{itemize}
+\end{sectioncontent}
+
+\vspace{10pt}
+
+% ================================
+% MATERIALES Y MÉTODOS
+% ================================
+\section{Materiales y metodos}
+
+\begin{sectioncontent}
+Describa materiales, reactivos, equipos, diseño experimental y procedimientos con detalle reproducible. Incluya variables, condiciones, analisis de datos, normas y aspectos de seguridad o etica aplicables; use subsecciones si resulta util.
+
+\subsection*{Materiales}
+\begin{itemize}
+    \item Material 1
+    \item Material 2
+    \item Material 3
+\end{itemize}
+
+\subsection*{Equipos}
+\begin{itemize}
+    \item Equipo 1
+    \item Equipo 2
+    \item Equipo 3
+\end{itemize}
+
+\subsection*{Procedimiento}
+\begin{enumerate}
+    \item Paso 1
+    \item Paso 2
+    \item Paso 3
+\end{enumerate}
+\end{sectioncontent}
+
+\vspace{10pt}
+
+% ================================
+% RESULTADOS Y DISCUSIONES
+% ================================
+\section{Resultados y discusiones}
+
+\begin{sectioncontent}
+Presente los hallazgos de forma objetiva y en el orden de los objetivos. Use tablas y figuras numeradas, titulos o pies explicativos, unidades y analisis estadistico cuando corresponda, y cite cada elemento en el texto.
+
+% Ejemplo de tabla
+\begin{table}[H]
+    \centering
+    \caption{Titulo descriptivo de la tabla}
+    \label{tab:ejemplo}
+    \begin{tabular}{@{}lcc@{}}
+        \toprule
+        \textbf{Variable} & \textbf{Valor 1} & \textbf{Valor 2} \\
+        \midrule
+        Resultado 1 & 0.00 & 0.00 \\
+        Resultado 2 & 0.00 & 0.00 \\
+        Resultado 3 & 0.00 & 0.00 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection*{Discusion}
+Analice e interprete los resultados obtenidos, compare con la literatura existente y discuta las implicaciones de los hallazgos.
+\end{sectioncontent}
+
+\vspace{10pt}
+
+% ================================
+% CONCLUSIONES
+% ================================
+\section{Conclusiones}
+
+\begin{sectioncontent}
+Sintetice los resultados principales y señale en que medida se cumplieron los objetivos. No introduzca informacion nueva; mencione limitaciones, implicaciones o trabajo futuro solo cuando sean pertinentes.
+
+\begin{itemize}
+    \item Conclusion 1
+    \item Conclusion 2
+    \item Conclusion 3
+\end{itemize}
+\end{sectioncontent}
+
+\vspace{10pt}
+
+% ================================
+% REFERENCIAS
+% ================================
+\section{Referencias}
+
+\begin{orientation}
+    \textbf{Orientacion:} Incluya unicamente las fuentes citadas y verifique su correspondencia con la lista final. Mantenga un solo estilo bibliografico e incorpore DOI o URL cuando proceda.
+\end{orientation}
+
+\vspace{8pt}
+
+% Ejemplo de formato de referencias (estilo APA)
+[1] Apellido, A. A. (2026). \textit{Titulo del articulo}. Nombre de la revista, \textit{Volumen}(Numero), paginas. DOI o URL
+
+[2] Apellido, B. B. (2026). \textit{Titulo del libro}. Editorial.
+
+[3] Apellido, D. D. (2026). Titulo del capitulo. En E. E. Apellido (Ed.), \textit{Titulo del libro} (pp. xx-xx). Editorial.
+
+\end{document}
