@@ -345,6 +345,7 @@ X[3]
 3 \\
 3
 \end{bmatrix}
+\left(\dfrac{1}{N}\right)
 =   
 \begin{bmatrix}       
 1 & 1 & 1 & 1 \\
@@ -358,6 +359,7 @@ X[3]
 3 \\
 3
 \end{bmatrix}
+\left(\dfrac{1}{4}\right)
 =
 \begin{bmatrix}       
 3 + 3 + 3 + 3 \\
@@ -365,9 +367,10 @@ X[3]
 3 -3 + 3 -3 \\
 3 + 3i -3 -3i
 \end{bmatrix}
+\left(\dfrac{1}{4}\right)
 =
 \begin{bmatrix}
-12\\ 
+3\\ 
 0 \\
 0 \\
 0
@@ -381,7 +384,7 @@ X[2] \\
 X[3]
 \end{bmatrix}=
 \begin{bmatrix}
-12\\ 
+3\\ 
 0 \\
 0 \\
 0
@@ -389,7 +392,7 @@ X[3]
 $$
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.8\linewidth]{src/LineaOUT.png}
+    \includegraphics[width=\linewidth]{src/dft_linea_continua.png}
     \caption{LineaOUT}
     \label{fig:LineaOUT}
 \end{figure}
@@ -397,7 +400,7 @@ $$
 Ademas esto nos sirve de evidencia para ver que las propiedades aplicadas en la presentación funcionaron
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.9\linewidth]{src/PropiedadesN4.png}
+    \includegraphics[width=\linewidth]{src/PropiedadesN4.png}
     \label{fig:placeholder}
 \end{figure}
 
@@ -465,6 +468,7 @@ X[3]
 0 \\
 -1
 \end{bmatrix}
+\left(\dfrac{1}{N}\right)
 $$
 
 $$
@@ -487,6 +491,7 @@ X[3]
 0 \\
 -1
 \end{bmatrix}
+\left(\dfrac{1}{4}\right)
 =
 \begin{bmatrix}       
 0 + 1  + 0 -1 \\
@@ -500,9 +505,17 @@ X[3]
 0 \\
 2i
 \end{bmatrix}
+\left(\dfrac{1}{4}\right)
+= 
+\begin{bmatrix}
+0 \\
+-0.5i\\
+0 \\
+0.5i
+\end{bmatrix}
 $$
 
-De resultado se obtuvo un vector de mangitudes imaginarias. Es aqui donde nos damos cuenta que la DFT no solo mide la amplitud o magnitud, sino que también mide la fase de la señal, lo que se refleja en la parte imaginaria del resultado.
+De resultado se obtuvo un vector de magnitudes imaginarias. Es aqui donde nos damos cuenta que la DFT no solo mide la amplitud o magnitud, sino que también mide la fase de la señal, lo que se refleja en la parte imaginaria del resultado.
 Podemos representar entonces la señal transformada mediante la siguiente ecuación
 
 $$
@@ -609,11 +622,11 @@ $$
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\linewidth]{src/SinOUT.png}
+    \includegraphics[width=\linewidth]{src/dft_pulso_4pts.png}
     \caption{SinOUT}
     \label{fig:SinOUT}
 \end{figure}
-
+\newpage
 \subsubsection{Pulso Cuadrado}
 \begin{figure}[!h]
     \centering
@@ -635,6 +648,7 @@ x[3]
 3 \\
 0
 \end{bmatrix}
+\left( \frac{1}{N} \right)
 $$
 Quedaria entonces
 $$
@@ -657,25 +671,37 @@ X[3]
 3 \\
 0
 \end{bmatrix}
+\left( \frac{1}{4} \right)
 =
 \begin{bmatrix}       
 0 + 3 + 3 + 0 \\
 0 -3i -3 + 0 \\
 0 -3 + 3 +0 \\
 0 + 3i -3 +0
-\end{bmatrix}=
+\end{bmatrix}
+\left( \frac{1}{4} \right)
+=
 \begin{bmatrix}       
 6 \\
 -(3i+3)\\
 0 \\
 3i -3
 \end{bmatrix}
-=
+\left( \frac{1}{4} \right)
+$$
+$$
 \begin{bmatrix}
 6 \\
 3\sqrt{2}\angle -\dfrac{3\pi}{4} \\
 0 \\
 3\sqrt{2}\angle \dfrac{\pi}{4}
+\end{bmatrix}
+\left( \frac{1}{4} \right)=
+\begin{bmatrix}
+1.5 \\
+\dfrac{3\sqrt{2}}{4}\angle -\dfrac{3\pi}{4} \\
+0 \\
+\dfrac{3\sqrt{2}}{4}\angle \dfrac{\pi}{4}
 \end{bmatrix}
 $$
 \begin{figure}[!h]
