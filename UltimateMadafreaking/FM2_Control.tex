@@ -1,0 +1,334 @@
+         \begin{multicols}{2}
+                            \section{Ecuaciones Diferenciales}
+
+                            \fmSubSec{Clasificación por Orden}
+                            \begin{itemform}
+                            \item \textbf{1er orden}: $\dfrac{dy}{dx} = f(x,y)$
+                            \item \textbf{2do orden}: $\dfrac{d^2y}{dx^2} = f\left(x,y,\dfrac{dy}{dx}\right)$
+                            \item \textbf{Orden n}: $F\left(x,y,y',\dots,y^{(n)}\right) = 0$
+                            \item \textbf{Lineal}: $a_n(x)y^{(n)} + \cdots + a_0(x)y = g(x)$
+                            \end{itemform}
+
+                            \fmSubSec{Métodos para EDOs 1er Orden}
+                            \begin{itemform}
+                            \item \textbf{Separables}:
+                              $$\dfrac{dy}{dx} = \dfrac{f(x)}{g(y)} \Rightarrow \int g(y)dy = \int f(x)dx$$
+
+                            \item \textbf{Lineales}:
+                              $$y' + P(x)y = Q(x)$$
+                              Solución: $y = e^{-\int P dx}\left(\int Q e^{\int P dx}dx + C\right)$
+
+                            \item \textbf{Exactas}:
+                              $$Mdx + Ndy = 0 \quad \text{con} \quad \dfrac{\partial M}{\partial y} = \dfrac{\partial N}{\partial x}$$
+                              Solución: $\psi(x,y) = C$ donde $d\psi = Mdx + Ndy$
+
+                            \item \textbf{Bernoulli}:
+                              $$y' + P(x)y = Q(x)y^n$$
+                              Sustitución: $v = y^{1-n}$
+
+                            \item \textbf{Homogéneas}:
+                              $$\dfrac{dy}{dx} = F\left(\dfrac{y}{x}\right)$$
+                              Sustitución: $v = \dfrac{y}{x}$
+                            \end{itemform}
+
+                            \fmSubSec{EDOs Lineales de 2do Orden}
+                            \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt]
+                              \item \textbf{Homogéneas}:
+                                $$ay'' + by' + cy = 0$$
+                                Ecuación característica: $ar^2 + br + c = 0$
+                                \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt]
+                                  \item Raíces reales distintas: $y = C_1e^{r_1x} + C_2e^{r_2x}$
+                                  \item Raíz doble: $y = (C_1 + C_2x)e^{rx}$
+                                  \item Complejas: $y = e^{\alpha x}(C_1\cos\beta x + C_2\sin\beta x)$
+                                \end{itemize}
+
+                              \item \textbf{No homogéneas}:
+                                $$ay'' + by' + cy = g(x)$$
+                                \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt]
+                                  \item \textbf{Coef. Indeterminados}: Para $g(x) = P(x)e^{kx}$
+                                  \item \textbf{Variación Parámetros}:
+                                    $$y_p = -y_1\int \dfrac{y_2 g}{W}dx + y_2\int \dfrac{y_1 g}{W}dx$$
+                                    donde $W = y_1y_2' - y_2y_1'$ (Wronskiano)
+                                \end{itemize}
+                            \end{itemize}
+
+                            \columnbreak
+                            \section{Transformada de Laplace}
+                            \fmSubSec{Definición Formal}
+                            \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt]
+
+                              \item \textbf{Transformada}:
+                                $$\lp{f(t)} = F(s) = \int_0^\infty e^{-st}f(t)dt$$
+                                donde $s = \sigma + i\omega$ (variable compleja)
+
+                              \item \textbf{Existencia}: Si $f(t)$ es:
+                                \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt]
+                                  \item Continua por partes
+                                  \item De orden exponencial $\exists M,\alpha$ tal que $|f(t)| \leq Me^{\alpha t}$
+                                \end{itemize}
+                            \end{itemize}
+
+                            \begin{multicols}{2}
+
+                              \fmSubSec{Transformada}
+                              $$
+                              \begin{aligned}
+                                \lp{1} &= \dfrac{1}{s}\\
+                                \lp{t^n} &= \dfrac{n!}{s^{n+1}}\\
+                                \lp{e^{at}} &= \dfrac{1}{s - a}\\
+                                \lp{\sin(kt)} &= \dfrac{k}{s^2 + k^2}\\
+                                \lp{\cos(kt)} &= \dfrac{s}{s^2 + k^2}\\
+                                \lp{\sinh(kt)} &= \dfrac{k}{s^2 - k^2}\\
+                                \lp{\cosh(kt)} &= \dfrac{s}{s^2 - k^2}\\
+                              \end{aligned}
+                              $$
+
+                              \columnbreak
+
+                              \fmSubSec{Transformada Inversa}
+                              $$
+                              \begin{aligned}
+                                \lpn{\dfrac{1}{s}} &= 1\\
+                                \lpn{\dfrac{n!}{s^{n+1}}} &= t^n\\
+                                \lpn{\dfrac{1}{s - a}} &= e^{at}\\
+                                \lpn{\dfrac{k}{s^2 + k^2}} &= \sin(kt)\\
+                                \lpn{\dfrac{s}{s^2 + k^2}} &= \cos(kt)\\
+                                \lpn{\dfrac{k}{s^2 - k^2}} &= \sinh(kt)\\
+                                \lpn{\dfrac{s}{s^2 - k^2}} &= \cosh(kt)\\
+                              \end{aligned}
+                              $$
+
+                            \end{multicols}
+
+                            \fmSubSec{Teoremas Clave}
+                            \begin{itemform}
+                              \item \textbf{1er Teorema de Traslación}:
+                                $$\lp{e^{at}f(t)} = F(s-a)$$
+
+                              \item \textbf{2do Teorema de Traslación}:
+                                $$\lp{f(t-a)u(t-a)} = e^{-as}F(s)$$
+                                ($u(t-a)$: función escalón)
+
+                              \item \textbf{Derivada n-ésima}:
+                                $$\lp{f^{(n)}(t)} = s^n F(s) - \sum_{k=1}^n s^{n-k}f^{(k-1)}(0)$$
+
+                              \item \textbf{Multiplicación por $t^n$}:
+                                $$\lp{t^n f(t)} = (-1)^n \dfrac{d^n F(s)}{ds^n}$$
+
+                              \item \textbf{Integración}:
+                                $$\lp{\int_0^t f(\tau)d\tau} = \dfrac{F(s)}{s}$$
+                            \end{itemform}
+
+                            \subsection*{Aplicación a EDOs}
+                            \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt]
+                              \item \textbf{Pasos para resolver} $ay'' + by' + cy = g(t)$:
+                                \begin{enumerate}[leftmargin=*,noitemsep,topsep=0pt]
+                                  \item Aplicar $\lp{}$ a ambos lados
+                                  \item Sustituir condiciones iniciales
+                                  \item Despejar $Y(s)$
+                                  \item Antitransformar usando fracciones parciales
+                                \end{enumerate}
+
+                              \item \textbf{Ejemplo clásico}:
+                                $$\lp{y'' + \omega^2 y = 0} \Rightarrow Y(s) = \dfrac{sy(0) + y'(0)}{s^2 + \omega^2}$$
+                            \end{itemize}
+                    
+                                              \end{multicols}
+                    \newpage
+                    \includepdf[pages=-, pagecommand={}]{st/Laplace.pdf}
+                    \newpage
+                    \begin{multicols}{2}
+                    \section{Señales y Sistemas}
+                    
+                    \subsection*{Funciones Básicas y Propiedades}
+                    \begin{itemform}
+                    \item \textbf{Par/Impar}:
+                      $$x(-t)=x(t) \quad (\text{par}) \quad x(-t)=-x(t) \quad (\text{impar})$$
+                    \item \textbf{Descomposición par/impar}:
+                      $$x(t) = x_e(t) + x_o(t) $$
+                      $$x_e(t)=0.5[x(t)+x(-t)] \quad (\text{par}) $$
+                      $$x_o(t)=0.5[x(t)-x(-t)] \quad (\text{impar})$$
+                    \item \textbf{Periodo fundamental}:
+                      $$x(t)=x(t+T) \quad T=m\frac{2\pi}{\omega_0} $$
+                    \end{itemform}
+              
+                    \fmSubSec{Transformaciones en el Tiempo}
+                    \begin{itemform}
+                    \begin{multicols}{2}
+                    \item \textbf{Shift}:
+                      $$y(t) = x(t - t_0) $$
+                    
+                    \columnbreak
+                    \item \textbf{Mirror}:
+                      $$y(t) = x(-t) $$
+                    \end{multicols}
+                    \item \textbf{Escalamiento}:
+                      $$y(t) = x(at) \quad \text{Shrink if } |a| > 1, \text{ Xpand if } |a| < 1$$
+                    \end{itemform}
+                    
+                    \fmSubSec{Señales Exponenciales y Sinusoidales}
+                    \begin{multicols}{2}
+                    \begin{itemform}
+                    \item \textbf{Exponenciales}:
+                      $$x(t) = e^{st}, s = \sigma + j\omega $$
+                    
+                    \columnbreak
+                    \item \textbf{Sinusoidales}:
+                      $$x(t) = A\cos(\omega t + \phi) $$
+                    \end{itemform}
+                        
+                    \end{multicols}
+                    
+                    \fmSubSec{Impulso y Escalón Unitario}
+                    \begin{itemform}
+                    \item \textbf{Definiciones}:
+                      $$\delta(t) = \frac{du(t)}{dt} \quad u(t) = \int_{-\infty}^t \delta(\tau)d\tau$$
+                      $$\delta[n] = \begin{cases} 1 & n=0 \\ 0 & n\neq 0 \end{cases} \quad u[n] = \begin{cases} 1 & n\geq 0 \\ 0 & n<0 \end{cases}$$
+                    \item \textbf{Propiedades de muestreo}:
+                      $$x(t)\delta(t) = x(0)\delta(t) \quad x(t)\delta(t-t_0) = x(t_0)\delta(t-t_0)$$
+                    \item \textbf{Representación de señales}:
+                      $$x(t) = \int_{-\infty}^{\infty} x(\tau)\delta(t-\tau)d\tau $$
+                    \end{itemform}
+                    
+                    
+                    \fmSubSec{Sistemas LTI y Propiedades}
+                    \begin{itemform}
+                    \item \textbf{Linealidad}:
+                      $$T\{a x_1(t) + b x_2(t)\} = a T\{x_1(t)\} + b T\{x_2(t)\}$$
+                    \item \textbf{Invariancia temporal}:
+                      $$\text{Si } T\{x(t)\} = y(t) \Rightarrow T\{x(t-t_0)\} = y(t-t_0)$$
+                    \end{itemform}
+                    \begin{multicols}{2}
+                    \begin{itemform}
+                        \item \textbf{Causalidad}:\\
+                      Salida depende de entradas presentes
+                      $$h(t) = 0 \ \forall t < 0 $$
+                      
+                    \columnbreak
+                    \item \textbf{Estabilidad BIBO}:
+                      $$\int_{-\infty}^{\infty} |h(t)|dt < \infty $$
+                    \end{itemform}
+                    \end{multicols}
+
+                    \fmSubSec{Convolución}
+                    \begin{itemform}
+                    \item \textbf{Convolución continua y discreta}:
+                      $$y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau)h(t-\tau)d\tau$$
+                      
+                    \item \textbf{Propiedades}:
+                      \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt]
+                        \item Conmutativa: $x * h = h * x$
+                        \item Asociativa: $x * (h_1 * h_2) = (x * h_1) * h_2$
+                        \item Distributiva: $x * (h_1 + h_2) = x * h_1 + x * h_2$
+                        \item Identidad: $x * \delta = x$
+                      \end{itemize}
+                    \end{itemform}
+                    
+                    \fmSubSec{Respuesta}
+                    \begin{multicols}{2}
+                        \begin{itemform}
+                    \item \textbf{Al impulso}:
+                      $$h(t) = T\{\delta(t)\} $$
+                    
+                    \columnbreak
+                    \item \textbf{Sistema}:
+                      $$y(t) = x(t) * h(t) $$
+                    \end{itemform}
+                    \end{multicols}
+                    
+                    \fmSubSec{Teorema de Muestreo}
+                    \begin{itemform}
+                    \item \textbf{Muestreo ideal}:
+                      $$x_s(t) = \sum_{n=-\infty}^{\infty} x(nT)\delta(t-nT)$$
+                    \item \textbf{Teorema de Nyquist}:
+                      $$f_s > 2f_m \quad \omega_s > 2\omega_m \quad T < \frac{\pi}{\omega_m}$$
+                    \end{itemform}
+                    
+                    \fmSubSec{Series de Fourier}
+                    \begin{itemform}
+                    \item Magnitud y Fase
+                    $$|X(jw)|= \dfrac{1}{\sqrt{a^2+\omega^2}} \quad \angle X(jw)=-\arctan(\omega/a)$$
+                    \item \textbf{Series exponencial compleja}:
+                      $$x(t) = \sum_{k=-\infty}^{\infty} c_k e^{jk\omega_0 t} \quad c_k = \frac{1}{T} \int_T x(t)e^{-jk\omega_0 t}dt$$
+                    \item \textbf{Forma trigonométrica}:
+                      $$x(t) = a_0 + \sum_{k=1}^{\infty} [a_k\cos(k\omega_0 t) + b_k\sin(k\omega_0 t)]$$
+                      $$a_0 = \frac{1}{T} \int_T x(t)dt, \quad a_k = \frac{2}{T} \int_T x(t)\cos(k\omega_0 t)dt$$
+                      $$b_k = \frac{2}{T} \int_T x(t)\sin(k\omega_0 t)dt$$
+                    \item \textbf{Coeficientes espectrales}:
+                      $$|c_k|: \text{amplitud} \quad \angle c_k: \text{fase}$$
+                    \end{itemform}
+                    
+                    \section{Transformada de Fourier}
+                    \begin{itemform}
+                    \item \textbf{Definición continua}:
+                      $$X(\omega) = \int_{-\infty}^{\infty} x(t)e^{-j\omega t}dt$$
+                      $$x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega)e^{j\omega t}d\omega$$
+                    \item \textbf{Respuesta en frecuencia}:
+                      $$H(\omega) = \int_{-\infty}^{\infty} h(t)e^{-j\omega t}dt \quad Y(\omega) = H(\omega)X(\omega)$$
+                      
+                    \end{itemform}
+    \begin{itemform}
+                        \item Linealidad: 
+                        $$ax_1(t)+bx_2(t) \leftrightarrow aX_1(\omega)+bX_2(\omega)$$
+                        \item Desplazamiento: 
+                        $$x(t-t_0) \leftrightarrow X(\omega)e^{-j\omega t_0}$$
+                        \item Convolución: 
+                        $$x(t)*h(t) \leftrightarrow X(\omega)H(\omega)$$
+                        \item Dualidad:
+                        $$X(t) \leftrightarrow 2\pi x(-\omega)$$
+                       \item 
+    \end{itemform}
+
+
+                    
+                    \end{multicols}
+                    
+                    \begin{multicols}{2}
+
+\subsection{Transformadas de Fourier}
+$$
+\begin{aligned}
+  % Función constante (usando delta)
+  \frt{1} &= 2\pi\delta(\omega)\\
+  % Delta de Dirac
+  \frt{\delta(t)} &= 1\\
+  % Escalón unitario
+  \frt{u(t)} &= \pi\delta(\omega) + \frac{1}{i\omega}\\
+  % Exponencial causal
+  \frt{e^{-at}u(t)} &= \frac{1}{a + i\omega}, \quad a > 0\\
+  % Exponencial bilateral
+  \frt{e^{-a|t|}} &= \frac{2a}{a^2 + \omega^2}, \quad a > 0\\
+  % Pulso rectangular
+  \frt{\text{rect}\left(\frac{t}{\tau}\right)} &= \tau\,\text{sinc}\left(\frac{\omega\tau}{2}\right)\\
+  % Función sinc
+  \frt{\text{sinc}(at)} &= \frac{\pi}{a}\text{rect}\left(\frac{\omega}{2a}\right)\\
+  % Seno
+  \frt{\sin(\omega_0 t)} &= \frac{\pi}{i}[\delta(\omega - \omega_0) - \delta(\omega + \omega_0)]\\
+  % Coseno
+  \frt{\cos(\omega_0 t)} &= \pi[\delta(\omega - \omega_0) + \delta(\omega + \omega_0)]\\
+  % Gaussiana
+  \frt{e^{-at^2}} &= \sqrt{\frac{\pi}{a}}e^{-\dfrac{\omega^2}{4a}}, \quad a > 0\\
+  % Signo
+  \frt{\text{sgn}(t)} &= \frac{2}{i\omega}\\
+\end{aligned}
+$$
+\columnbreak
+
+\subsection{Transformadas Inversas de Fourier}
+$$
+\begin{aligned}
+  \frtn{\delta(\omega)} &= \frac{1}{2\pi}\\
+  \frtn{1} &= \delta(t)\\
+  \frtn{\pi\delta(\omega) + \frac{1}{i\omega}} &= u(t)\\
+  \frtn{\frac{1}{a + i\omega}} &= e^{-at}u(t), \quad a > 0\\
+  \frtn{\frac{2a}{a^2 + \omega^2}} &= e^{-a|t|}, \quad a > 0\\
+  \frtn{\tau\,\text{sinc}\left(\frac{\omega\tau}{2}\right)} &= \text{rect}\left(\frac{t}{\tau}\right)\\
+  \frtn{\frac{\pi}{a}\text{rect}\left(\frac{\omega}{2a}\right)} &= \text{sinc}(at)\\
+  \frtn{\frac{\pi}{i}[\delta(\omega - \omega_0) - \delta(\omega + \omega_0)]} &= \sin(\omega_0 t)\\
+  \frtn{\pi[\delta(\omega - \omega_0) + \delta(\omega + \omega_0)]} &= \cos(\omega_0 t)\\
+  \frtn{\sqrt{\frac{\pi}{a}}e^{-\dfrac{\omega^2}{4a}}} &= e^{-at^2}, \quad a > 0\\
+  \frtn{\frac{2}{i\omega}} &= \text{sgn}(t)\\
+\end{aligned}
+$$
+
+\end{multicols}

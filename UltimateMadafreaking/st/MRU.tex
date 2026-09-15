@@ -1,0 +1,111 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage{vwcol}  
+\usepackage{multicol}
+\usepackage{cancel}
+\usepackage{background}
+
+\setlength{\topmargin}{-0.99in}
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{-0.25in}
+\setlength{\textwidth}{7in}
+
+\backgroundsetup{contents=\includegraphics{udas.png}, scale=2, opacity=0.2,angle =30}
+
+\begin{document}
+\thispagestyle{empty}
+
+\section{MCU}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale = 0.25]{MCU.png}
+\end{figure}
+\begin{vwcol}[widths={0.2,0.1,0.2,0.3}, sep=.5cm, justify=flush,indent=1em]
+    \begin{align*}
+    &\textbf{--- Otras jeje---}\\
+    &f = \dfrac{\theta}{2 \pi}= \dfrac{t}{T} \quad \text{\# vueltas}\\
+    &T = \dfrac{2 \pi}{\omega} \quad f = \dfrac{\omega}{2 \pi}\\
+    &\textbf{--Formulas Angulares--}\\    
+    &\omega_f = \omega_0 \pm \alpha t  \quad \left[\frac{rad}{s}\right]\\
+    &\theta = \omega_0 t \pm \dfrac{\alpha t^2}{2} \quad [rad]\\
+    &\theta = \left( \dfrac{\omega_0+\omega_f}{2}\right) t\\
+    & \omega_f^2=\omega_o^2 \pm 2 \alpha \theta
+    \end{align*}
+   \begin{align*}
+    &\textbf{--Formulas Tangenciales--}\\    
+    &v_f = \omega_0 \pm \alpha_T t \quad \left[ \dfrac{m}{s} \right]\\
+    &L = v_0 t \pm \dfrac{\alpha_T t^2}{2} \quad [m]\\
+    &L = \left( \dfrac{v_0+v_f}{2}\right) t\\
+    & v_f^2=v_o^2 \pm 2 \alpha_T L
+    \end{align*}
+    \begin{align*}
+    &\textbf{--- Formulas Aux ---}\\    
+    &\omega = \dfrac{\theta}{t} \quad v = \dfrac{L}{t}\\
+    &L = R \theta\\
+    &v = \omega R\\
+    &\alpha_T = \alpha R \quad \left[ \dfrac{rad}{s^2}\right]\quad\\
+    &\alpha_C = \dfrac{v^2}{R}= \omega^2 R \quad \left[ \dfrac{m}{s^2}\right]\\
+    &a = \sqrt{\alpha_T^2+\alpha_C^2} \\
+    \end{align*}  
+    \begin{align*}
+    \omega &\leftarrow \text{ rapidez/velocidad angular}\\
+    \alpha &\leftarrow \text{ aceleracion angular/tangencial}\\
+    \theta &\leftarrow \text{ desplazamiento angular}\\
+    \\
+    v &\leftarrow \text{ rapidez tangencial}\\
+    \alpha_T &\leftarrow \text{ aceleracion tangencial}\\
+    L &\leftarrow \text{ Longitud de arco}\\
+    \\
+    R &\leftarrow \text{ Radio de giro}\\
+    \alpha_c &\leftarrow \text{ aceleracion centripeta}\\
+    T &\leftarrow \text{ Periodo}\\
+    f &\leftarrow \text{ Frencuencia}\\
+    \end{align*}
+\end{vwcol}
+
+\section{MRU}
+\begin{minipage}{0.6\textwidth}\RaggedRight
+$    a=\dfrac{V_f-V_o}{t_f-t_o}$\\
+$    x=V_ft-\dfrac{at^2}{2}=V_ot+\frac{at^2}{2}=\dfrac{V_f^2-V_o^2}{2a}$\\
+\end{minipage}
+\noindent\begin{minipage}{0.3\textwidth}
+  \includegraphics[scale = 0.4]{Tiro Parabolico.png}
+\end{minipage}
+\hfill%
+
+
+
+\begin{vwcol}[widths={0.2,0.1,0.2,0.3}, sep=.5cm, justify=flush,indent=1em]
+    \begin{align*}
+    &\textbf{--- Tiro Parabólico ---}\\
+    &v = \sqrt{v_{ox}^2 + v_{oy}^2}\\
+    &d_{(\text{en}\ h_M)} = v_{ox} \cdot t_{(\text{en}\ h_M)}\\
+    &t_{(\text{en}\ d_T)} = 2 \cdot t_{(\text{en}\ h_M)}\\
+    &d_{T} = v_{ox} \cdot t_{(\text{en}\ d_t)} = \dfrac{v_o^2 \sin 2\theta}{g}\\
+    &v_o = \sqrt{\dfrac{g \cdot d_{\text{total}}}{\sin(2\theta)}} \quad\\
+    &\theta = \dfrac{\sin^{-1}\left(\dfrac{g d_{\text{total}}}{v_o^2}\right)}{2}
+    \end{align*}
+    \begin{align*}
+    &\textbf{--- Posición en el eje $x$ (MRU) ---}\\    
+    &x = d = v_{ox} \cdot t\\
+    &\tan \theta = \dfrac{4 h_{\text{máx}}}{d_{\text{total}}}\\
+    &\textbf{Caída Libre} \ (+g, V_o = 0)\\
+    %
+    &a = \dfrac{V_f - \cancelto{0}{V_o}}{\Delta t} \rightarrow a\Delta t +  = V_f \rightarrow \boxed{V_f = g t}\\
+    &x = \dfrac{V_f^2 - \cancelto{0}{V_o^2}}{2g} \rightarrow \boxed{V_f^2 = 2gh}\\
+    &x = \cancelto{0}{V_o t} + \dfrac{a t^2}{2}  \rightarrow \boxed{h = \dfrac{g t^2}{2}}
+    \end{align*}
+    \begin{align*}
+    &\textbf{--- Posición en el eje $y$ (Tiro Vertical) ---}\\    
+    &x = \dfrac{V_f^2 - V_o^2}{-2g} \rightarrow -2gh = V_f^2 - V_o^2 \rightarrow \boxed{V_f^2 = V_o^2 - 2gh}\\
+    &h = V_o t + \dfrac{a t^2}{2} \rightarrow \boxed{h = V_o t - \dfrac{g t^2}{2}}\\
+    &\textbf{En $h_{\text{máx}}$, } V_f = 0\\
+    &h = \dfrac{\cancelto{0}{V_f^2} - V_o^2}{2a} \rightarrow \boxed{h = \dfrac{-V_o^2}{-2g}}\\
+    &a = \dfrac{V_f - V_o}{t} \rightarrow \boxed{t = \dfrac{-V_o}{-g}}
+    \end{align*}
+\end{vwcol}
+
+\end{document}

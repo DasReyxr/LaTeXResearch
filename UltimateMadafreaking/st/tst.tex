@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{enumitem}
+\usepackage{physics}
+\usepackage{xcolor}
+
+% Contadores jerárquicos (conservando tus nombres)
+\newcounter{fmSubSec}[section]
+\newcounter{fmCounter}[fmSubSec]
+\newcommand{\theformulaCounter}{\arabic{section}.\arabic{fmSubSec}.\arabic{fmCounter}}
+
+% Configuración GLOBAL del contador (nuevo)
+\usepackage{etoolbox}
+\preto\itemform{\stepcounter{fmCounter}} % Incrementa ANTES de cada ítem
+
+% Entorno personalizado (modificado)
+\newlist{itemform}{itemize}{1}
+\setlist[itemform]{
+  label=\textcolor{blue}{(\theformulaCounter)},
+  ref=(\theformulaCounter),
+  leftmargin=*,
+  noitemsep,
+  topsep=0pt,
+  before={\setcounter{fmCounter}{0}}, % Solo reinicia al cambiar subsección
+}
+
+% Comando para subsecciones (conservando tu nombre)
+\newcommand{\fmSubSec}[1]{%
+  \stepcounter{fmSubSec}%
+  \subsection{#1}%
+}
+
+\begin{document}
+
+\section{Electrodinámica Clásica}
+
+\fmSubSec{Potenciales}
+\begin{itemform}
+\item \label{fm:potencial-escalar} Potencial eléctrico:
+\[ V(\vec{r}) = \frac{1}{4\pi\epsilon_0}\int\frac{\rho(\vec{r}')}{|\vec{r}-\vec{r}'|}d\tau' \]
+
+\item \label{fm:campo-electrico} Campo eléctrico:
+\[ \vec{E} = -\nabla V - \frac{\partial\vec{A}}{\partial t} \]
+\end{itemform}
+
+\fmSubSec{Energía}
+\begin{itemform}
+\item \label{fm:densidad-energia} Densidad:
+\[ u = \frac{\epsilon_0}{2}E^2 + \frac{1}{2\mu_0}B^2 \]
+
+\item \label{fm:poynting} Vector de Poynting:
+\[ \vec{S} = \frac{1}{\mu_0}(\vec{E}\times\vec{B}) \]
+\end{itemform}
+
+\end{document}

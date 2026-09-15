@@ -1,0 +1,16 @@
+{
+  "pasteImage.insertPattern": "\\begin{figure}\n\t\\centering\n\t\\includegraphics[width=0.5\\linewidth]{src/${imageFileName}}\n\t\\caption{figure}\n\t\\label{fig:placeholder}\n\\end{figure}",
+  "pasteImage.filePathConfirmInputBoxMode": "fullPath",
+  "pasteImage.encodePath": "none",
+  "pasteImage.basePath": "${projectRoot}",
+  "pasteImage.showFilePathConfirmInputBox": true,
+  "pasteImage.defaultName": "${currentFileNameWithoutExt}-HH-mm-ss",
+  "pasteImage.path": "${projectRoot}/src",
+  "MarkdownPaste.path": "${projectRoot}/src",
+  "MarkdownPaste.silence": false,
+  "MarkdownPaste.enableImgTag": false,
+  "MarkdownPaste.encodePath": "none",
+  "MarkdownPaste.enableHtmlTag": true,
+  "MarkdownPaste.template": "\\begin{figure}\n\t\\centering\n\t\\includegraphics[width=0.5\\linewidth]{src/${imageFileName}}\n\t\\caption{figure}\n\t\\label{fig:placeholder}\n\\end{figure}"
+}
+

@@ -1,0 +1,113 @@
+\documentclass[fleqn]{article}
+\usepackage{multicol}
+\usepackage{amsmath}
+
+\usepackage{lipsum}
+\usepackage{microtype}
+\usepackage{vwcol}  
+\usepackage{pgfplots}
+
+\setlength{\mathindent}{0pt} % Ensures no indentation
+\setlength{\topmargin}{-0.99in}
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{-0.25in}
+\setlength{\textwidth}{7in}
+
+\begin{document}
+
+\begin{vwcol}[widths={0.3,0.6}, sep=.5cm, justify=flush,rule=2pt,indent=0em] 
+    \begin{align*}
+        &D_x(k) = 0 \\
+        &D_x[kf(x)] = k \cdot D_x[f(x)] \\
+        &D_x[f(g(x))] = f'(g(x)) \cdot D_x[g(x)]
+    \end{align*}
+
+    \begin{align*}
+        \\&D_x[g(x)\cdot h(x)] = g(x)\cdot h'(x) + g'(x) \cdot h(x) \\
+        &D_x\left[\frac{h(x)}{g(x)}\right] =  \frac{g(x)\cdot h'(x) - g'(x)\cdot h(x)}{g(x)^2}=\frac{h'(x)}{g(x)}-\frac{g'(x)\cdot h(x)}{g(x)^2}               \\
+        &D_x[f(x) \pm g(x)] = D_x[f(x)] \pm D_x[g(x)]
+    \end{align*}
+\end{vwcol}
+
+\textbf{\\}
+%
+\begin{vwcol}[widths={0.2,1.6,0.6}, sep=.5cm, justify=flush,rule=2pt,indent=0em] 
+\begin{align*}
+    &Definition\\
+    &\lim_{{h \to 0}} \frac{f(x+h) - f(x)}{h}\\
+    &D_x[ln(u)] = \frac{u'}{u} \\
+    &D_x[log(u)] = \frac{log(e) \cdot u'}{u} \\
+    &D_x[a^u] = a^u \cdot ln(a) \cdot u' \\
+    &D_x[e^u]=e^v\cdot v'
+\end{align*}
+\begin{align*}
+    \\&D_x[sin(u)] = u'\cdot cos(u)
+    \\&D_x[cos(u)] = -u'\cdot sin(u)
+    \\&D_x[tan(u)] = u'\cdot sec^2(u)_{[1]}
+    \\&D_x[asin(u)] = \frac{u'}{\sqrt{1-u^2}}
+    \\&D_x[acos(u)] = \frac{-u'}{\sqrt{1-u^2}}
+    \\&D_x[atan(u)] = \frac{u'}{1+u^2}
+\end{align*}
+\begin{align*}
+    \\&D_x[csc(u)] = -u'\cdot csc(u) \cdot cot(u)
+    \\&D_x[sec(u)] = u'\cdot sec(u) \cdot tan(u)
+    \\&D_x[cot(u)] = -u'\cdot csc^2(u)
+    \\&D_x[acsc(u)] = \frac{-u'}{u\cdot \sqrt{(u^2-1)}}
+    \\&D_x[asec(u)] = \frac{u'}{u\cdot \sqrt{u^2-1}}
+    \\&D_x[acot(u)] = \frac{-u'}{1+u^2}
+\end{align*}
+\end{vwcol}
+
+\[sec^2(u)=sec(u)^2 \ne sec(u^2)\]
+Every result is +C
+\begin{vwcol}[widths={0.2,0.6,0.6,0.2}, sep=.5cm, justify=flush,rule=2pt,indent=0em] 
+    \begin{align*}
+        &Definition\\
+        &\int_a^b f(x) dx = \lim_{{n \to \infty}} \sum_{{i=1}}^{n} f(x_{i-1}) \Delta x\\
+        &=F(b)-F(a)\\
+        &\int kdx = k\int  dx = kx\\
+        &\int (u + v)dx = \int u dx + \int vdx \\
+        &\int x^ndx=\frac{x^{n+1}}{n+1} \textbf{ } \int \frac{dv}{v}dx= ln(v)\\
+        &\int a^vdx=\frac{a^v}{ln(a)} \textbf{ } \int e^vdx=e^v
+    \end{align*}
+    \begin{align*}
+        \\&\int sin(u)du = -cos(u)
+        \\&\int cos(u)du = sin(u)
+        \\&\int tan(u)du = ln(sec(u))
+        \\&\int \frac{du}{\sqrt{1-u^2}} = asin(u) 
+        \\&\int -\frac{du}{\sqrt{1-u^2}} = acos(u) 
+        \\&\int \frac{du}{1+u^2} = atan(u) 
+    \end{align*}
+    \begin{align*}
+        \\&\int csc(u)du = -cot(u)
+        \\&\int sec(u)du = tan(u)
+        \\&\int cot(u)du = ln(sin(u))
+    \end{align*}
+    \begin{align*}
+        \\&\int csc(u)\cdot cot(u) du = -csc(u)
+        \\&\int sec(u)\cdot tan(u) = tan(u)
+        \\&\int cot(u)du = ln(sin(u))
+        \\&\int -\frac{du}{u\cdot \sqrt{(u^2-1)}} = acsc(u) 
+        \\&\int \frac{du}{u\cdot \sqrt{u^2-1}} = asec(u) 
+        \\&\int -\frac{du}{1+u^2} = acot(u) 
+    \end{align*}
+\end{vwcol}
+\textbf{\\}
+     \begin{table}[h]
+         \begin{align*}
+        \textbf{Integration by parts}\\
+        \int udv = uv- \int vdu    
+        \end{align*}
+
+
+        
+        \begin{tabular}{c|c|c}
+             u& Inv. Trig&\[asin,atan\]\\
+             &  Logarithmic & \[ln,log\]\\
+             &  Algebraic & \[x^2,x^-3\]\\
+             &  Trigonometric& \[sin,cos\] \\
+             dv& Exponential& \[e^{2x},3^{2x}\]\\
+        \end{tabular}
+    \end{table}
+
+\end{document}

@@ -1,0 +1,151 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage{vwcol}  
+\usepackage{multicol}
+\usepackage{cancel}
+\usepackage{background}
+
+\setlength{\topmargin}{-0.99in}
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{-0.25in}
+\setlength{\textwidth}{7in}
+
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par}
+  
+\backgroundsetup{contents=\includegraphics{udas.png}, scale=2, opacity=0.2,angle =30}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{multicols}{2}
+\section{Calculo I}
+\subsection{Funciones}
+
+$
+\begin{aligned}
+    f : &\mathbb{R} \rightarrow \mathbb{R} \quad \quad \Gamma_f=\{x,f(x) | x \in Dom_f\}\\
+        &x \longmapsto f(x)    \quad \quad  D_f = \{ x \in \mathbb{R} | f(x) \in \mathbb{R} \}\\
+\end{aligned}
+$
+\subsection{Operaciones}
+$(f \pm g) (x) \ | \ (f \cdot g) (x)$
+\\
+$
+\begin{aligned}
+    f \pm g \ | \ f \cdot g: &\mathbb{R} \rightarrow \mathbb{R}\\
+            &x \longmapsto (f\pm g)(x) = f(x) \pm g(x) \\
+            &x \longmapsto (f\cdot g)(x) = f(x) \cdot g(x)
+\end{aligned}
+\\
+Dom_{f \pm g}= Dom_f \cap Dom_g \\  Dom_{f \cdot g}= Dom_f \cap Dom_g
+$
+\\\\
+$\left(\frac{f}{g}\right) (x)$
+\\
+$
+\begin{aligned}
+    \frac{f}{g} : &\mathbb{R} \rightarrow \mathbb{R}\\
+            &x \longmapsto \left(\frac{f}{g}\right)(x) = \frac{f(x)}{g(x)}
+\end{aligned}
+\\
+Dom_{\frac{f}{g}}= Dom_f \cap Dom_g \backslash \{ x \in Dom_g | g(x) = 0\}
+$
+\\\\
+$(f \circ g) (x)$
+\\
+$
+\begin{aligned}
+    f \circ g : &\mathbb{R} \rightarrow \mathbb{R}\\
+            &x \longmapsto (f\circ g)(x) = f(g(x))
+\end{aligned}
+\\
+Dom_{f \circ g}= \{ x \in Dom_g | g(x) \in Dom_f\} \subseteq Dom_f\
+$
+
+\subsection{Continuidad}
+\begin{minipage}{0.3\textwidth}\RaggedRight
+Observemos que \\$\lim_{x\to a} f(x)=f(a)$\\
+$\begin{aligned}
+    L1&=L2\\
+    \lim_{x\to a^-}f(x) &=\lim_{x\to a^+}f(x)\\
+    L_1 \exists &\wedge L_2 \exists \ \therefore L \exists\\
+\end{aligned}$
+
+Ademas observamos que el $\lim_{x\to b}f(x) \nexists$\\
+\end{minipage}
+\noindent\begin{minipage}{0.2\textwidth}
+  \includegraphics[scale = 0.17]{Conti.png}
+\end{minipage}
+\hfill%
+\\\\
+\textbf{Axiomas de Continuidad}
+\begin{itemize}
+    \item $f(a) \ \exists \ (a \in Dom_f)$
+    \item $\lim_{x \to a} f(x) \ \exists$
+    \item $\lim_{x \to a} f(x) = f(a)$
+\end{itemize}
+$\begin{aligned}
+\text{Sea f}&: \mathbb{R} \to \mathbb{R} \text{ función}    \\
+&I \subseteq Dom_f \text{ Intervalo}
+\end{aligned}
+$
+\begin{enumerate}
+    \item Si I es intervalo abierto entonces f es continua en I si es continua en cada punto I.
+    \item Si I es intervalo cerrado entonces f es continua si: 
+    \begin{itemize}
+        \item f es continua en (a,b)
+        \item $\lim_{x\to a^+} f(x)=f(a) $\\
+            $\lim_{x\to b^-} f(x) =f(b)$
+        
+    \end{itemize}
+\end{enumerate}
+\columnbreak
+
+
+\subsection{Teoremas}
+\begin{itemize}
+    \item Constante\\
+    $\lim_{x \to a} k = k \quad \quad a,k \in \mathbb{R}$
+    \item Identidad\\
+    $\lim_{x \to a} x = a \quad \quad a \in \mathbb{R}$
+    \item Constante por $f(x)$\\
+    $\lim_{x \to a} kf(x) = k\lim_{x \to a} f(x) \quad \quad k \in \mathbb{R}\ \ L(f(x)) \exists$
+    \item Suma Resta Producto\\
+    $\lim_{x \to a} [f(x)\pm g(x)] = \lim_{x \to a} f(x) \pm \lim_{x \to a} g(x) $
+    \item Cociente de funciones\\
+    $\lim_{x \to a} \dfrac{f(x)}{g(x)} = \dfrac{\lim_{x \to a} f(x)}{\lim_{x \to a} g(x)} \\\lim_{x\to a}(f(x)), \lim_{x\to a}(g(x)) \ \exists \  \wedge\ \lim_{x\to a}(g(x)) \ne 0 $
+    \item Funcion Racional\\
+    $\lim_{x \to a} \dfrac{\mathbb{P}(x)}{\mathbb{Q}(x)}=\dfrac{\lim_{x\to a} \mathbb{P}(x)}{\lim_{x\to a} \mathbb{Q}(x)}$
+    \item Exponentes\\
+    $\lim_{x\to a}(f(x))^n=(\lim_{x\to a}(f(x)))^n$
+    \item Raices de indice par\\
+    $\lim_{x\to a} \sqrt[n]{f(x)}=\sqrt[n]{\lim{x\to a} f(x)} \\ f(x) \ge 0, n=2k$
+    \item Division entre cero \\
+    $\dfrac{f(x)}{g(x)}=
+    \begin{matrix}
+        f(x) & g(x) & case \\
+        0 & 0 &\text{Ind. tipo } 0/0 \\
+        0 & g(x)  & 0\\
+        f(x) & 0 & \nexists\\
+    \end{matrix}$
+\end{itemize}
+
+
+\subsection{Limites al Infinito}
+\includegraphics[scale = 0.35]{plotfavor.png}\\
+Para $ n\in \mathbb{R}$\\
+$\lim_{x\to \infty} x^n =\lim_{x \to 0^+} \dfrac{1}{x^n}= \lim_{x\to a^+} \dfrac{1}{(x-a)^n} = \infty $\\
+$\lim_{x\to -\infty} x^n =\lim_{x \to 0^-} \dfrac{1}{x^n}= \lim_{x\to a^-} \dfrac{1}{(x-a)^n} =\left\{ \begin{aligned}
+    &+\infty \text{ si n es par} \\
+    &-\infty \text{ si n es impar}
+\end{aligned} \right. $\\
+
+
+\end{multicols}
+
+\end{document}

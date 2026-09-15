@@ -1,0 +1,7 @@
+[
+  {
+    "key": "ctrl+shift+v",
+    "command": "telesoho.markdownPaste.paste",
+    "when": "editorTextFocus && editorLangId == latex"
+  }
+]
