@@ -202,20 +202,80 @@ $$V_{RMS}=\sqrt{\dfrac{1}{T} \int\limits_0^T f(t)}=\dfrac{V_m}{\sqrt{2}}$$
         \item Potencia de salida
         $$P_o = V_s I_{rated} PF$$
     \end{itemform}
-    \subsection*{Opans}
-    \textbf{Espejos de corriente}
+  
+\end{multicols}
+
+\newpage
+\begin{multicols}{2}
+      \subsection*{Opans}
+    \textbf{Espejos de corriente y Par Diferencial}
     \begin{itemform}
     \item Corrientes
-    $$I_T=\dfrac{|V_{EE}|-0.7}{R_T} \quad I_E=0.5 \cdot I_T $$
+    $$I_T=\dfrac{|V_{EE}|-0.7}{R_T+R_E/2} \quad I_E=0.5 \cdot I_T $$
+    $$I_E = \dfrac{V_{CC}-0.7}{R_E+2R_T}$$
     \item re
     $$re = \dfrac{26 mV}{I_E}$$
     \item Ganancia
     $$A_V=\dfrac{-R_C}{2(r_e+R_E)}$$
+    \item Ganancia Dual
+        $$
+        A_v = \dfrac{R_C}{r_e+R_E}
+        $$
     \end{itemform}
-    \textbf{Amplificador Diferencial}
+    \textbf{Amplificador Modo Comun}
+    \begin{itemform}
+        \item Ganancia
+        $$
+        A_v= \dfrac{R_C}{2R_T+R_E+re} 
+        $$
         
+    \end{itemform}
+    
 
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Parámetro} & \textbf{Op-Amp} & \textbf{Op-Amp} \\
+& \textbf{Ideal} & \textbf{Real} \\
+\hline
+$A_V$ de lazo abierto
+& $\infty$
+& $10^4$ -- $10^6$ \\
+\hline
+$Z_i$
+& $\infty$
+& Alta \\
+\hline
+$Z_o$
+& $0$
+& $1\,\Omega$ -- $100\,\Omega$ \\
+\hline
+BW
+& $\infty$
+& Finito  \\
+\hline
+CMRR
+& $\infty$
+& Finito \\
+\hline
+\end{tabular}
+
+  
+    
+\begin{description}
+    \item[Ganancia en lazo abierto ($A_{OL}$)] Cuánto amplifica el Op Amp la diferencia entre sus entradas cuando no hay resistencia de realimentación. Idealmente infinita; en la realidad depende del voltaje diferencial exacto y de la temperatura.
+
+    \item[Impedancia de entrada ($Z_i$)] La resistencia que ``ve'' la señal al entrar a las terminales del Op Amp. Entre más alta, menos corriente le roba a la fuente de la señal.
+
+    \item[Impedancia de salida ($Z_o$)] La resistencia interna en serie con la salida. Entre más baja, mejor puede el Op Amp entregar voltaje sin caer al conectar una carga.
+
+    \item[Ancho de banda (BW)] Rango de frecuencias en el que el Op Amp mantiene su ganancia sin caer. En el real está limitado porque el GBW es constante: al configurar más ganancia, se sacrifica ancho de banda.
+
+    \item[CMRR] Qué tan bien el Op Amp ignora señales que aparecen igual en ambas entradas (ruido común). Entre más alto, mejor rechaza esas interferencias.
+    
+    \item[SlewRate] Qué tan rápido puede cambiar la salida del Op Amp. Entre más alto, mejor puede seguir señales rápidas.
+\end{description}
 \end{multicols}
+\includegraphics[width=1\linewidth]{src/FM4Circuits/Comparador.png}
 
 \newpage
 \section{Electronica de Potencia}
