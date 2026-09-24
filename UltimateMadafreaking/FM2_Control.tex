@@ -1,4 +1,6 @@
-         \begin{multicols}{2}
+\documentclass{article}
+\input{confi.tex}
+\begin{document}         \begin{multicols}{2}
                             \section{Ecuaciones Diferenciales}
 
                             \fmSubSec{Clasificación por Orden}
@@ -332,3 +334,148 @@ $$
 $$
 
 \end{multicols}
+
+
+\newpage
+% ============================================================
+% SECCIÓN: Decibeles, Transductores, SPL y Señales
+% ============================================================
+\section{Decibeles, Transductores, SPL y Señales}
+\begin{multicols}{2}
+
+\textbf{Magnitud}
+    $$
+\left|H(j\omega)\right|=
+\frac{\sqrt{\Re\{N(j\omega)\}^2+\Im\{N(j\omega)\}^2}}
+{\sqrt{\Re\{D(j\omega)\}^2+\Im\{D(j\omega)\}^2}} 
+$$
+\fmSubSec{Decibeles y SPL}
+\begin{itemform}
+\item \textbf{Intensidad de sonido}
+$$
+I = \dfrac{P}{A} \quad  p = \text{ presión} 
+$$
+\item \textbf{Intensidad acustica}
+$$
+I = \dfrac{p^2}{2\rho c} \quad c = 344 \text{ m/s, }, \rho = \text{ densidad del medio} 
+$$
+  \item \textbf{dB}: 
+$$A\log_{10}(P/P_0) \quad P_0 = 1\text{E-12}$$ 
+$$A = 10 \text{ potencia, } 20 = \text{amplitud}$$
+
+\item \textbf{SPL} 
+$$SPL = 20\log_{10}(p_{rms}/p_0) \quad p_0 = 20\,\mu\text{Pa}$$
+
+\item \textbf{Suma incoherente}: 
+
+$$dB = 10\log_{10}\left(\sum 10^{dB/10}\right)$$
+
+
+
+\end{itemform}
+
+
+\fmSubSec{RLC: Función de Transferencia}
+\begin{itemform}
+\item Dominio $s$: 
+$$R\rightarrow R \quad L\rightarrow sL \quad C\rightarrow 1/sC$$
+
+\end{itemform}
+
+
+
+\fmSubSec{Transformada de Laplace y DFT}
+\begin{itemform}
+  \item \textbf{Transformada de Laplace}:
+  $$X(s) = \int_0^\infty x(t)e^{-st}dt \quad s = \sigma + j\omega$$
+  \item \textbf{Transformada de Fourier}:
+  $$X(j\omega) = \int_{-\infty}^{\infty} x(t)e^{-j\omega t}dt$$
+  \item \textbf{Transformada de Fourier Discreta}:
+  $$X[k] = \sum_{n=0}^{N-1} x[n]e^{-j2\pi kn/N}$$
+\end{itemform}
+
+\fmSubSec{Laplace, ROC y Estabilidad}
+\begin{itemform}
+\item $X(s)=\displaystyle\int_0^\infty x(t)e^{-st}dt$, \ $s=\sigma+j\omega$
+
+\item \textbf{FT = Laplace en el eje $j\omega$}: $X(j\omega)=X(s)|_{s=j\omega}$ \textbf{solo si el eje $j\omega$ está en la ROC}
+
+\item \textbf{Estabilidad BIBO} (causal): todos los polos con $\text{Re}(s)<0$ (semiplano izquierdo)
+
+\item Polos de $s^2LC+sRC+1=0$: con $R,L,C>0$ siempre en semiplano izquierdo $\Rightarrow$ circuito RLC pasivo \textbf{siempre estable}
+
+\item Regla: sustituir $s\rightarrow j\omega$ es válido \textbf{solo si el sistema es estable}
+\end{itemform}
+
+
+\columnbreak
+
+% ============================================================
+% COLUMNA 2
+% ============================================================
+\fmSubSec{Función Periódica y Envolvente}
+\begin{itemform}
+\item $x(t)=A\sin(\omega t+\phi)+DC$, \ $T=1/f$, \ $\omega=2\pi f$
+
+\item \textbf{Partes}: amplitud $A$, fase $\phi$, offset DC, fundamental $f_0$ y armónicos $nf_0$
+
+\item \textbf{Envolvente (ADSR)}: \textbf{Attack} (subida a pico) $\rightarrow$ \textbf{Decay} (baja a sostenimiento) $\rightarrow$ \textbf{Sustain} (nivel estable) $\rightarrow$ \textbf{Release} (caída a 0)
+
+\item Obtención: rectificación + filtro pasa-bajas, o magnitud de la señal analítica (Hilbert)
+\end{itemform}
+\includegraphics[width=0.6\linewidth]{src/Envolvente.png}
+
+\fmSubSec{Microfonos}
+\begin{itemform}
+\item \textbf{Dinamico}
+Consiste en una bobina móvil dentro de un campo magnético. 
+No ocupa voltaje
+
+\item \textbf{Condensador} 
+Se utiliza un capacitor para captar la señal de entrada. Se ocupa
+un voltaje para que jale
+
+\end{itemform}
+\includegraphics[width=0.7\linewidth]{src/Microfono.png}
+
+\fmSubSec{CFT y DFT}
+\begin{itemform}
+\item \textbf{CFT}: 
+Se aplica a señales continuas y de duración infinita. Se obtiene un espectro continuo.
+
+\item \textbf{DFT}:
+Se aplica a señales discretas y de duración finita. Se obtiene un espectro discreto y periódico. 
+
+\item \textbf{CQT}:
+Se aplica a señales discretas y de duración finita. Se obtiene un espectro discreto y no lineal (logarítmico).
+
+\item \textbf{STFT}:
+Cortar senales en segmentos
+
+\end{itemform}
+
+
+
+
+
+% ============================================================
+% SECCIÓN: Crossover, EQ y RLC
+% ============================================================
+
+\fmSubSec{Crossover vs. Ecualizador}
+\begin{itemform}
+\item \textbf{Crossover}: filtros LP/HP/BP fijos que \textbf{enrutan} bandas a transductores distintos (woofer/tweeter); no cambia ganancia relativa, protege drivers
+
+\item \textbf{Ecualizador}: ajusta \textbf{ganancia} (boost/cut) de bandas dentro del \textbf{mismo} camino de señal; da forma al tono. Sale una señal
+
+\item \textbf{Clave}: crossover = enrutamiento espacial por banda $\quad$ EQ = conformado de ganancia
+\end{itemform}
+
+\begin{itemform}
+  \item SubWoofer: 20-200 Hz (Muy Bajas Frecuencias)
+  \item Woofer: 40-1000 Hz (Bajas Frecuencias)
+  \item Midrange: 200-5000 Hz (Medias Frecuencias)
+  \item Tweeter: 2000-20000 Hz (Altas Frecuencias)
+\end{itemform}
+\end{multicols}
+\end{document}

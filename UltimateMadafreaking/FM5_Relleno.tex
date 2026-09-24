@@ -1,22 +1,105 @@
-
-\section{Errores y Propagación}
+\documentclass{article}
+\input{confi.tex}
+\begin{document}
 \begin{multicols}{2}
 
-\fmSubSec{Propagación de Errores}
+\subsubsection*{Propagación de Errores}
 \begin{itemform}
 \item \textbf{Regla de potencia} ($f=x_1^{n_1}x_2^{n_2}$), error relativo:
 $$\frac{\Delta f}{f} \approx |n_1|\frac{\Delta x_1}{x_1} + |n_2|\frac{\Delta x_2}{x_2}$$
-\item \textbf{Producto/cociente puro} ($f=x_1^{\pm1}x_2^{\pm1}$):
-$$\frac{\Delta f}{f} \approx \frac{\Delta x_1}{x_1} + \frac{\Delta x_2}{x_2}$$
 \item \textbf{Peor caso (diferencial exacto)}:
 $$\Delta f = \left|\frac{\partial f}{\partial x_1}\right|\Delta x_1 + \left|\frac{\partial f}{\partial x_2}\right|\Delta x_2$$
+\item \textbf{Conversión relativo $\to$ absoluto}: $\Delta y = y\dfrac{\Delta y}{y}$
 \end{itemform}
 
-\fmSubSec{Clasificación de Errores}
+\subsubsection*{Tipos de Errores}
+
+\begin{itemform}
+    
+\item \textbf{Error absoluto, relativo, y relativo porcentual}
+\[
+e=x_{\mathrm{medido}}-x_{\mathrm{ref}}
+\quad e_r=
+\frac{e}
+{x_{\mathrm{ref}}}
+\quad e_{\%}=\frac{e}{x_{\mathrm{ref}}}\times100
+\]
+
+
+\item \textbf{Error maximo permitido}
+
+Para un instrumento con spec de $\pm a\%\text{ de lectura}\pm b$
+
+
+El error máximo permitido puede expresarse como:
+
+\[
+E_{\max}
+=
+\frac{a}{100}|x|+b
+\]
+
+\item  \textbf{Error absoluto por \%FS}
+
+
+Si la exactitud está especificada como: \(
+\pm a\%FS
+\)
+
+El error absoluto máximo es:
+
+\[
+E_{\max}
+=
+\frac{a}{100}FS
+\]
+
+\item \textbf{Bias}:
+Sesgo $$
+Bias= \bar{x}-x_{\text{ref}} \quad Bias_{\%}=\frac{Bias}{x_{\text{ref}}}\times100
+$$
+\item \textbf{Error de no linealidad/ Histeresis}:
+
+$$
+e_{NL,i}=\max|y_i-y_{\text{recta},i}|
+\quad
+e_{NL,\%}=\frac{e_{NL,max}}{FS}\times100
+$$
+\end{itemform}
+
+
+
+
+\begin{itemform}
+\item \textbf{Media} y \textbf{desviación estándar muestral}:
+$$\bar{x}=\frac{\sum x_i}{N} \quad \sigma=\sqrt{\frac{\sum(x_i-\bar{x})^2}{N-1}}$$
+\end{itemform}
+
+\subsubsection*{Regresión Lineal (Mínimos Cuadrados)}
+\begin{itemform}
+\item \textbf{Ajuste} $y=ax+b$:
+$$a=\frac{N\sum xy-\sum x\sum y}{N\sum x^2-(\sum x)^2} \quad b=\bar{y}-a\bar{x}$$
+\item \textbf{Coeficiente de determinación}:
+$$R^2=1-\frac{\sum(y_i-\hat{y}_i)^2}{\sum(y_i-\bar{y})^2}$$
+\end{itemform}
+
+
+\subsubsection*{SNR y Ganancia}
+\begin{itemform}
+\item \textbf{Relación senal/ruido}:
+$$SNR_{dB}=20\log_{10}\left(\frac{V_{senal}}{V_{ruido}}\right)$$
+\item \textbf{Ganancia de etapas en Cascada}
+$$
+G_T = G_1G_2\cdots G_n \quad G_{T,dB}=G_{1,dB}+G_{2,dB}+\cdots+G_{n,dB}$$
+\end{itemform}
+
+\subsubsection*{Clasificación de Errores}
 \begin{itemform}
 \item \textbf{Grueso (equivocación)}: 
 
 falla de operador, ej. rango/escala mal seleccionada; no es reproducible por diseño del equipo.
+Si $|\Delta x|>3 \sigma$, investigar causa asignable.
+
 \item \textbf{Sistemático}:
 
 reproducible y determinista (offset, ganancia, no linealidad, deriva, interferencia periódica como 60\,Hz).
@@ -25,101 +108,67 @@ reproducible y determinista (offset, ganancia, no linealidad, deriva, interferen
 dispersión estocástica de causa no asignable; se reduce promediando repeticiones.
 \end{itemform}
 
-\fmSubSec{Offset, Ganancia y Combinaciones}
+\subsubsection*{Offset, Ganancia y Combinaciones}
 \begin{itemform}
-\item \textbf{Offset puro}:
+\item \textbf{Offset puro} ($y=x+b$):
 
 error $=$ constante en todo el rango (desplazamiento aditivo con entrada cero).
-\item \textbf{Ganancia pura}: 
+\item \textbf{Ganancia pura} ($y=ax$, $a\neq1$): 
 
 error crece proporcional a la entrada (pendiente $\neq 1$).
 
-\item \textbf{Recta de corrección} 
+\item \textbf{Recta de corrección} ($T_{real}=aT_{ind}+b$):
 
-($T_{real}=aT_{ind}+b$): $a\neq1 \Rightarrow$ error de ganancia; $b\neq0 \Rightarrow$ error de offset.
+$a\neq1 \Rightarrow$ error de ganancia; $b\neq0 \Rightarrow$ error de offset.
 \end{itemform}
 
+\subsubsection*{Precision, Exactitud y Veracidad}
+\begin{itemform}
+\item \textbf{Precisión}: dispersión de mediciones repetidas (e. random).
+\item \textbf{Veracidad}: cercanía a valor verdadero (error sistemático).
+\item \textbf{Exactitud}: cercanía a valor verdadero y dispersión pequeña (combinación de exactitud y precisión).
 
-\fmSubSec{Zona Muerta, Histéresis y Umbral}
+\end{itemform}
+
+\subsubsection*{Zona Muerta, Histéresis y Umbral}
 \begin{itemform}
 \item \textbf{Umbral}: mínimo estímulo absoluto desde reposo (cero) que produce respuesta.
 \item \textbf{Resolución}: mínimo incremento detectable en cualquier punto del rango.
-\item \textbf{Zona muerta}: rango de entrada donde la salida es nula (sin respuesta).
-\item \textbf{Histéresis}: salida distinta según sentido de variación (subida vs.\ bajada); no corregible con offset/ganancia estáticos porque depende de $\text{signo}\!\left(\dfrac{dx}{dt}\right)$.
+\item \textbf{Zona muerta}: rango de entrada donde la salida es nula.
+\item \textbf{Histéresis}: salida distinta según sentido de variación, no corregible con offset/ganancia estáticos .
+\item \textbf{Saturación}: si $|V_{out,ideal}|>|V_{out,max}|$, la salida se recorta al límite físico.
 \end{itemform}
 
-\fmSubSec{Interferencia y SNR}
+
+
+
+\subsubsection*{Repetitividad y Reproducibilidad}
 \begin{itemform}
-\item \textbf{Relación señal/ruido}:
-$$SNR_{dB}=20\log_{10}\!\left(\frac{V_{señal}}{V_{ruido}}\right)$$
-\item \textbf{Mitigación típica}: cable STP con blindaje aterrizado en un solo extremo; tierra en estrella (single-point); filtro pasa-bajas o notch en $60\,\magn{Hz}$.
-\end{itemform}
-
-\section{Estadística, Calibración y Especificaciones}
-
-\fmSubSec{Estadística de Mediciones}
-\begin{itemform}
-\item \textbf{Media} y \textbf{desviación estándar muestral}:
-$$\bar{x}=\frac{\sum x_i}{N} \quad s=\sqrt{\frac{\sum(x_i-\bar{x})^2}{N-1}}$$
-\item \textbf{Sesgo (bias)} y \textbf{error relativo}:
-$$\text{Sesgo}=\bar{x}-x_{ref} \quad \%\text{Error}=\frac{\text{Sesgo}}{x_{ref}}\times100$$
-\item \textbf{Nota}: $s$ no debe reportarse por debajo del límite de cuantización del instrumento (resolución/2).
-\end{itemform}
-
-\fmSubSec{Regresión Lineal (Mínimos Cuadrados)}
-\begin{itemform}
-\item \textbf{Ajuste} $y=ax+b$:
-$$a=\frac{N\sum xy-\sum x\sum y}{N\sum x^2-(\sum x)^2} \quad b=\frac{\sum y-a\sum x}{N}$$
-\end{itemform}
-
-\fmSubSec{Repetitividad y Reproducibilidad}
-\begin{itemform}
-\item \textbf{Límite de repetitividad} (ISO 5725): $r=2.8\,s_r$; si $|\Delta x|>r$, investigar causa asignable.
-\item \textbf{Diagnóstico}: $\dfrac{s_R}{s_r}\gg1 \Rightarrow$ variabilidad dominada por el operador (no por el instrumento) $\Rightarrow$ SOP + capacitación.
+\item \textbf{Límite de repetitividad}: $r=2.8\,s_r$; si $|\Delta x|>r$, investigar causa asignable.
+\item \textbf{Diagnóstico}: $\dfrac{s_R}{s_r}\gg1 \Rightarrow$ R Reproducibilidad, r Repetitividad
 \end{itemform}
 
 
-
-\fmSubSec{Especificación de Exactitud}
-\begin{itemform}
-\item \textbf{Mixta (\% lectura + absoluto)}:
-$$E_{max}=\pm(\%\text{lect}\times x)\pm E_{abs}$$
-El término \% cubre errores de ganancia; el término absoluto cubre offset/ruido/cuantización.
-\end{itemform}
-
-\fmSubSec{Rango, Escala y No Linealidad}
-\begin{itemform}
-\item \textbf{Error absoluto por \%FS}: $E_{abs}=\%FS\times\text{Rango}$ (elegir rango ajustado a la aplicación minimiza el error absoluto).
-\item \textbf{Error de no linealidad}:
-$$\%NL=\frac{|q_{med}-q_{teo}|}{FS}\times100$$
-\item \textbf{Saturación}: al exceder el rango o los rieles de alimentación, la salida se recorta al valor límite físico.
-\end{itemform}
-
-\fmSubSec{Deriva y Recalibración}
 \begin{itemform}
 \item \textbf{Intervalo máximo de calibración}:
-$$t_{cal}=\frac{\%FS_{tolerable}}{\text{Deriva}\ (\%FS/\text{año})}$$
-\end{itemform}
-
-
-\section{Acondicionamiento de Señal y ADC}
-
-\fmSubSec{Ganancia en Cascada}
-\begin{itemform}
-\item \textbf{Suma en dB} y \textbf{conversión a $A_v$}:
-$$G_{total,dB}=G_{1,dB}+G_{2,dB} \quad A_v=10^{G_{dB}/20}$$
-\item \textbf{Saturación de A.O.}: si $A_v\cdot V_{in,pk}$ excede el riel de alimentación, la salida se recorta (clipping).
+$$t_{cal}=\frac{\%FS_{tolerable}}{\text{Deriva}\ (\%FS/\text{ano})}$$
 \end{itemform}
 
 
 
-\fmSubSec{Resolución del ADC}
+\subsubsection*{Resolución del ADC}
 \begin{itemform}
+\item \textbf{Niveles de un ADC de $N$ bits}: $L=2^N$
 \item \textbf{Niveles requeridos}:
 $$N_{niveles}=\frac{\text{Rango}}{\text{Resolución deseada}}$$
-\item \textbf{Bits mínimos}: el menor $n$ tal que $2^n \geq N_{niveles}$.
+\item \textbf{Bits mínimos}:
+$$
+N \ge \log_2\left(\frac{FS}{\Delta_{max}}\right)
+$$
+
 \end{itemform}
 
 \end{multicols}
+
 
 \end{document}
