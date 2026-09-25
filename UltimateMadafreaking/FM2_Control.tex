@@ -335,7 +335,116 @@ $$
 
 \end{multicols}
 
+\newpage
+\begin{multicols}{2}
+\textbf{Ziegler Nichols}
 
+\begin{itemform}
+  
+  \item \textbf{Sigmoide}   
+  
+  (No aplica con integrador, ni polos $\mathbb{C}$ dominantes)
+  $$G_c(s) = K_p\left(1 + \frac{1}{T_i s} + T_d s\right)$$
+  $$K_P = 1.2 T/L \quad T_i = 2L \quad T_d = 0.5 L$$
+  $$G_c(s)= 0.6 T \dfrac{(s+1/L)^2}{s}$$
+  \includegraphics[width=0.5\linewidth]{src/Sigmoide.png}
+  
+  \item \textbf{Oscilación}
+  $$G_C(s) = K_p$$
+  $$K_P = 0.6 K_{CR} \quad T_i = P_{CR}/2 \quad T_d = P_{CR}/8$$
+  $$P_{CR} = \frac{2\pi}{\omega_{CR}}$$
+\end{itemform}
+
+
+\textbf{Magnitud y Fase}
+    $$
+\left|H(j\omega)\right|=
+\dfrac{\sqrt{ \text{Re} (N(j\omega))^2 + \text{Im} (N(j\omega))^2 }}
+{\sqrt{\text{Re}(D(j\omega))^2+\text{Im}(D(j\omega))^2}} 
+$$
+
+$$
+\angle N(j\omega)=
+\tan^{-1}\left(
+\frac{\text{Im}\{N(j\omega)\}}
+{\text{Re}\{N(j\omega)\}}
+\right)
+$$
+
+$$
+\begin{aligned}
+\angle \left(\dfrac{Num(j\omega)}{Den(j\omega)}\right)&=\tan^{-1}\left(
+\frac{\text{Im}\{Num(j\omega)\}}
+{\text{Re}\{Num(j\omega)\}}
+\right)\\
+&-\tan^{-1}\left(
+\frac{\text{Im}\{Den(j\omega)\}}
+{\text{Re}\{Den(j\omega)\}}
+\right)
+\end{aligned}
+$$
+\section{Diagramas de bode}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Forma} & \textbf{dB/dec} & $w_{esq}$& \textbf{Extra} \\ \hline
+
+
+$1/s$   & $20$  & N/A & $db |1/s| = 20$\\ 
+        &       &     & $\angle (1/s)=-90$\\ \hline
+$\dfrac{1}{\tau s+1}$ & $-20$ & $1/\tau$ & \\ \hline
+
+$\dfrac{\omega_n}{(s^2+2 \zeta\omega_n s+\omega_n^2)}$
+& $-40$
+& $\omega_n$ &
+\\ \hline
+
+\end{tabular}
+\subsection*{Lazo cerrado}
+
+Con realimentación negativa unitaria:
+\[
+T(s)=\frac{G_c(s)G_p(s)}
+{1+G_c(s)G_p(s)}.
+\]
+
+
+\section*{5. Márgenes de estabilidad}
+
+Frecuencia de cruce de ganancia:
+\[
+|G(j\omega_{gc})|=1
+\]
+o equivalentemente
+\[
+M_{\mathrm{dB}}(\omega_{gc})=0\text{ dB}.
+\]
+
+Margen de fase:
+\[
+\boxed{
+PM=180^\circ+\angle G(j\omega_{gc})
+}
+\]
+
+Frecuencia de cruce de fase:
+\[
+\angle G(j\omega_{pc})=-180^\circ.
+\]
+
+Margen de ganancia:
+\[
+\boxed{
+GM_{\mathrm{dB}}=-20\log_{10}|G(j\omega_{pc})|
+}
+\]
+
+Si se usa la magnitud en dB directamente:
+\[
+GM_{\mathrm{dB}}=-M_{\mathrm{dB}}(\omega_{pc}).
+\]
+
+
+\end{multicols}
 \newpage
 % ============================================================
 % SECCIÓN: Decibeles, Transductores, SPL y Señales

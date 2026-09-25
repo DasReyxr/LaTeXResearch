@@ -2,83 +2,83 @@
 \input{confi.tex}
 \begin{document}
 
-                          \begin{multicols}{2}
+    \begin{multicols}{2}
 
-                            \section{Circuitos}
-                            \subsection{Relaciones Básicas}
-                            \begin{itemform}
-                            \item Corriente y Densidad de corriente
-                              $$i=\dfrac{dq}{dt} \quad
-                              j=\dfrac{i}{A}$$
-                            \item Ley de Ohm
-                              $$V=IR$$
-                            \item Impedancia y Reactancia
-                              $$ Z=R+Xj\quad \text{ where }X_c=(\omega c)^{-1} \quad X_L=(\omega c)$$
- \item Circuitos Delta, Estrella
-                              $$(\Delta \to \star) \ R_n=\dfrac{R_{Adj}}{\sum R} \quad (\star \to \Delta)\ R_1=\dfrac{Comb(R)}{R_{Opp}}$$
-                            \item Kirchoff
-                              $$LVK \Rightarrow \Sigma V_{Mesh} =0 \quad LCK \Rightarrow \Sigma V_{Net} = 0$$
-    
-                            \item Divisores
-                            $$\text{V}\rightarrow  V_n=V_{s}\dfrac{R_n}{R_T} \quad \text{I}\rightarrow I_n=I_{s}\dfrac{R_T}{R_n}$$
-                            \end{itemform}
-                            \fmSubSec{RLC}
-                            \subsubsection*{DC}
-                                \includegraphics[width=0.8\linewidth]{src/LC Behavioral.png}
-                            \begin{itemform}
-                            \item Voltajes y Corrientes de los elementos
-                              $$V_r=\dfrac{R}{i} \ V_L = L\dfrac{di}{dt} \ I_c=C\dfrac{dV_c}{dt}$$
-                            \item Tao
-                              $$\tau=RC \quad \tau^{-1}=(R/L)$$
-                            \item RC
-                              $$V_C=V_{in}-(V_{in}-V_{Co})e^{-t/\tau}$$
-                            \item RL
-                              $$i_R+L \dfrac{di}{dt}=V_{in} \rightarrow i_L=\dfrac{Vin}{R}-\left(\dfrac{V_{in}}{R} -I_o\right)e^{-t/\tau}$$
-                              \item Resistencia critica para $\alpha^2=\omega^2$
-                              $$R=\sqrt{\dfrac{L}{4C}}$$
-                              
-                            \item RLC $||$
-                              $$\dfrac{V_c}{R}+\dfrac{1}{L}\int V_l dt+I_{02}+C \dfrac{dV_c}{dt}=0 \rightarrow \dfrac{sV_o+I_0+2 \alpha V_0}{s^2+2\alpha s + \omega_o^2} $$
-                              Esto deriva en 3 ecuaciones segun sea el caso con
-                              $\alpha=\dfrac{1}{2RC} \ \omega_0=\dfrac{1}{\sqrt{LC}} \ \omega_d = \sqrt{\omega_o^2-\alpha^2}$ de forma que
-                              $$S_{1,2}=-\alpha \pm \sqrt{\alpha^2-\omega_0^2}$$
-                              $$ V(t)=
-                              \left\{
-                                \begin{aligned}
-                                  &A_1 e^{s_1 t} + A_2 e^{s_2 t}    &\alpha^2 > \omega^2 \text{ O.D.} \\
-                                  &A_1 e^{s_1 t} + A_2 t e^{s_2 t}    &\alpha^2 = \omega^2 \text{ C.D.} \\
-                                  &e^{\alpha t}(B_1 \cos(\omega_d t) + B_2 \sin(\omega_d t))   &\alpha^2 < \omega^2 \text{ U.D.} \\
-                                \end{aligned}
-                                \right.
-                                $$
-                                \includegraphics[width=0.3\textwidth]{src/image.png}
-                              \end{itemform}
-                              \subsection*{AC}
-                              \begin{itemform}
-                              \item RL
-                            $$Ri+L \dfrac{di}{dt}=V_m \cos (\omega t) \rightarrow $$
-                                $$ i(t)=\dfrac{RV_m}{R^2+(\omega L)^2} \cos(\omega t)+\dfrac{V_m \omega L}{R^2+(\omega L)^2} \sin(\omega t)$$
-                                $$\quad \textbf{I}_M\angle \phi \quad \text{where } \textbf{I}_M=\dfrac{V_M}{\sqrt{R^2+(\omega L)^2}} \quad \phi= \arctan{\left(\dfrac{\omega L}{R}\right)}$$
-                              \end{itemform}
-                              \fmSubSec{AC}
-                              \begin{itemform}
-                              \item Velocidad angular
-                              $$\omega=2 \pi f=\frac{2 \pi}{T}$$
-                              \item $\sin\rightarrow \cos$
-                              $$\sin(\theta)=\cos(\theta-90 ) \quad \cos(\theta)=\sin(\theta+90)$$
+    \section{Circuitos}
+    \subsection{Relaciones Básicas}
+    \begin{itemform}
+    \item Corriente y Densidad de corriente
+    $$i=\dfrac{dq}{dt} \quad
+    j=\dfrac{i}{A}$$
+    \item Ley de Ohm
+    $$V=IR$$
+    \item Impedancia y Reactancia
+    $$ Z=R+Xj\quad \text{ where }X_c=(\omega c)^{-1} \quad X_L=(\omega c)$$
+    \item Circuitos Delta, Estrella
+    $$(\Delta \to \star) \ R_n=\dfrac{R_{Adj}}{\sum R} \quad (\star \to \Delta)\ R_1=\dfrac{Comb(R)}{R_{Opp}}$$
+    \item Kirchoff
+    $$LVK \Rightarrow \Sigma V_{Mesh} =0 \quad LCK \Rightarrow \Sigma V_{Net} = 0$$
+
+    \item Divisores
+    $$\text{V}\rightarrow  V_n=V_{s}\dfrac{R_n}{R_T} \quad \text{I}\rightarrow I_n=I_{s}\dfrac{R_T}{R_n}$$
+    \end{itemform}
+    \fmSubSec{RLC}
+    \subsubsection*{DC}
+    \includegraphics[width=0.8\linewidth]{src/LC Behavioral.png}
+    \begin{itemform}
+    \item Voltajes y Corrientes de los elementos
+    $$V_r=\dfrac{R}{i} \ V_L = L\dfrac{di}{dt} \ I_c=C\dfrac{dV_c}{dt}$$
+    \item Tao
+    $$\tau=RC \quad \tau^{-1}=(R/L)$$
+    \item RC
+    $$V_C=V_{in}-(V_{in}-V_{Co})e^{-t/\tau}$$
+    \item RL
+    $$i_R+L \dfrac{di}{dt}=V_{in} \rightarrow i_L=\dfrac{Vin}{R}-\left(\dfrac{V_{in}}{R} -I_o\right)e^{-t/\tau}$$
+    \item Resistencia critica para $\alpha^2=\omega^2$
+    $$R=\sqrt{\dfrac{L}{4C}}$$
+
+    \item RLC $||$
+    $$\dfrac{V_c}{R}+\dfrac{1}{L}\int V_l dt+I_{02}+C \dfrac{dV_c}{dt}=0 \rightarrow \dfrac{sV_o+I_0+2 \alpha V_0}{s^2+2\alpha s + \omega_o^2} $$
+    Esto deriva en 3 ecuaciones segun sea el caso con
+    $\alpha=\dfrac{1}{2RC} \ \omega_0=\dfrac{1}{\sqrt{LC}} \ \omega_d = \sqrt{\omega_o^2-\alpha^2}$ de forma que
+    $$S_{1,2}=-\alpha \pm \sqrt{\alpha^2-\omega_0^2}$$
+    $$ V(t)=
+    \left\{
+    \begin{aligned}
+    &A_1 e^{s_1 t} + A_2 e^{s_2 t}    &\alpha^2 > \omega^2 \text{ O.D.} \\
+    &A_1 e^{s_1 t} + A_2 t e^{s_2 t}    &\alpha^2 = \omega^2 \text{ C.D.} \\
+    &e^{\alpha t}(B_1 \cos(\omega_d t) + B_2 \sin(\omega_d t))   &\alpha^2 < \omega^2 \text{ U.D.} \\
+    \end{aligned}
+    \right.
+    $$
+    \includegraphics[width=0.3\textwidth]{src/image.png}
+    \end{itemform}
+    \subsection*{AC}
+    \begin{itemform}
+    \item RL
+    $$Ri+L \dfrac{di}{dt}=V_m \cos (\omega t) \rightarrow $$
+    $$ i(t)=\dfrac{RV_m}{R^2+(\omega L)^2} \cos(\omega t)+\dfrac{V_m \omega L}{R^2+(\omega L)^2} \sin(\omega t)$$
+    $$\quad \textbf{I}_M\angle \phi \quad \text{where } \textbf{I}_M=\dfrac{V_M}{\sqrt{R^2+(\omega L)^2}} \quad \phi= \arctan{\left(\dfrac{\omega L}{R}\right)}$$
+    \end{itemform}
+    \fmSubSec{AC}
+    \begin{itemform}
+    \item Velocidad angular
+    $$\omega=2 \pi f=\frac{2 \pi}{T}$$
+    \item $\sin\rightarrow \cos$
+    $$\sin(\theta)=\cos(\theta-90 ) \quad \cos(\theta)=\sin(\theta+90)$$
     $$-\cos(\theta)=\cos(\theta+180) \quad -\sin(\theta)=\sin(\theta+180)$$
-                              
-                
 
-                              \item Voltaje promedio
-                                $$V_{prom}= \dfrac{1}{T} \int\limits_0^T f(t)$$
-\item Voltaje RMS
-$$V_{RMS}=\sqrt{\dfrac{1}{T} \int\limits_0^T f(t)}=\dfrac{V_m}{\sqrt{2}}$$
-                              \item Voltaje promedio para ondas senoidales 
-                              $$\text{Media Onda }V_{DC}=\dfrac{V_M}{\pi} \quad \text{Onda }V_{DC}=\dfrac{2 V_M}{\pi}$$
-                              \end{itemform}
 
-                            \end{multicols}
+
+    \item Voltaje promedio
+    $$V_{prom}= \dfrac{1}{T} \int\limits_0^T f(t)$$
+    \item Voltaje RMS
+    $$V_{RMS}=\sqrt{\dfrac{1}{T} \int\limits_0^T f(t)}=\dfrac{V_m}{\sqrt{2}}$$
+    \item Voltaje promedio para ondas senoidales 
+    $$\text{Media Onda }V_{DC}=\dfrac{V_M}{\pi} \quad \text{Onda }V_{DC}=\dfrac{2 V_M}{\pi}$$
+    \end{itemform}
+
+    \end{multicols}
 \newpage
 \begin{multicols}{2}
     \fmSubSec{Potencia en Circuitos AC}
@@ -183,14 +183,14 @@ $$V_{RMS}=\sqrt{\dfrac{1}{T} \int\limits_0^T f(t)}=\dfrac{V_m}{\sqrt{2}}$$
         \textbf{Pruebas Transformador SC (Circuito Cerrado)}
     \begin{itemform}
         \item 
-        $$|Z_{SC}|=\dfrac{V_{SC}}{I_{SC}}\quad Z_{SC}=R_{eq}+jX_{eq}9$$
+        $$|Z_{SC}|=\dfrac{V_{SC}}{I_{SC}}\quad Z_{SC}=R_{eq}+jX_{eq}$$
         \item 
         $$\theta = \arccos{\left(\dfrac{P_{SC}}{V_{SC} \cdot I_{SC}}\right)}$$
     \end{itemform}
     \textbf{Eficiencia}
     \begin{itemform}
         \item Corrientes
-        $$I_{rated}=\dfrac{S_{rated}}{V_{rated}}$$
+        $$I_{rated}=\dfrac{S_{rated}}{V_{rated}} \quad I_{fl}= I_{rated} \angle \arccos(P.F.)$$
         \item Voltajes
         $$V_S^{nl}=Vp/a = V_{rated} = V_s \quad V_S^{fl}= V_s^{nl}-I_{fl}Z_{eq}$$
         \item VR
@@ -201,6 +201,18 @@ $$V_{RMS}=\sqrt{\dfrac{1}{T} \int\limits_0^T f(t)}=\dfrac{V_m}{\sqrt{2}}$$
         $$P_{loss}= P_{Req}+P_{RC} \quad P_{Req}= I_{rated}^2R_{eq}\quad P_{RC}= \dfrac{V_s^2}{R_C}$$
         \item Potencia de salida
         $$P_o = V_s I_{rated} PF$$
+    \end{itemform}
+    \textbf{AutoTransformador}
+
+    \includegraphics[width=0.7\linewidth]{src/AutoTransformador.png}
+    
+    \begin{itemform}
+        \item Identificacion parametros $1000 KVA\ 12/1.2KV$
+        $$ S_{w} = 1000 KVA \quad NSE = 12 KV \quad NC = 1.2 KV$$
+        \item Potencia de salida
+        $$S_{io}=V_H \dfrac{S_w}{N_C}; V_H = V_{SE} + V_{C}$$
+        \item Relacion de Potencia
+        $$\dfrac{S_{io}}{S_w}= \dfrac{N_{SE}+N_C}{N_C}$$
     \end{itemform}
   
 \end{multicols}
