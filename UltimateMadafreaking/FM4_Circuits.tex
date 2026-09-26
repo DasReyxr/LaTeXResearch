@@ -24,7 +24,7 @@
     \end{itemform}
     \fmSubSec{RLC}
     \subsubsection*{DC}
-    \includegraphics[width=0.8\linewidth]{src/LC Behavioral.png}
+    \includegraphics[width=0.8\linewidth]{src/FM4/LC Behavioral.png}
     \begin{itemform}
     \item Voltajes y Corrientes de los elementos
     $$V_r=\dfrac{R}{i} \ V_L = L\dfrac{di}{dt} \ I_c=C\dfrac{dV_c}{dt}$$
@@ -51,7 +51,7 @@
     \end{aligned}
     \right.
     $$
-    \includegraphics[width=0.3\textwidth]{src/image.png}
+%    \includegraphics[width=0.3\textwidth]{src/FM4/image.png}
     \end{itemform}
     \subsection*{AC}
     \begin{itemform}
@@ -112,7 +112,7 @@
 
     \textbf{Triángulo de Potencia}
     \begin{center}
-        \includegraphics[width=0.55\linewidth]{src/TrianglePower.png}
+        \includegraphics[width=0.55\linewidth]{src/FM4/TrianglePower.png}
     \end{center}
 
     \begin{itemform}
@@ -204,7 +204,7 @@
     \end{itemform}
     \textbf{AutoTransformador}
 
-    \includegraphics[width=0.7\linewidth]{src/AutoTransformador.png}
+    \includegraphics[width=0.7\linewidth]{src/FM4/AutoTransformador.png}
     
     \begin{itemform}
         \item Identificacion parametros $1000 KVA\ 12/1.2KV$
@@ -287,13 +287,13 @@ CMRR
     \item[SlewRate] Qué tan rápido puede cambiar la salida del Op Amp. Entre más alto, mejor puede seguir señales rápidas.
 \end{description}
 \end{multicols}
-\includegraphics[width=1\linewidth]{src/FM4Circuits/Comparador.png}
+\includegraphics[width=1\linewidth]{src/FM4/Comparador.png}
 
 \newpage
 \section{Electronica de Potencia}
 \begin{multicols}{2}
 \fmSubSec{Convertidores CC}
-\includegraphics[width=0.9\linewidth]{src/BuckBoost.png}
+\includegraphics[width=0.9\linewidth]{src/FM4/BuckBoost.png}
 \textbf{Buck}
 \begin{itemform}
     \item Vo
@@ -338,7 +338,7 @@ CMRR
     $$ \eta = 1-\dfrac{0.7}{V_{CC}}$$
     $$P_{OUT}=\dfrac{(V_{CC}-0.7)^2}{R_L} \quad P_{IN}=V_{CC}\dfrac{VCC-0.7}{R_L}$$
 \end{itemform}
-\includegraphics[width=1.3\linewidth]{src/Amp.png}
+\includegraphics[width=1.3\linewidth]{src/FM4/Amp.png}
 \end{multicols}
 \newpage
 
@@ -352,12 +352,12 @@ CMRR
         \item Corrientes
         $$I_c=\beta I_b \quad I_e=(\beta+1) I_b \quad Ic=Ie/\alpha$$
     \end{itemform}
-    \includegraphics[width=0.9\linewidth]{src/RectaExcursion.png}
+    \includegraphics[width=0.9\linewidth]{src/FM4/RectaExcursion.png}
     
     \subsubsection*{AC Analysis}
 
-    \includegraphics[width=\linewidth]{src/ModelosIII.png}
-%    \includegraphics[width=0.9\linewidth]{src/Modelos.png}
+    \includegraphics[width=\linewidth]{src/FM4/ModelosIII.png}
+%    \includegraphics[width=0.9\linewidth]{src/FM4/Modelos.png}
     
     \begin{itemform}
 
@@ -374,10 +374,10 @@ CMRR
         BJT Base Colector Conectados, FET GateSource Conecectados
         $$R_{BJT}=\dfrac{hie}{\beta +1}\approx re \quad R_{FET}= gm^{-1}$$ 
     \end{itemform}
-        \includegraphics[width=0.8\linewidth]{src/Fets.png}
+        \includegraphics[width=0.8\linewidth]{src/FM4/Fets.png}
 
     \fmSubSec{FETS}
-        \includegraphics[width=0.8\linewidth]{src/FETSyMoSFET.png}
+        \includegraphics[width=0.8\linewidth]{src/FM4/FETSyMoSFET.png}
         
     Bloque I (BI) Mosfet Descremento y JFETS
     
@@ -401,8 +401,8 @@ CMRR
 \end{itemform}
 
 \end{multicols}
-\includepdf[pages=-, pagecommand={}]{src/FETConf.pdf}
-\includepdf[pages=-, pagecommand={}]{src/BJTConf.pdf}
+\includepdf[pages=-, pagecommand={}]{src/FM4/FETConf.pdf}
+\includepdf[pages=-, pagecommand={}]{src/FM4/BJTConf.pdf}
 \newpage
 \section{Respuesta en frecuencia}
 \begin{multicols}{2}
@@ -425,7 +425,7 @@ $$
 \angle H(j\omega)=
 \angle N(j\omega)-\angle D(j\omega)
 $$
-    \includegraphics[width=0.7\linewidth]{src/Colpits.png}
+    \includegraphics[width=0.7\linewidth]{src/FM4/Colpits.png}
 
     \fmSubSec{Osciladores}
     
@@ -455,9 +455,9 @@ RFC>> L
 $$
     \end{itemform}
     
-    \includegraphics[width=0.5\linewidth]{src/Oscilator.png}
+    \includegraphics[width=0.5\linewidth]{src/FM4/Oscilator.png}
     \subsubsection*{AC Analysis}
-%    \includegraphics[width=0.9\linewidth]{src/Modelos.png}
+%    \includegraphics[width=0.9\linewidth]{src/FM4/Modelos.png}
     
     \begin{itemform}
 
@@ -474,10 +474,10 @@ $$
         BJT Base Colector Conectados, FET GateSource Conecectados
         $$R_{BJT}=\dfrac{hie}{\beta +1}\approx re \quad R_{FET}= gm^{-1}$$ 
     \end{itemform}
-        \includegraphics[width=0.8\linewidth]{src/Fets.png}
+        \includegraphics[width=0.8\linewidth]{src/FM4/Fets.png}
 
     \fmSubSec{FETS}
-        \includegraphics[width=0.8\linewidth]{src/FETSyMoSFET.png}
+        \includegraphics[width=0.8\linewidth]{src/FM4/FETSyMoSFET.png}
         
     Bloque I (BI) Mosfet Descremento y JFETS
     
