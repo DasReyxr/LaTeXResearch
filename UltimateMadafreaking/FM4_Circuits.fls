@@ -314,11 +314,11 @@ INPUT /usr/share/texmf-dist/fonts/tfm/public/rsfs/rsfs10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/rsfs/rsfs7.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/rsfs/rsfs5.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
-INPUT ./src/FM4/LC Behavioral.png
-INPUT ./src/FM4/LC Behavioral.png
-INPUT ./src/FM4/LC Behavioral.png
-INPUT ./src/FM4/LC Behavioral.png
-INPUT ./src/FM4/LC Behavioral.png
+INPUT ./src/FM4/LCBehavioral.png
+INPUT ./src/FM4/LCBehavioral.png
+INPUT ./src/FM4/LCBehavioral.png
+INPUT ./src/FM4/LCBehavioral.png
+INPUT ./src/FM4/LCBehavioral.png
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
 INPUT ./ALUDAS.png
