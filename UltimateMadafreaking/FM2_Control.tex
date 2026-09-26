@@ -414,41 +414,20 @@ T(s)=\frac{G_c(s)G_p(s)}
 
 \textbf{Márgenes de estabilidad}
 
+\includegraphics[width=0.28\textwidth]{src/FM2/Margin.out.png}
+
 Frecuencia de cruce de ganancia:
 \[
-|G(j\omega_{gc})|=1
-\]
-o equivalentemente
-\[
-M_{\mathrm{dB}}(\omega_{gc})=0\text{ dB}.
+|G(j\omega_{g})|=1 \quad \text{ o } \quad M_{\mathrm{dB}}(\omega_{gc})=0\text{ dB}.
 \]
 
-Margen de fase:
+Margenes de fase y ganancia:
 \[
-\boxed{
-PM=180^\circ+\angle G(j\omega_{gc})
-}
+P_M=180^\circ+\angle G(j\omega_{g})\quad GM_{\mathrm{dB}}=-20\log_{10}|G(j\omega_{\varphi})|
 \]
-
-Frecuencia de cruce de fase:
-\[
-\angle G(j\omega_{pc})=-180^\circ.
-\]
-
-Margen de ganancia:
-\[
-\boxed{
-GM_{\mathrm{dB}}=-20\log_{10}|G(j\omega_{pc})|
-}
-\]
-
-Si se usa la magnitud en dB directamente:
-\[
-GM_{\mathrm{dB}}=-M_{\mathrm{dB}}(\omega_{pc}).
-\]
-
 
 \end{multicols}
+
 \includegraphics[width=0.6\textwidth]{src/Bode.png}
 
 \newpage
@@ -458,7 +437,7 @@ GM_{\mathrm{dB}}=-M_{\mathrm{dB}}(\omega_{pc}).
 \section{Decibeles, Transductores, SPL y Señales}
 \begin{multicols}{2}
 
-\textbf{Magnitud}
+\textbf{Magnitud} 
     $$
 \left|H(j\omega)\right|=
 \frac{\sqrt{\Re\{N(j\omega)\}^2+\Im\{N(j\omega)\}^2}}
@@ -551,7 +530,7 @@ Se utiliza un capacitor para captar la señal de entrada. Se ocupa
 un voltaje para que jale
 
 \end{itemform}
-\includegraphics[width=0.7\linewidth]{src/Microfono.png}
+\includegraphics[width=0.4\textwidth]{src/FM2/Microfono.png}
 
 \fmSubSec{CFT y DFT}
 \begin{itemform}
