@@ -138,7 +138,7 @@
 
                         \end{multicols}
 \newpage
-\includepdf[pages=-, pagecommand={}]{st/Laplace.pdf}
+%\includepdf[pages=-, pagecommand={}]{st/Laplace.pdf}
 \newpage
 \begin{multicols}{2}
 \section{Señales y Sistemas}
@@ -414,21 +414,25 @@ T(s)=\frac{G_c(s)G_p(s)}
 
 \textbf{Márgenes de estabilidad}
 
-\includegraphics[width=0.28\textwidth]{src/FM2/Margin.out.png}
+\includegraphics[width=0.3\textwidth]{src/FM2/Margin.out.png}
 
+Estabilidad y Margenes ideales
+$$0 \ \text{db} \to -180 ^{\circ} \quad
+P_M \ge 30 ^{\circ} \quad GM_{dB} \ge 6 \ \text{dB}
+$$
 Frecuencia de cruce de ganancia:
 \[
 |G(j\omega_{g})|=1 \quad \text{ o } \quad M_{\mathrm{dB}}(\omega_{gc})=0\text{ dB}.
 \]
 
-Margenes de fase y ganancia:
+Margenes de fase $\gamma$ y ganancia $K_g$:
 \[
 P_M=180^\circ+\angle G(j\omega_{g})\quad GM_{\mathrm{dB}}=-20\log_{10}|G(j\omega_{\varphi})|
 \]
 
 \end{multicols}
 
-\includegraphics[width=0.6\textwidth]{src/Bode.png}
+\includegraphics[width=0.6\textwidth]{src/Bodiii.png}
 
 \newpage
 % ============================================================
