@@ -169,8 +169,26 @@
         $$\Phi = \dfrac{\mathcal{F}_m}{\mathcal{R}} \quad B = \dfrac{\Phi}{A}$$
         \item Reluctancia
         $$
-        \mathcal{R}=\dfrac{l_c}{\mu_r\mu_0A}
+        \mathcal{R}=\dfrac{l_c}{\mu_r\mu_0A} \quad \mu_0 = 4 \pi \cdot 10^{-7}
         $$
+    \end{itemform}
+        \includegraphics[width=0.4\textwidth]{src/Trafo3.png}
+        
+    \includegraphics[width=0.4\textwidth]{src/Trafo1.png}
+    
+    
+    \includegraphics[width=0.4\textwidth]{src/Trafo2.png}
+    
+    \textbf{Transformadores}
+    \begin{itemform}
+           \item Relacion de transformacion
+    $$
+    a=\dfrac{v_p}{v_s}=\dfrac{N_p}{N_s}=\dfrac{I_s}{I_p}
+    $$
+    \item Impendancia primario
+    $$Z_p=a^2 Z_s \quad Z_s=\dfrac{Z_p}{a^2}$$
+    \item Factor de potencia
+    $$PF = \cos(\theta-\phi) \quad V\angle \theta \quad I\angle \phi$$
     \end{itemform}
     \textbf{Pruebas Transformador OC (Circuito Abierto)}
     \begin{itemform}
@@ -189,32 +207,106 @@
     \end{itemform}
     \textbf{Eficiencia}
     \begin{itemform}
+         \item Voltajes
+        $$V_s^{nl}=Vp/a = V_{rated} = V_s \quad V_S^{fl}= V_s^{nl}-I_{fl}Z_{eq}$$
         \item Corrientes
-        $$I_{rated}=\dfrac{S_{rated}}{V_{rated}} \quad I_{fl}= I_{rated} \angle \arccos(P.F.)$$
-        \item Voltajes
-        $$V_S^{nl}=Vp/a = V_{rated} = V_s \quad V_S^{fl}= V_s^{nl}-I_{fl}Z_{eq}$$
+        $$I_{rated}=\dfrac{S_{rated}}{V_{s}^{nl}} \quad I_{fl}= I_{rated} \angle \arccos(P.F.)$$
+       
         \item VR
-        $$V_R= \dfrac{Vp/a - V_s^{fl}}{V_s^{fl}} \times 100\% $$
+        $$V_R= \dfrac{|V_s^{nl}| - |V_s^{fl}|}{V_s^{fl}} \times 100\% \quad \dfrac{V_s^{nl}}{V_s^{nl}-|I_{fl}||Z_{eq}|}-1 \times 100 \%$$
+        \item Potencia de salida
+        $$P_o = V_s^{nl} I_{rated} PF$$
+        \item Potencia de Perdidas
+        $$P_{Req}= (I_{rated})^2R_{eq}\quad P_{RC}= \dfrac{(V_s^{nl})^2}{R_C} \quad P_{loss}= P_{Req}+P_{RC}$$
         \item Eficiencia
         $$\eta = \dfrac{P_{out}}{P_{in}} \times 100\% = \dfrac{P_o}{P_{o} + P_{loss}} \times 100\%$$
-        \item Potencia de Perdidas
-        $$P_{loss}= P_{Req}+P_{RC} \quad P_{Req}= I_{rated}^2R_{eq}\quad P_{RC}= \dfrac{V_s^2}{R_C}$$
-        \item Potencia de salida
-        $$P_o = V_s I_{rated} PF$$
+
     \end{itemform}
     \textbf{AutoTransformador}
 
-    \includegraphics[width=0.7\linewidth]{src/FM4/AutoTransformador.png}
+    \includegraphics[width=0.5\textwidth]{src/FM4/AutoTransfo.png}
+%    \includegraphics[width=0.7\linewidth]{src/FM4/AutoTransformador.png}
     
     \begin{itemform}
         \item Identificacion parametros $1000 KVA\ 12/1.2KV$
-        $$ S_{w} = 1000 KVA \quad NSE = 12 KV \quad NC = 1.2 KV$$
+        $$ S_{w} = 1000 KVA \quad N_{SE} = 12 KV \quad N_{C} = 1.2 KV$$
         \item Potencia de salida
-        $$S_{io}=V_H \dfrac{S_w}{N_C}; V_H = V_{SE} + V_{C}$$
+        $$S_{io}=V_H \dfrac{S_w}{N_C}= \dfrac{S_{w}}{1-\frac{N_{SE}}{N_C+N_{SE}}}$$
+
+        $$
+        V_H = V_{SE} + V_{C} = V_L (1 - \dfrac{N_SE}{N_C})
+        $$
+        $$
+        I_L= I_H (1-\dfrac{N_{SE}}{N_C})
+        $$
+        $$S_{w}=S_{io}(1-\frac{N_{SE}}{N_C+N_{SE}})$$
         \item Relacion de Potencia
         $$\dfrac{S_{io}}{S_w}= \dfrac{N_{SE}+N_C}{N_C}$$
     \end{itemform}
   
+\end{multicols}
+\newpage
+% ============================================================
+%  Transformadores trifásicos — conexiones estrella (Y) y delta (Δ)
+%  Requiere: \usepackage{amsmath}
+%  a = N_p / N_s = V_{\phi P} / V_{\phi S}   (relación por fase)
+% ============================================================
+
+% --- 1. Relaciones básicas de línea y fase ---
+\begin{multicols}{2}
+    % ============================================================
+%  Transformadores trifásicos
+%  Requiere: \usepackage{amsmath}
+% ============================================================
+
+\section*{Transformadores trifásicos}
+
+% --- Y–Y ---
+\subsection*{Conexión Y--Y}
+\begin{align}
+  V_{LP} &= \sqrt{3}\, V_{\phi P} \\
+  V_{LS} &= \sqrt{3}\, V_{\phi S} \\
+  \frac{V_{LP}}{V_{LS}} &= \frac{\sqrt{3}\, V_{\phi P}}{\sqrt{3}\, V_{\phi S}} = a
+\end{align}
+
+% --- Y–Δ ---
+\subsection*{Conexión Y--$\Delta$}
+\begin{align}
+  V_{LP} &= \sqrt{3}\, V_{\phi P} \\
+  V_{LS} &= V_{\phi S} \\
+  \frac{V_{LP}}{V_{LS}} &= \frac{\sqrt{3}\, V_{\phi P}}{V_{\phi S}} = \sqrt{3}\, a
+\end{align}
+
+% --- Δ–Y ---
+\subsection*{Conexión $\Delta$--Y}
+\begin{align}
+  V_{LP} &= V_{\phi P} \\
+  V_{LS} &= \sqrt{3}\, V_{\phi S} \\
+  \frac{V_{LP}}{V_{LS}} &= \frac{V_{\phi P}}{\sqrt{3}\, V_{\phi S}} = \frac{a}{\sqrt{3}}
+\end{align}
+
+% --- Δ–Δ ---
+\subsection*{Conexión $\Delta$--$\Delta$}
+\begin{align}
+  V_{LP} &= V_{\phi P} \\
+  V_{LS} &= V_{\phi S} \\
+  \frac{V_{LP}}{V_{LS}} &= \frac{V_{\phi P}}{V_{\phi S}} = a
+\end{align}
+% --- V–V (delta abierta) ---
+\subsection*{Conexión V--V (delta abierta)}
+\begin{align}
+  V_{LP} &= V_{\phi P} \\
+  V_{LS} &= V_{\phi S} \\
+  \frac{V_{LP}}{V_{LS}} &= \frac{V_{\phi P}}{V_{\phi S}} = a
+\end{align}
+
+% --- Open Y – V (estrella abierta – delta abierta) ---
+\subsection*{Conexión Y abierta -- V}
+\begin{align}
+  V_{LP} &= \sqrt{3}\, V_{\phi P} \\
+  V_{LS} &= V_{\phi S} \\
+  \frac{V_{LP}}{V_{LS}} &= \frac{\sqrt{3}\, V_{\phi P}}{V_{\phi S}} = \sqrt{3}\, a
+\end{align}
 \end{multicols}
 
 \newpage
