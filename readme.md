@@ -2,21 +2,22 @@
 **Extensions installed**
 - LaTeX Utilities
 - LaTex Workshop
-- Paste Image
+
 **Extra Extensions**
 - Python
 - Jupyter Notebooks
 
-## Paste Image with LaTex
-I have configured the Paste Image extension to work with LaTex. The configuration is as follows:
+## Pasting Images with LaTex
+I have configured the LaTeX Utilities extension to work with LaTex. The configuration is as follows:
 ```json
 {
-    "pasteImage.path": "${currentFileDir}/src",
-    "pasteImage.forceUnixStyleSeparator": true,
-    "pasteImage.showFilePathConfirmInputBox": true,
-    "pasteImage.basePath": "${currentFileDir}/src",
-    "pasteImage.filePathConfirmInputBoxMode": "onlyName",
-    "pasteImage.insertPattern": "\\begin{figure}[h]\n    \\centering\n    \\includegraphics[width=0.8\\textwidth]{src/${imageFileNameWithoutExt}}\n    \\caption{${imageFileNameWithoutExt}}\n    \\label{fig:${imageFilePath}}\n\\end{figure}",
+    "latex-utilities.formattedPaste.useAsDefault": true,
+    "latex-utilities.formattedPaste.image.template": "\\begin{figure}[h]\n    \\centering\n    \\includegraphics[width=0.8\\textwidth]{src/${imageFilePath}}\n    \\caption{${imageFileNameWithoutExt}}\n    \\label{fig:${imageFileNameWithoutExt}}\n\\end{figure}",
+    "latex-utilities.formattedPaste.imagePathOverride": "${currentFileDir}/src",
+
+    "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": true,
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.autoClean.run": "onBuilt",
 
 }
 ```
