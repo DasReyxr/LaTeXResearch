@@ -391,26 +391,18 @@ $$
 \hline
 \textbf{Forma} & \textbf{dB/dec} & $w_{esq}$& \textbf{Extra} \\ \hline
 
-$ s$    & $20$  & N/A & $ \text{db} |s| = 20$\\ 
-        &       &     & $\angle (s)=90$\\ \hline
-$1/s$   & $20$  & N/A & $ \text{db} |1/s| = 20$\\ 
-        &       &     & $\angle (1/s)=-90$\\ \hline
-$1/(\tau s+1)$ & $-20$ & $1/\tau$ & \\ \hline
+$ s$    & $20$  & N/A & $ magn = 20$\\ 
+        &       &     & $\angle =90$\\ \hline
+$1/s$   & $20$  & N/A & $ magn  = 20$\\ 
+        &       &     & $\angle =-90$\\ \hline
+$1/(\tau s+1)$ & $-20$ & $1/\tau$ & $\angle =-90$ \\ \hline
 
-$\dfrac{\omega_n}{(s^2+2 \zeta\omega_n s+\omega_n^2)}$
-& $-40$
-& $\omega_n$ &
-\\ \hline
+$\dfrac{\omega_n}{(s^2+2 \zeta\omega_n s+\omega_n^2)}$ & $-40$ & $\omega_n$ & $\angle = -180$
+\\  \hline
 
 \end{tabular}
-\subsection*{Lazo cerrado}
 
-Con realimentación negativa unitaria:
-\[
-T(s)=\frac{G_c(s)G_p(s)}
-{1+G_c(s)G_p(s)}.
-\]
-
+\includegraphics[width=0.5\textwidth]{src/FM2/Routh.png}
 
 \textbf{Márgenes de estabilidad}
 
@@ -427,12 +419,15 @@ Frecuencia de cruce de ganancia:
 
 Margenes de fase $\gamma$ y ganancia $K_g$:
 \[
-P_M=180^\circ+\angle G(j\omega_{g})\quad GM_{\mathrm{dB}}=-20\log_{10}|G(j\omega_{\varphi})|
-\]
+P_M=180^\circ+\angle G(j\omega_{g}) \pm 90^\circ \quad +\text{Polo}\  -\text{Cero}\]
+$$
+GM_{\mathrm{dB}}=-20\log_{10}|G(j\omega_{\varphi})|
+$$
 
 \end{multicols}
 
-\includegraphics[width=0.6\textwidth]{src/Bodiii.png}
+\includegraphics[width=0.8\textwidth]{src/FM2/BodeDiagram.out.png}
+%\includegraphics[width=0.6\textwidth]{src/Bodiii.png}
 
 \newpage
 % ============================================================
