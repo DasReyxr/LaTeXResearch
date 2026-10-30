@@ -345,7 +345,6 @@ X[3]
 3 \\
 3
 \end{bmatrix}
-\left(\dfrac{1}{N}\right)
 =   
 \begin{bmatrix}       
 1 & 1 & 1 & 1 \\
@@ -358,8 +357,9 @@ X[3]
 3 \\
 3 \\
 3
-\end{bmatrix}
-\left(\dfrac{1}{4}\right)
+\end{bmatrix}=
+$$
+$$
 =
 \begin{bmatrix}       
 3 + 3 + 3 + 3 \\
@@ -367,15 +367,13 @@ X[3]
 3 -3 + 3 -3 \\
 3 + 3i -3 -3i
 \end{bmatrix}
-\left(\dfrac{1}{4}\right)
 =
 \begin{bmatrix}
-3\\ 
+12\\ 
 0 \\
 0 \\
 0
-\end{bmatrix}
-$$
+\end{bmatrix}$$
 Siendo la Transformada Discreta de la funcion $f(x)=3$ la siguiente
 $$\begin{bmatrix}
 X[0] \\
@@ -384,7 +382,7 @@ X[2] \\
 X[3]
 \end{bmatrix}=
 \begin{bmatrix}
-3\\ 
+12 \\ 
 0 \\
 0 \\
 0
@@ -396,13 +394,15 @@ $$
     \caption{LineaOUT}
     \label{fig:LineaOUT}
 \end{figure}
-\subsubsection{Propiedades de la DFT}
-Ademas esto nos sirve de evidencia para ver que las propiedades aplicadas en la presentación funcionaron
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\linewidth]{src/PropiedadesN4.png}
     \label{fig:placeholder}
 \end{figure}
+\newpage
+\subsubsection{Propiedades de la DFT}
+Ademas esto nos sirve de evidencia para ver que las propiedades aplicadas en la presentación funcionaron
+
 
 ademas de obtener una nueva propiedad siendo que 
 $$
@@ -468,7 +468,6 @@ X[3]
 0 \\
 -1
 \end{bmatrix}
-\left(\dfrac{1}{N}\right)
 $$
 
 $$
@@ -491,7 +490,6 @@ X[3]
 0 \\
 -1
 \end{bmatrix}
-\left(\dfrac{1}{4}\right)
 =
 \begin{bmatrix}       
 0 + 1  + 0 -1 \\
@@ -505,7 +503,6 @@ X[3]
 0 \\
 2i
 \end{bmatrix}
-\left(\dfrac{1}{4}\right)
 = 
 \begin{bmatrix}
 0 \\
@@ -622,11 +619,160 @@ $$
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\linewidth]{src/dft_pulso_4pts.png}
+    \includegraphics[width=\linewidth]{src/SinOUT.png}
     \caption{SinOUT}
     \label{fig:SinOUT}
 \end{figure}
 \newpage
+\subsubsection{Suma de senoidales}
+
+Para el caso de la suma de senoidales se consideraran dos señales
+$$
+f_1(t) = \sin(2\pi (1) t) \quad \text{y} \quad f_2(t) = \sin(2\pi(1)  t+ \frac{\pi}{2})
+$$ 
+Siendo la naranja la señal $f_1(t)$ y la azul la señal $f_2(t)$, y la verde la suma de ambas señales.
+$$f_3(t)= f_1(t) + f_2(t)= \sin(2\pi  t) + \sin(2\pi  t+ \frac{\pi}{2})$$
+Se toman 6 puntos de cada señal, es decir, $N=6$, y se obtiene el vector de la siguiente manera
+%[ 1.         1.3660254  0.3660254 -1.        -1.3660254 -0.3660254]
+$$
+\vec{x} =
+\begin{bmatrix}
+    1 \\
+    1.3660254 \\
+    0.3660254 \\
+    -1 \\
+    -1.3660254 \\
+    -0.3660254
+\end{bmatrix}$$
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{src/Sin45.png}
+    \caption{Sin45}
+    \label{fig:Sin45}
+\end{figure}
+
+Como N = 6 se debe recalcular la matriz de Fourier, obteniendo la siguiente matriz
+$$
+\hat{W}^{kn}_6 =
+\begin{bmatrix}       
+\text{W}_6^{0*0} & \text{W}_6^{0*1} & \text{W}_6^{0*2} & \text{W}_6^{0*3} & \text{W}_6^{0*4} & \text{W}_6^{0*5} \\
+\text{W}_6^{1*0} & \text{W}_6^{1*1} & \text{W}_6^{1*2} & \text{W}_6^{1*3} & \text{W}_6^{1*4} & \text{W}_6^{1*5} \\
+\text{W}_6^{2*0} & \text{W}_6^{2*1} & \text{W}_6^{2*2} & \text{W}_6^{2*3} & \text{W}_6^{2*4} & \text{W}_6^{2*5} \\
+\text{W}_6^{3*0} & \text{W}_6^{3*1} & \text{W}_6^{3*2} & \text{W}_6^{3*3} & \text{W}_6^{3*4} & \text{W}_6^{3*5} \\
+\text{W}_6^{4*0} & \text{W}_6^{4*1} & \text{W}_6^{4*2} & \text{W}_6^{4*3} & \text{W}_6^{4*4} & \text{W}_6^{4*5} \\
+\text{W}_6^{5*0} & \text{W}_6^{5*1} & \text{W}_6^{5*2} & \text{W}_6^{5*3} & \text{W}_6^{5*4} & \text{W}_6^{5*5}
+\end{bmatrix}
+=
+\begin{bmatrix}       
+\text{W}_6^{0} & \text{W}_6^{0} & \text{W}_6^{0} & \text{W}_6^{0} & \text{W}_6^{0} & \text{W}_6^{0} \\
+\text{W}_6^{0} & \text{W}_6^{1} & \text{W}_6^{2} & \text{W}_6^{3} & \text{W}_6^{4} & \text{W}_6^{5} \\
+\text{W}_6^{0} & \text{W}_6^{2} & \text{W}_6^{4} & \text{W}_6^{6} & \text{W}_6^{8} & \text{W}_6^{10} \\
+\text{W}_6^{0} & \text{W}_6^{3} & \text{W}_6^{6} & \text{W}_6^{9} & \text{W}_6^{12} & \text{W}_6^{15} \\
+\text{W}_6^{0} & \text{W}_6^{4} & \text{W}_6^{8} & \text{W}_6^{12} & \text{W}_6^{16} & \text{W}_6^{20} \\
+\text{W}_6^{0} & \text{W}_6^{5} & \text{W}_6^{10} & \text{W}_6^{15} & \text{W}_6^{20} & \text{W}_6^{25}
+\end{bmatrix}
+$$
+Siendo 
+$$
+W_N = e^{-(2\pi j) / N} \xrightarrow{N=6} W_6 = e^{-(2\pi j) / 6}
+$$
+Evaluando en la matriz se obtiene
+\begin{comment}
+    
+[ 1. +0.j    1. +0.j    1. +0.j    1. +0.j    1. +0.j    1. +0.j  ]
+ [ 1. +0.j    0.5-0.87j -0.5-0.87j -1. -0.j   -0.5+0.87j  0.5+0.87j]
+ [ 1. +0.j   -0.5-0.87j -0.5+0.87j  1. +0.j   -0.5-0.87j -0.5+0.87j]
+ [ 1. +0.j   -1. -0.j    1. +0.j   -1. -0.j    1. +0.j   -1. -0.j  ]
+ [ 1. +0.j   -0.5+0.87j -0.5-0.87j  1. +0.j   -0.5+0.87j -0.5-0.87j]
+ [ 1. +0.j    0.5+0.87j -0.5+0.87j -1. -0.j   -0.5-0.87j  0.5-0.87j]]
+\end{comment}
+$$
+\hat{W}^{kn}_6 =
+\begin{bmatrix}
+1 & 1 & 1 & 1 & 1 & 1 \\
+1 & 0.5-0.87j & -0.5-0.
+87j & -1 & -0.5+0.87j & 0.5+0.87j \\
+1 & -0.5-0.87j & -0.5+0.87j & 1 & -0.5-0.87j & -0.5+0.87j \\
+1 & -1 & 1 & -1 & 1 & -1 \\
+1 & -0.5+0.87j & -0.5-0.87j & 1 & -0.5+0.87j & -0.5-0.87j \\
+1 & 0.5+0.87j & -0.5+0.87j & -1 & -0.5-0.87j & 0.5-0.87j
+\end{bmatrix}
+$$
+
+Una vez con los coeficientes lo aplicamos directamente
+$$
+\begin{bmatrix}
+X[0] \\
+X[1] \\
+X[2] \\
+X[3] \\
+X[4] \\
+X[5]
+\end{bmatrix}
+= 
+\begin{bmatrix}
+1 & 1 & 1 & 1 & 1 & 1 \\
+1 & 0.5-0.87j & -0.5-0.
+87j & -1 & -0.5+0.87j & 0.5+0.87j \\
+1 & -0.5-0.87j & -0.5+0.87j & 1 & -0.5-0.87j & -0.5+0.87j \\
+1 & -1 & 1 & -1 & 1 & -1 \\
+1 & -0.5+0.87j & -0.5-0.87j & 1 & -0.5+0.87j & -0.5-0.87j \\
+1 & 0.5+0.87j & -0.5+0.87j & -1 & -0.5-0.87j & 0.5-0.87j
+\end{bmatrix}
+\begin{bmatrix}
+    1 \\
+    1.3660254 \\
+    0.3660254 \\
+    -1 \\
+    -1.3660254 \\
+    -0.3660254
+\end{bmatrix}
+$$
+%array([-0.+0.j,  3.-3.j,  0.-0.j,  0.+0.j,  0.+0.j,  3.+3.j])
+$$
+\begin{bmatrix}
+X[0] \\
+X[1] \\
+X[2] \\
+X[3] \\
+X[4] \\
+X[5]
+\end{bmatrix}
+=\begin{bmatrix}
+    0 \\
+    3-3j \\
+    0 \\
+    0 \\
+    0 \\
+    3+3j
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0 \\
+    4.24 \\
+    0 \\
+    0 \\
+    0 \\
+    4.24
+\end{bmatrix}
+\angle
+\begin{bmatrix}
+    0 \\
+    - {\pi}/{4} \\
+    0 \\
+    0 \\
+    0 \\
+    {\pi}/{4}
+\end{bmatrix}
+$$
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{src/Sin2Out.png}
+    \caption{Sin2Out}
+    \label{fig:Sin2Out}
+\end{figure}
 \subsubsection{Pulso Cuadrado}
 \begin{figure}[!h]
     \centering
