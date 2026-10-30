@@ -69,3 +69,8 @@
     bookmarks=true,
     pdfpagemode=FullScreen,
 }
+
+\newcommand{\imgph}[3][\linewidth]{%
+  \IfFileExists{src/AM/#2.png}%
+  {\includegraphics[width=#1]{src/AM/#2.png}}%
+  {\fbox{\parbox[c][2.2cm][c]{0.92\linewidth}{\centering\scriptsize\textbf{[#2.png]} #3}}}}
