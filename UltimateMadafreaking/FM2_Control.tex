@@ -571,4 +571,95 @@ Cortar senales en segmentos
   \item Tweeter: 2000-20000 Hz (Altas Frecuencias)
 \end{itemform}
 \end{multicols}
+
+
+\newpage
+\section{Modulación de Amplitud (AM)}
+\begin{multicols}{2}
+
+\textbf{Canal de Comunicación}
+
+\includegraphics[width=0.5\textwidth]{src/Canal.png}
+\fmSubSec{Canal, SNR e Información}
+\begin{itemform}
+\item \textbf{Canal}: $r(t)=s(t)*h(t)+n(t) \quad R=SH+N$
+\item \textbf{Sin distorsión}: $H(j\omega)=Ke^{-j\omega t_d}$
+\item \textbf{SNR}: $SNR_{dB}=10\log_{10}(P_s/P_n)$
+\item \textbf{Shannon}: $C=B\log_2(1+SNR)$ \ ($SNR$ lineal, no dB)
+C = capacidad del canal, B = ancho de banda, SNR = relación señal/ruido
+\item \textbf{Información y entropía}:
+$$I(x)=-\log_2p(x) \quad H(X)=-\sum p(x_i)\log_2p(x_i)$$
+\item \textbf{Frecuencia de corte de filtros} $f_c = \dfrac{1}{2\pi \tau}$\\
+$\tau = RC$ Bajas/Altas RC\\
+$\tau = L/R$ Bajas/Altas RL
+\end{itemform}
+\fmSubSec{Definición y Señal AM}
+\begin{itemform}
+\item \textbf{Tono}: $m(t)=A_m\cos(\omega_m t)$
+$$\mu=\dfrac{A_m}{A_c}=\dfrac{V_{max}-V_{min}}{V_{max}+V_{min}} \quad \mu\le1\ \text{(sin sobremodulación)}$$
+\item \textbf{Voltaje  AM}:
+$$v_{AM} = V_c \sin (2 \pi f_c t) + \dfrac{Vm}{2} \sin (2 \pi(fc - f_m )t) - \dfrac{Vm}{2} \sin (2 \pi(fc + f_m )t)$$
+
+\end{itemform}
+
+\includegraphics[width=0.45\textwidth]{src/Modulacion.png}
+%\imgph{AM_tiempo_mu}{Señal AM en el tiempo con envolvente, $\mu<1$, $\mu=1$, $\mu>1$}
+
+\fmSubSec{Espectro y Ancho de Banda}
+\begin{itemform}
+\item \textbf{Ancho de banda}: $BW=2f_m \quad$ Bandas: $f_c\pm f_m$ (USB/LSB)
+\item \textbf{Espectro}: portadora en $f_c$ + bandas en $f_c\pm f_m$ (LSB/USB), cada una de amplitud $\dfrac{V_M}{2}=\dfrac{mV_C}{2}$
+\end{itemform}
+%\imgph{AM_espectro}{Espectro bilateral: portadora en $\pm f_c$ y bandas laterales}
+
+\columnbreak
+
+\fmSubSec{Potencia y Eficiencia}
+\begin{itemform}
+\item \textbf{Potencia total}:
+$$P_{AM} =\dfrac{V_C^2}{2R}+\dfrac{V_m^2}{8R}+\dfrac{V_m^2}{8R}\quad 
+P_{AM}=P_c ( 1 + \dfrac{m^2}{2})
+$$
+\item \textbf{PEP} Peak Envelope Power
+$$
+PEP=\dfrac{V_{rms^2}}{R}=V_s I_{Max} \quad V_{rms} = \dfrac{V_{Max}}{\sqrt{2}}
+$$
+\item \textbf{Avg power}
+$$
+P_{avg} = \dfrac{PEP}{4} \quad P_{avg} = \dfrac{PEP}{3}
+$$
+\end{itemform}
+
+\begin{itemform}
+\item \textbf{DSB-SC}: sin portadora, $\eta=100\%$, $BW=2f_m$
+$$x(t)=m(t)\cos\omega_c t$$
+\item \textbf{SSB}: una sola banda, $BW=f_m$ 
+\end{itemform}
+%\imgph{AM_variantes}{Espectros comparados: AM, DSB-SC, SSB (USB/LSB)}
+
+
+
+\begin{itemform}
+  \item \textbf{SNR}:
+  $$SNR_{db} = 10 \log (SNR_{lineal})$$
+\end{itemform}
+
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Banda} & \textbf{Frecuencia} & \textbf{Aplicaciones típicas} \\
+\hline
+VLF & 3--30 kHz         & Comunicaciones especiales \\
+LF  & 30--300 kHz       & Navegación y radiobalizas \\
+MF  & 300 kHz--3 MHz    & Radio AM \\
+HF  & 3--30 MHz         & Onda corta y radioafición \\
+VHF & 30--300 MHz       & Radio FM y comunicaciones aéreas \\
+UHF & 300 MHz--3 GHz    & TV, telefonía móvil y Wi-Fi \\
+SHF & 3--30 GHz         & Radar, satélites y enlaces \\
+EHF & 30--300 GHz       & Ondas milimétricas \\
+\hline
+\end{tabular}
+%\imgph{AM_bloques}{Diagrama a bloques: modulador, detector de envolvente y receptor superheterodino}
+\includegraphics[width=0.4\textwidth]{src/AM.png}
+
+\end{multicols}
 \end{document}
