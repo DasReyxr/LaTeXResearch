@@ -183,7 +183,7 @@ F(\omega)=2\pi\,\delta(\omega)
 Los Funtores son una herramienta matemática que se utiliza para describir la relación entre dos categorías, en este caso, entre el dominio del tiempo y el dominio de la frecuencia. En el contexto de la transformada de Fourier, los funtores se utilizan para representar la transformación de una función del dominio del tiempo a una función del dominio de la frecuencia. La notación $\{\}$ se utiliza para denotar un functor, y en este caso, se puede interpretar como la aplicación de la transformada de Fourier a una función $f(t)$, lo que da como resultado la función $F(\omega)$ en el dominio de la frecuencia. Es decir, $\{f(t)\}$ representa la función transformada de Fourier de $f(t)$, lo que se puede expresar como:
 $$\{f(t)\} = F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-j\omega t} dt$$
 Esta notación es útil para simplificar la representación de la transformada de Fourier y para enfatizar la relación entre las funciones en los dos dominios. Además, permite expresar de manera concisa la aplicación de la transformada de Fourier a diferentes funciones, lo que facilita el análisis y la manipulación de señales en el dominio de la frecuencia. Es importante destacar que el argumento de la notación $\{\}$ debe ser una función y no un número, ya que la transformada de Fourier se aplica a funciones y no a valores individuales.
-
+\newpage
 
 \subsection{DFT Discrete Fourier Transform}
 Debemos considerar que el mundo real es de manera continua pero a la hora de procesar una señal debe ser tomada por un microcontrolador, lo que implica que la señal debe ser muestreada, es decir, convertida a una señal discreta. 
@@ -619,10 +619,11 @@ $$
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\linewidth]{src/SinOUT.png}
+    \includegraphics[width=\linewidth]{src/pyfig/dft_senoidal_4pts.png}
     \caption{SinOUT}
     \label{fig:SinOUT}
 \end{figure}
+
 \newpage
 \subsubsection{Suma de senoidales}
 
@@ -648,8 +649,8 @@ $$
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{src/Sin45.png}
-    \caption{Sin45}
+    \includegraphics[width=0.6\textwidth]{src/Sin45.png}
+ %   \caption{Sin45}
     \label{fig:Sin45}
 \end{figure}
 
@@ -769,8 +770,8 @@ X[5]
 $$
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.75\textwidth]{src/Sin2Out.png}
-    \caption{Sin2Out}
+    \includegraphics[width=0.8\textwidth]{src/pyfig/dft_suma_senoidales.png}
+    %\caption{Analis}
     \label{fig:Sin2Out}
 \end{figure}
 \subsubsection{Pulso Cuadrado}
@@ -856,6 +857,185 @@ $$
     \caption{PulsoOUT}
     \label{fig:PulsoOUT}
 \end{figure}
+
+\newpage
+\newpage
+
+\subsection{Espectro (Spectra)}
+El espectro de una señal es una representación de la distribución de su energía a lo largo de las diferentes frecuencias que la componen. 
+
+En el contexto de la Transformada Discreta de Fourier (DFT), el espectro se obtiene al calcular la magnitud de los coeficientes resultantes de la DFT, lo que permite identificar qué frecuencias están presentes en la señal y con qué intensidad.
+
+Existen tres tipos principales de espectros que se pueden analizar:
+
+\subsubsection{Espectro de Magnitud}
+Muestra la amplitud de cada componente frecuencial, indicando la fuerza o intensidad de cada frecuencia presente en la señal x.
+$$
+A[k] = \dfrac{1}{N} | X[k] |
+$$
+\textbf{Nota:} Si x es una señal real, el espectro de magnitud es simétrico respecto al eje de frecuencia/(Frecuencia de nyquist) siendo el valor de la frecuencia de nyquist igual a $f_N = f_s/2$.
+\newpage
+La DFT se definio previamente como
+$$
+X[k]= \sum_{j=0}^{N-1} x[j] e^{-(2\pi i) k j  / N}=\sum_{j=0}^{N-1} x[j] \omega^{ jk }, \quad 0 \le k \le N-1, \quad \omega = e^{-(2\pi i) / N}
+$$
+
+Sea $x[j]\in\mathbb{R}$ una señal muestreada con frecuencia $f_s$ y $N$ muestras. La frecuencia asociada al índice $k$ es
+\begin{equation}
+f_k = \frac{k\,f_s}{N}
+\end{equation}
+Se define la frecuencia de Nyquist como la mitad de la frecuencia de muestreo, es decir, $f_N = f_s/2$. En términos del índice $k$, esto corresponde a $k = N/2$.
+
+\paragraph{Conjugados exponenciales} 
+El conjugado de un número complejo $z = a + bi$ es $\overline{z} = a - bi$. En particular, para un exponencial complejo:
+\begin{equation}
+\overline{e^{i\theta}} = e^{-i\theta}
+\end{equation}
+\paragraph{Propiedades previas de $\omega$.} Con $\omega = e^{-2\pi i/N}$ se cumple
+\begin{equation}
+\omega^{N} = e^{-2\pi i} = 1, \qquad
+\overline{\omega^{jk}} = \left(e^{-2\pi i/N}\right)^{-jk} = \omega^{-jk}.
+\end{equation}
+
+\paragraph{Teorema (simetría conjugada).} Si $x[j]\in\mathbb{R}$ para todo $j$, entonces
+\begin{equation}
+X[N-k] = \overline{X[k]}, \qquad k = 1,\ldots,N-1.
+\end{equation}
+
+\begin{proof}
+Evaluando la DFT en el índice $N-k$:
+\begin{equation}
+X[N-k] = \sum_{j=0}^{N-1} x[j]\,\omega^{j(N-k)}
+       = \sum_{j=0}^{N-1} x[j]\,\underbrace{\omega^{jN}}_{=\,1}\,\omega^{-jk}
+       = \sum_{j=0}^{N-1} x[j]\,\omega^{-jk}.
+\end{equation}
+Como $\omega^{-jk} = \overline{\omega^{jk}}$ y $x[j]$ es real ($x[j]=\overline{x[j]}$):
+\begin{equation}
+X[N-k] = \sum_{j=0}^{N-1} \overline{x[j]\,\omega^{jk}}
+       = \overline{\sum_{j=0}^{N-1} x[j]\,\omega^{jk}}
+       = \overline{X[k]}. \qquad \qedhere
+\end{equation}
+\end{proof}
+
+\paragraph{Consecuencia en magnitud y fase.} Escribiendo $X[k] = |X[k]|\,e^{i\varphi[k]}$, la igualdad $X[N-k]=\overline{X[k]}$ implica
+\begin{equation}
+|X[N-k]| = |X[k]|, \qquad \varphi[N-k] = -\varphi[k].
+\end{equation}
+Por lo tanto, el espectro de amplitud es \emph{par} respecto a $k=N/2$ y el de fase es \emph{impar}. Como $f_{N-k} = f_s - f_k$, y por la periodicidad $X[k+N]=X[k]$, el bin $N-k$ es equivalente a la frecuencia negativa $-f_k$:
+\begin{equation}
+|X(-f_k)| = |X(f_k)|.
+\end{equation}
+
+\paragraph{Simetría respecto a Nyquist.} Sea $k = N/2 + m$ con $m$ entero. Entonces $N-k = N/2 - m$, y la propiedad anterior se reescribe como
+\begin{equation}
+\left|X\!\left[\tfrac{N}{2}+m\right]\right| = \left|X\!\left[\tfrac{N}{2}-m\right]\right|,
+\end{equation}
+es decir, en frecuencia, $|X(f_N + \Delta f)| = |X(f_N - \Delta f)|$: el espectro es un espejo alrededor de $f_s/2$. Por eso la información independiente está solo en $0 \le k \le N/2$ (de $0$ a $f_s/2$), y la segunda mitad es redundante.
+
+\paragraph{Casos especiales.}
+\begin{itemize}
+    \item \textbf{Nyquist ($k=N/2$, con $N$ par):} haciendo $k=N-k=N/2$ en el teorema, $X[N/2]=\overline{X[N/2]}$, así que es real. Además, como $\omega^{jN/2}=(-1)^j$,
+    \begin{equation}
+    X\!\left[\tfrac{N}{2}\right] = \sum_{j=0}^{N-1} (-1)^j\,x[j] \in \mathbb{R}.
+    \end{equation}
+    Este bin es su propio espejo y no tiene pareja.
+    \item \textbf{$N$ impar:} no existe un índice entero igual a $N/2$, por lo que el eje de simetría cae entre los bins $(N-1)/2$ y $(N+1)/2$.
+\end{itemize}
+
+\paragraph{Ejemplo ($N=4$, $x=[0,\,1,\,0,\,-1]$).} 
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{src/pyfig/dft_senoidal_4pts.png}
+    \caption{SinOUT}
+    \label{fig:SinOUT}
+\end{figure}
+\newpage
+\subsubsection{Espectro de fase}
+Representa la fase de cada componente frecuencial según la ecuación
+$$
+\phi[k] = \angle X[k]
+$$
+\subsubsection{Espectro de Potencia}
+Representa la potencia de cada componente frecuencial según la ecuación
+\begin{equation}
+P[k] = \dfrac{1}{N^2}\,|X[k]|^2 .
+\end{equation}
+\begin{comment}
+    
+\paragraph{Definición de potencia promedio.} La potencia promedio de la señal muestreada es
+\begin{equation}
+P_x = \frac{1}{N}\sum_{j=0}^{N-1} |x[j]|^2 .
+\end{equation}
+Se busca una $P[k]$ tal que $\sum_{k=0}^{N-1} P[k] = P_x$, es decir, que reparta la potencia total entre los bins de frecuencia.
+
+\paragraph{Lema (ortogonalidad).} Con $\omega = e^{-2\pi i/N}$ y $m\in\mathbb{Z}$,
+\begin{equation}
+\sum_{k=0}^{N-1} \omega^{km} =
+\begin{cases}
+N, & m \equiv 0 \pmod{N},\\
+0, & \text{en otro caso.}
+\end{cases}
+\end{equation}
+
+\begin{proof}
+Si $m \equiv 0 \pmod{N}$, entonces $\omega^{km}=1$ y la suma vale $N$. En otro caso $\omega^{m}\neq 1$, y la suma es geométrica:
+\begin{equation}
+\sum_{k=0}^{N-1} (\omega^{m})^{k} = \frac{1-\omega^{mN}}{1-\omega^{m}} = \frac{1-1}{1-\omega^{m}} = 0. \qquad \qedhere
+\end{equation}
+\end{proof}
+
+\paragraph{Teorema (Parseval para la DFT).}
+\begin{equation}
+\sum_{k=0}^{N-1} |X[k]|^2 = N \sum_{j=0}^{N-1} |x[j]|^2 .
+\end{equation}
+
+\begin{proof}
+Usando $|X[k]|^2 = X[k]\,\overline{X[k]}$ y $\overline{\omega^{lk}} = \omega^{-lk}$:
+\begin{equation}
+\sum_{k=0}^{N-1} |X[k]|^2
+= \sum_{k=0}^{N-1} \left(\sum_{j=0}^{N-1} x[j]\,\omega^{jk}\right)\left(\sum_{l=0}^{N-1} \overline{x[l]}\,\omega^{-lk}\right)
+= \sum_{j=0}^{N-1}\sum_{l=0}^{N-1} x[j]\,\overline{x[l]} \sum_{k=0}^{N-1} \omega^{k(j-l)} .
+\end{equation}
+Por el lema, la suma interior vale $N$ cuando $j=l$ (pues $|j-l|<N$) y $0$ en otro caso. Solo sobreviven los términos con $j=l$:
+\begin{equation}
+\sum_{k=0}^{N-1} |X[k]|^2 = N \sum_{j=0}^{N-1} x[j]\,\overline{x[j]} = N\sum_{j=0}^{N-1} |x[j]|^2 . \qquad \qedhere
+\end{equation}
+\end{proof}
+
+\paragraph{Obtención de $P[k]$.} Dividiendo el teorema entre $N^2$:
+\begin{equation}
+\underbrace{\frac{1}{N}\sum_{j=0}^{N-1} |x[j]|^2}_{P_x}
+= \sum_{k=0}^{N-1} \underbrace{\frac{|X[k]|^2}{N^2}}_{P[k]} .
+\end{equation}
+Por lo tanto, $P[k] = |X[k]|^2/N^2$ es la fracción de la potencia promedio que aporta la frecuencia $f_k = k f_s/N$, y la suma de todo el espectro de potencia es la potencia promedio de la señal.
+
+\paragraph{Espectro unilateral.} Si $x[j]\in\mathbb{R}$, por la simetría conjugada $|X[N-k]|=|X[k]|$, así que $P[N-k]=P[k]$. La potencia total queda
+\begin{equation}
+P_x = P[0] + 2\sum_{k=1}^{N/2-1} P[k] + P[N/2], \qquad N \text{ par},
+\end{equation}
+donde $k=0$ y $k=N/2$ no se duplican porque no tienen pareja.
+
+\paragraph{Ejemplo ($N=4$, $x=[0,\,1,\,0,\,-1]$).} Con $X=[0,\,-2i,\,0,\,2i]$:
+\begin{equation}
+P = \left[0,\ \tfrac{1}{4},\ 0,\ \tfrac{1}{4}\right], \qquad
+\sum_k P[k] = \tfrac12 = \frac{0^2+1^2+0^2+(-1)^2}{4} = P_x .
+\end{equation}
+Esto coincide con la potencia de $\sin(2\pi t)$, que es $A^2/2 = 1/2$. En el espectro unilateral, $2P[1] = 1/2$ concentra toda la potencia en $f = 1$ Hz.
+
+\end{comment}
+
+
+
+% https://www.statlect.com/matrix-algebra/discrete-Fourier-transform-amplitude-power-phase-spectrum
+%https://www.dsprelated.com/showarticle/1004.php
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\linewidth]{src/pyfig/Spectre.png}
+    \caption{Espectro}
+    \label{fig:Espectro}
+\end{figure}
+%https://docs.scipy.org/doc/scipy/tutorial/fft.html
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
