@@ -774,6 +774,8 @@ $$
     %\caption{Analis}
     \label{fig:Sin2Out}
 \end{figure}
+\begin{comment}
+    
 \subsubsection{Pulso Cuadrado}
 \begin{figure}[!h]
     \centering
@@ -857,6 +859,7 @@ $$
     \caption{PulsoOUT}
     \label{fig:PulsoOUT}
 \end{figure}
+\end{comment}
 
 \newpage
 \newpage
@@ -864,16 +867,38 @@ $$
 \subsection{Espectro (Spectra)}
 El espectro de una señal es una representación de la distribución de su energía a lo largo de las diferentes frecuencias que la componen. 
 
-En el contexto de la Transformada Discreta de Fourier (DFT), el espectro se obtiene al calcular la magnitud de los coeficientes resultantes de la DFT, lo que permite identificar qué frecuencias están presentes en la señal y con qué intensidad.
+En el contexto de la DFT, el espectro se obtiene al calcular la magnitud de los coeficientes resultantes de la DFT, lo que permite identificar qué frecuencias están presentes en la señal y con qué intensidad.
 
 Existen tres tipos principales de espectros que se pueden analizar:
 
-\subsubsection{Espectro de Magnitud}
+\textbf{Espectro de Magnitud}
 Muestra la amplitud de cada componente frecuencial, indicando la fuerza o intensidad de cada frecuencia presente en la señal x.
 $$
 A[k] = \dfrac{1}{N} | X[k] |
 $$
-\textbf{Nota:} Si x es una señal real, el espectro de magnitud es simétrico respecto al eje de frecuencia/(Frecuencia de nyquist) siendo el valor de la frecuencia de nyquist igual a $f_N = f_s/2$.
+\textbf{Nota:} Si x es una señal real, el espectro de magnitud es simétrico respecto al eje de frecuencia/(Frecuencia de nyquist) siendo  $f_N = f_s/2$.
+
+\textbf{Espectro de fase}
+Representa la fase de cada componente frecuencial 
+$$
+\phi[k] = \angle X[k]
+$$
+\textbf{Espectro de Potencia}
+Representa la potencia de cada componente frecuencial
+$$
+P[k] = \dfrac{1}{N^2}\,|X[k]|^2 .
+$$
+% https://www.statlect.com/matrix-algebra/discrete-Fourier-transform-amplitude-power-phase-spectrum
+%https://www.dsprelated.com/showarticle/1004.php
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\linewidth]{src/pyfig/Spectre.png}
+    \caption{Espectro}
+    \label{fig:Espectro}
+\end{figure}
+%https://docs.scipy.org/doc/scipy/tutorial/fft.html
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \newpage
 La DFT se definio previamente como
 $$
@@ -951,16 +976,6 @@ es decir, en frecuencia, $|X(f_N + \Delta f)| = |X(f_N - \Delta f)|$: el espectr
     \label{fig:SinOUT}
 \end{figure}
 \newpage
-\subsubsection{Espectro de fase}
-Representa la fase de cada componente frecuencial según la ecuación
-$$
-\phi[k] = \angle X[k]
-$$
-\subsubsection{Espectro de Potencia}
-Representa la potencia de cada componente frecuencial según la ecuación
-\begin{equation}
-P[k] = \dfrac{1}{N^2}\,|X[k]|^2 .
-\end{equation}
 \begin{comment}
     
 \paragraph{Definición de potencia promedio.} La potencia promedio de la señal muestreada es
@@ -1027,16 +1042,6 @@ Esto coincide con la potencia de $\sin(2\pi t)$, que es $A^2/2 = 1/2$. En el esp
 
 
 
-% https://www.statlect.com/matrix-algebra/discrete-Fourier-transform-amplitude-power-phase-spectrum
-%https://www.dsprelated.com/showarticle/1004.php
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=\linewidth]{src/pyfig/Spectre.png}
-    \caption{Espectro}
-    \label{fig:Espectro}
-\end{figure}
-%https://docs.scipy.org/doc/scipy/tutorial/fft.html
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \newpage

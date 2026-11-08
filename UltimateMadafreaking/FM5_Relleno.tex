@@ -1,5 +1,19 @@
 \documentclass{article}
 \input{confi.tex}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+\titleformat{\section}{\normalsize\bfseries\color{blue!50!black}}{}{0pt}{}[\vspace{-4pt}\rule{\linewidth}{0.4pt}]
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\titleformat{\subsection}{\small\bfseries}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{5pt}{2pt}
+\setlist{nosep,leftmargin=*}
+\setlength{\columnsep}{18pt}
+
 \begin{document}
 \begin{multicols}{2}
 
@@ -168,6 +182,230 @@ $$
 
 \end{itemform}
 
+\end{multicols}
+
+\begin{multicols}{2}
+    \textbf{Puente de Impedancias}
+
+    
+    \includegraphics[width=0.4\textwidth]{src/Puente.png}
+    \textbf{Condiciones de equilibrio:}
+    $$
+    I_1 = I_3 \quad I_2 = I_4 \quad V_{ab}=0
+    $$
+    $$\begin{aligned}
+            Z_3I_3&=Z_4I_4\rightarrow  I_3=I_4 \frac{Z_4}{Z_3}=I_2\frac{Z_4}{Z_3} \\
+            Z_1I_1&=Z_2I_2\rightarrow  I_1=I_2 \frac{Z_2}{Z_1} \\
+            I_2 \frac{Z_4}{Z_3} &= I_2 \frac{Z_2}{Z_1} \rightarrow  \boxed{Z_1Z_4=Z_2Z_3}
+    \end{aligned}
+    $$
+        \includegraphics[width=0.4\textwidth]{src/Inductor.png}
+
+
+    \textbf{Constantes de DC}
+    $$C=\frac{1}{wX_C} \quad L=\dfrac{X_L}{\omega}$$
+
+    \textbf{Req en Paralelo}
+$$
+  Y = \frac{1}{R_s - jX_s} = R_2 + jX_2\ \text{S}
+$$
+$$
+  R_p = \text{Re({Y})} =\frac{1}{R_2} 
+  \qquad
+  C_p = \text{Im({Y})} = \frac{X_2}{\omega} 
+  \qquad
+  L_p = \frac{1}{\omega X_2}
+$$
+
+
+\subsection{Reglas de diseño (sensor $R_x$)}
+
+\textbf{WheatStone}
+
+\includegraphics[width=0.3\textwidth]{src/Wit.png}
+
+\textbf{Pendiente ascendente:} $R_x$ en $R_2$ o $R_3$. 
+
+Si $R_x = R_2 \Rightarrow R_4 = R_{x,min}$ 
+
+si $R_x = R_3 \Rightarrow R_1 = R_{x,min}$.
+
+\textbf{Pendiente descendente:} $R_x$ en $R_1$ o $R_4$.
+ 
+Si $R_x = R_1 \Rightarrow R_3 = R_{x,max}$ 
+ 
+Si $R_x = R_4 \Rightarrow R_2 = R_{x,max}$).
+
+Otras dos resistencias (máxima salida):
+\[
+R = \frac{R_{x,max} - R_{x,min}}{2} + R_{x,min}
+\]
+
+
+    \textbf{Puentes}
+    
+    \includegraphics[width=0.4\textwidth]{src/Puentes.png}
+    \begin{itemform}
+        \item \textbf{Wheatstone}
+        $$
+        \begin{aligned}
+        Z_{AB} &= R_1 \quad&& Z_{BC} = R_3\\
+        Z_{DA} &= R_2 \quad&& Z_{CD} = R_4
+        \end{aligned}
+        $$
+        \item \textbf{Wien}
+        $$
+        \begin{aligned}
+        Z_{AB} &=R_1 + X_{C1} \quad&& Z_{BC} = R_2\\
+        Z_{DA} &= R_3 || X_{C3}\quad&& Z_{CD} = R_4
+        \end{aligned}
+        $$
+        \item \textbf{Schering}
+        $$
+        \begin{aligned}
+        Z_{AB} &=R_4 + X_{C4} \quad&& Z_{BC} = C_1\\
+        Z_{DA} &= R_3\quad&& Z_{CD} = R_2 || X_{C2}
+        \end{aligned}
+        $$
+        \item \textbf{Maxwell}
+        $$
+        \begin{aligned}
+        Z_{AB} &= R_2 + X_{L2} \quad&& Z_{BC} = R_1+X_{L1}\\
+        Z_{DA} &= R_4          \quad&& Z_{CD} = R_3
+        \end{aligned}
+        $$
+    \end{itemform}
+
+    \includegraphics[width=0.513\textwidth]{src/Rigual.png}
+
+\end{multicols}
+
+\newpage
+\begin{multicols}{2}
+
+\section{II.1 Señales continuas y discretas}
+\subsection{Senoidal, valor instantáneo y pico}
+\[
+v(t) = V_p\,\sin(\omega t),\qquad \omega = 2\pi f,\qquad f = \frac{1}{T}
+\]
+
+\subsection{Valor promedio (DC)}
+\[
+V_{prom} = \frac{1}{T}\int_0^T V(t)\,dt \qquad V_{prom} = \frac{1}{N}\sum_{n=1}^{N} V[n]
+\]
+Senoidal en un periodo completo: $V_{prom} = 0$.\\
+Señal por tramos: $V_{prom} = \dfrac{V_1 t_1 + V_2 t_2}{T}$.
+
+
+\subsection{Valor eficaz (RMS)}
+Es el voltaje de CD que disiparía la \textbf{misma potencia media} en una resistencia (por eso se llama \emph{valor eficaz}).
+\[
+V_{rms} = \sqrt{\frac{1}{T}\int_0^T v(t)^2\,dt} \qquad V_{rms} = \sqrt{\frac{1}{N}\sum_{n=0}^{N-1} v[n]^2}
+\]
+
+$$
+V_{rect}=\frac{1}{T}\int_0^T |v(t)|\,dt $$
+Senoidal: $V_p = \sqrt{2}\,V_{rms}$.\quad Ej.: 127 V$_{rms}$ $\Rightarrow$ $V_p \approx 179.6$ V.\\
+Por tramos: $V_{rms} = \sqrt{\dfrac{V_1^2 t_1 + V_2^2 t_2}{T}}$.
+
+\subsection{Factor de forma y factor de cresta}
+\[
+FF = \frac{V_{rms}}{V_{rect}} \qquad\qquad CF = \frac{V_p}{V_{rms}}
+\]
+\small
+
+
+\textbf{Valores de referencia} ($V_p$ = voltaje pico):
+\begin{center}
+\small
+\begin{tabular}{lcc}
+
+Señal & $V_{rms}$ & $V_{rect}$\\
+Senoidal & $\dfrac{V_p}{\sqrt{2}} = 0.707\,V_p$ & $\dfrac{2V_p}{\pi} = 0.637\,V_p$\\[8pt]
+Cuadrada ($\pm V_p$) & $V_p$ & $V_p$\\[4pt]
+Triangular simétrica & $\dfrac{V_p}{\sqrt{3}} = 0.577\,V_p$ & $\dfrac{V_p}{2}$\\
+
+\end{tabular}
+\end{center}
+\section{II.2.1 Atenuación (divisor de tensión)}
+\[
+v_{sal} = \frac{R_2}{R_1 + R_2}\,v_{en},\qquad \frac{1}{x} = \frac{R_2}{R_1+R_2}
+\]
+\[
+R_1 \gg R_2:\; v_{sal} \approx \frac{R_2}{R_1}v_{en},\qquad P = I^2R = \frac{V^2}{R}
+\]
+Diseño: fijar $R_2$, despejar $R_1 = R_2\left(\dfrac{v_{en,max}}{v_{sal,max}} - 1\right)$.\\
+
+\section{II.2.2 Puente de Wheatstone}
+\[
+\text{Nulo: } \frac{R_1}{R_4} = \frac{R_2}{R_3},\qquad K = \frac{R_2}{R_3} \Rightarrow R_1 = K R_4
+\]
+El nulo no depende de la excitación ni del detector.
+
+\subsection{Salida como diferencia de dos divisores}
+\[
+V_G = V\left(\frac{R_b}{R_a + R_b} - \frac{R_d}{R_c + R_d}\right)
+\]
+(cada fracción = voltaje en un nodo del detector respecto al mismo borne de la fuente).
+
+\subsection{Galvanómetro: método de Thévenin}
+\begin{enumerate}
+\item $V_{th}$ = diferencia de voltaje entre los nodos del detector, sin galvanómetro.
+\item $R_{th}$ = fuente en corto: $R_{th} = (R_a\|R_b) + (R_c\|R_d)$.
+\item $I_g = \dfrac{V_{th}}{R_{th} + R_g}$
+\item Deflexión: $d = I_g \times S$ (mm/$\mu$A).
+\end{enumerate}
+\textbf{Ej. de clase} (5 V; 100, 200, 1000 y 2005 $\Omega$; $R_g = 100\ \Omega$; $S = 10$ mm/$\mu$A):
+\[
+V_{th} = 5\left(\tfrac{2005}{3005} - \tfrac{200}{300}\right) = 2.77\ \text{mV}
+\]
+\[
+R_{th} = 100\|200 + 1000\|2005 = 66.7 + 667.2 = 733.9\ \Omega
+\]
+\[
+I_g = \frac{2.77\ \text{mV}}{833.9\ \Omega} = 3.33\ \mu\text{A}\ \Rightarrow\ d \approx 33.3\ \text{mm}
+\]
+
+\section{Puentes de CA}
+\[
+Z_1 Z_4 = Z_2 Z_3 \quad\Longleftrightarrow\quad Z_{AB}Z_{CD} = Z_{BC}Z_{DA}
+\]
+
+\subsection{Procedimiento}
+\begin{enumerate}
+\item $\omega = 2\pi f$. Pasar cada rama a impedancia:\\
+$Z_R = R$, $Z_L = j\omega L$, $Z_C = -j/(\omega C)$.
+\item Paralelo: $Z = \dfrac{Z_aZ_b}{Z_a+Z_b}$ o usar admitancias $Y = \dfrac{1}{R} + j\omega C$.
+\item Despejar la rama desconocida (ramas opuestas).
+\item Resultado $R + jX$: si $X>0$, $L = X/\omega$; si $X<0$, $C = 1/(\omega|X|)$.
+\item Equivalente paralelo: $Y = 1/Z = G + jB$, $R_p = 1/G$; $B>0 \Rightarrow C_p = B/\omega$; $B<0 \Rightarrow L_p = 1/(\omega|B|)$.
+\end{enumerate}
+\textbf{¿Se equilibra solo con $R$?} Revisar primero la condición de \textbf{ángulos}: una resistencia no cambia la reactancia de su rama.
+
+\subsection{Puente de Wien}
+\[
+\frac{R_2}{R_4} = \frac{R_1}{R_3} + \frac{C_3}{C_1},\qquad f = \frac{1}{2\pi\sqrt{R_1R_3C_1C_3}}
+\]
+\[
+R_1 = R_3 = R,\ C_1 = C_3 = C:\quad R_2 = 2R_4,\quad f = \frac{1}{2\pi RC}
+\]
+
+\subsection{Maxwell (inductor patrón)}
+\[
+l_1 = \frac{r_3}{r_4}\,l_2,\qquad r_1 = \frac{r_3}{r_4}(r_2 + R_2)
+\]
+\subsection{Maxwell--Wien (capacitor patrón)}
+$C_4$ en paralelo con $r_4$, en la rama opuesta al inductor:
+\[
+r_1 = \frac{r_2 r_3}{r_4},\qquad l_1 = r_2 r_3 C_4,\qquad Q = \frac{\omega l_1}{r_1} = \omega C_4 r_4
+\]
+Frecuencia para un $Q$ dado: $\omega = \dfrac{Q}{C_4 r_4}$, $f = \dfrac{Q}{2\pi C_4 r_4}$.
+
+\subsection{Puente de Schering (capacitores)}
+$Z_1 = \dfrac{1}{j\omega C_1}$, $Z_2 = R_2\|C_2$, $Z_3 = R_3$, $Z_x = R_x + \dfrac{1}{j\omega C_x}$:
+\[
+R_x = \frac{R_3 C_2}{C_1},\qquad C_x = \frac{R_2 C_1}{R_3},\qquad D = \omega C_x R_x
+\]
 \end{multicols}
 
 
