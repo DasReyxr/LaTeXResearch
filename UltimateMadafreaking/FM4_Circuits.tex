@@ -13,11 +13,11 @@
     \item Ley de Ohm
     $$V=IR$$
     \item Impedancia y Reactancia
-    $$ Z=R+Xj\quad \text{ where }X_c=(\omega c)^{-1} \quad X_L=(\omega c)$$
+    $$ Z=R+jX \quad \text{ where }X_C=(\omega C)^{-1} \quad X_L=\omega L$$
     \item Circuitos Delta, Estrella
     $$(\Delta \to \star) \ R_n=\dfrac{R_{Adj}}{\sum R} \quad (\star \to \Delta)\ R_1=\dfrac{Comb(R)}{R_{Opp}}$$
     \item Kirchoff
-    $$LVK \Rightarrow \Sigma V_{Mesh} =0 \quad LCK \Rightarrow \Sigma V_{Net} = 0$$
+    $$LVK \Rightarrow \Sigma V_{Mesh} =0 \quad LCK \Rightarrow \Sigma I_{Node} = 0$$
 
     \item Divisores
     $$\text{V}\rightarrow  V_n=V_{s}\dfrac{R_n}{R_T} \quad \text{I}\rightarrow I_n=I_{s}\dfrac{R_T}{R_n}$$
@@ -27,7 +27,7 @@
     \includegraphics[width=0.8\linewidth]{src/FM4/LCBehavioral.png}
     \begin{itemform}
     \item Voltajes y Corrientes de los elementos
-    $$V_r=\dfrac{R}{i} \ V_L = L\dfrac{di}{dt} \ I_c=C\dfrac{dV_c}{dt}$$
+    $$V_R=iR \ V_L = L\dfrac{di}{dt} \ I_c=C\dfrac{dV_c}{dt}$$
     \item Tao
     $$\tau=RC \quad \tau^{-1}=(R/L)$$
     \item RC
@@ -47,7 +47,7 @@
     \begin{aligned}
     &A_1 e^{s_1 t} + A_2 e^{s_2 t}    &\alpha^2 > \omega^2 \text{ O.D.} \\
     &A_1 e^{s_1 t} + A_2 t e^{s_2 t}    &\alpha^2 = \omega^2 \text{ C.D.} \\
-    &e^{\alpha t}(B_1 \cos(\omega_d t) + B_2 \sin(\omega_d t))   &\alpha^2 < \omega^2 \text{ U.D.} \\
+    &e^{-\alpha t}(B_1 \cos(\omega_d t) + B_2 \sin(\omega_d t))   &\alpha^2 < \omega^2 \text{ U.D.} \\
     \end{aligned}
     \right.
     $$
@@ -71,9 +71,9 @@
 
 
     \item Voltaje promedio
-    $$V_{prom}= \dfrac{1}{T} \int\limits_0^T f(t)$$
+    $$V_{prom}= \dfrac{1}{T} \int\limits_0^T f(t)\,dt$$
     \item Voltaje RMS
-    $$V_{RMS}=\sqrt{\dfrac{1}{T} \int\limits_0^T f(t)}=\dfrac{V_m}{\sqrt{2}}$$
+    $$V_{RMS}=\sqrt{\dfrac{1}{T} \int\limits_0^T f^2(t)\,dt}=\dfrac{V_m}{\sqrt{2}}$$
     \item Voltaje promedio para ondas senoidales 
     $$\text{Media Onda }V_{DC}=\dfrac{V_M}{\pi} \quad \text{Onda }V_{DC}=\dfrac{2 V_M}{\pi}$$
     \end{itemform}
@@ -97,7 +97,7 @@
     \item \textbf{3. Potencia Compleja y Triángulo de Potencias}  
     La potencia compleja combina la parte real (activa) y la imaginaria (reactiva):  
     $$\textbf{S} = \textbf{V} \cdot \textbf{I}^* = P + jQ$$  
-    $$\textbf{S}=\dfrac{\textbf{V}^2}{\textbf{Z*}}$$
+    $$\textbf{S}=\dfrac{\textbf{V}^2}{\textbf{Z}^*}$$
     $$S = \sqrt{P^2 + Q^2}$$  
     Ángulo de fase:  
     $$\tan(\varphi) = \frac{Q}{P}$$  
@@ -128,8 +128,8 @@
         $$V_\phi=V_L \quad I_L= \sqrt{3} I_\phi \quad \dfrac{P_{3\phi \Delta}}{P_{3\phi Y}}=3$$
         \item Secuencia
         $$\begin{cases}
-          Positiva& \quad V_{bn} (V_\phi)\angle -120 \quad V_{bc} (V_L) \angle -150\\  
-          Negativa& \quad V_{bn} (V_\phi)\angle +120 \quad V_{bc} (V_L)\angle +150\\  
+          Positiva& \quad V_{bn} (V_\phi)\angle -120 \quad V_{bc} (V_L) \angle -90\\  
+          Negativa& \quad V_{bn} (V_\phi)\angle +120 \quad V_{bc} (V_L)\angle +90\\  
 
         \end{cases}
         $$
