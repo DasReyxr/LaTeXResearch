@@ -428,6 +428,228 @@ $$
 
 \includegraphics[width=0.8\textwidth]{src/FM2/BodeDiagram.out.png}
 %\includegraphics[width=0.6\textwidth]{src/Bodiii.png}
+\newpage
+\section{Compensadores}
+\begin{multicols}{2}
+
+
+\textbf{Márgenes de estabilidad}
+
+  \includegraphics[width=0.3\textwidth]{src/FM2/Margin.out.png}
+
+  Juanpe y ogata los pone al reves $wcg= wcp$ y $wcp =wcg$
+  Estabilidad y Margenes ideales
+  $$0 \ \text{db} \to -180 ^{\circ} \quad
+  P_M \ge 30 ^{\circ} \quad GM_{dB} \ge 6 \ \text{dB}
+  $$
+
+  Margenes de fase PM y ganancia GM:
+  \[
+  P_M=180^\circ+\angle G(j\omega_{g}) \pm 90^\circ \quad +\text{Polo}\  -\text{Cero}\]
+
+  \textbf{Adelanto - Lead} \quad $0<\alpha<1$
+  $$
+  G_C(s)  = K_c\,\dfrac{s+{1}/{T}}{s+{1}/{\alpha T}}=K_c\dfrac{s+z}{s+p} \quad K=K_c\,\alpha 
+  $$
+  \begin{itemform}
+  \item Ganancia ($K$ sale de $K_v$):
+  $$
+  K_v = \lim_{s\to 0} sG(s)G_C(s) = \lim_{s\to 0} s\,K\,G(s)
+  $$
+  \item Margen de fase: se obtiene $P_M$ de $G_1$ (Bode) $\varepsilon=5^\circ$ a $12^\circ$:
+  $$
+  \phi_m = P_{M,\text{des}} - P_M(G_1) + \varepsilon
+  $$
+
+  \item Controlador:
+  $$
+  \alpha = \dfrac{1-\sin\phi_m}{1+\sin\phi_m} \quad \omega_c = \dfrac{1}{T\sqrt{\alpha}} \quad z = \omega_c \sqrt{a} \quad p = \dfrac{w_c}{\sqrt{\alpha} } 
+  $$
+  \item Frecuencia de cruce nueva $\omega_c$ 
+  $$
+  |G_1(j\omega_c)|_{\text{dB}} = \boxed{ -20\log_{10}\dfrac{1}{\sqrt{\alpha}}} \xrightarrow{\text{en freq}} w_c 
+  $$
+  \end{itemform}
+  \textbf{Atraso - Lag} \quad $\beta>1$
+  $$
+  G_C(s) = \dfrac{K}{\beta}\,\dfrac{s+{1}/{T}}{s+{1}/{\beta T}}= \dfrac{K}{\beta} \dfrac{s+z}{s+p} \quad G_1(s)=K\,G(s)
+  $$
+  \begin{itemform}
+  \item Ganancia: $K_v = \lim_{s\to 0} sG(s)G_C(s) = \lim_{s\to 0} s\,K\,G(s)$
+  \item Nueva $\omega_c$ (se compensa el atraso con $\varepsilon=5^\circ$ a $12^\circ$):
+  $$
+ \phi_m = \angle G_1(j\omega_c) = -180^\circ + P_{M,\text{des}} + \varepsilon
+  $$
+  \item Beta
+  $
+  \beta = |G_1(j\omega_c)| 
+  $
+  \item Controlador:
+  $$
+  z = w_{cp}/10 \quad p = z/(\beta) \quad K=K_C \beta
+  $$
+  \end{itemform}
+  \textbf{Retardo-adelanto - Lag-Lead} \quad $\gamma>1,\ \beta>1$
+  $$
+  G_C(s)  = K_c\,\dfrac{s+{1}/{T_1}}{s+{\gamma}/{T_1}}\,\dfrac{s+{1}/{T_2}}{s+{1}/{\beta T_2}}
+  $$
+  \begin{itemform}
+  \item Ganancia (con $\gamma=\beta$): 
+  $$K_v = \lim_{s\to 0} sG(s)G_C(s) = K_c \lim_{s\to 0} sG(s)$$
+  \item Adelanto: $\phi_m = \arcsin\dfrac{\beta-1}{\beta+1}$ \quad $\omega_c=\dfrac{\sqrt{\beta}}{T_1}$ % VERIFICAR $\omega_c$ elegida frente al ejemplo del libro
+  \item Glag
+  Con el $w_{cp}$ se agarra 
+  $$
+  Z_{lag} = \dfrac{w_{cp}}{10} \quad P_{lag} = \dfrac{w_{cp}}{\beta } \quad G_{lag}(s) = \dfrac{s+zero}{s+pole}
+  $$
+  \item Glead
+  Con el Wcp te vas 20 db  v pa abajo y 1 decada pa delante y se toma Wp
+  $$
+  P_{lead} = Wp \quad Z_{lead} = \dfrac{Wp}{10} \quad G_{lead}(s) = \dfrac{s+Zero}{s+Pole}
+  $$
+\end{itemform}
+  \textbf{PID en Freq}
+  \begin{itemform}
+    \item Control $w_c \approx w_{cp}$ misma decada
+    $$
+    G_c(s) = \dfrac{K (as+1)(bs+1)}{s} \quad a = w_{c} \quad b = w_{c}/10 
+    $$
+    \item Kv
+    $
+    Kv = \lim_{s\to 0} sG(s)G_c(s) = K \lim_{s\to 0} G(s)
+    $
+    \item Control con Planta
+    $$
+    G(s)=\dfrac{K}{s} G_p(s)
+    $$
+  \end{itemform}
+  
+
+  \fmSubSec{Espacio de Estados}
+  $$
+  y^n+a_1y^{n-1}+\dots+a_ny=b_0u^{n}+b_1u^{n-1}+\dots+b_nu
+  $$
+  $$
+  \begin{aligned}
+    \mathbf{\dot{x}}(t) &= \mathbf{A}x(t) + \mathbf{B}u(t) \\
+    \mathbf{y}(t)       &= \mathbf{C}x(t) + \mathbf{D}u(t)
+  \end{aligned}
+  $$
+  Funcion de transferencia:
+  $$
+  G(s) = \mathbf{C}(s\mathbf{I}-\mathbf{A})^{-1}\mathbf{B} + \mathbf{D}
+  $$
+  Inversa
+  $$
+  A^{-1}=\begin{bmatrix}a & b \\ c & d\end{bmatrix}^{-1} = \dfrac{1}{ad-bc}\begin{bmatrix}d & -b \\ -c & a\end{bmatrix}
+  $$
+  \begin{itemform}
+    \item Matriz de trancision
+    $$
+    \Phi(t) = \lpn{(SI - A)^{-1}}
+    $$
+    $$
+    x(t) = e^{At}x(0) + \int_0^t e^{A(t-\tau)}Bu(\tau)d\tau
+    $$
+    \item Forma Canonica Controlable:
+    $$
+    \begin{bmatrix}
+      \dot{x_1} \\
+      \dot{x_2} \\
+      \dot{x_3 }
+    \end{bmatrix}
+    = \begin{bmatrix}
+      0 & 1 & 0 \\
+      0 & 0 & 1 \\
+      -a_3 & -a_2 & -a_1
+    \end{bmatrix}
+    \begin{bmatrix}
+      x_1 \\
+      x_2 \\
+      x_3
+    \end{bmatrix}
+    + \begin{bmatrix}
+      0 \\
+      0 \\
+      1
+    \end{bmatrix} u
+    $$
+    $$y= \begin{bmatrix}
+      b_3 - a_3b_0 & b_2 - a_2b_0 & b_1 - a_1b_0
+    \end{bmatrix} \begin{bmatrix}
+      x_1 \\
+      x_2 \\
+      x_3
+    \end{bmatrix}+b_0 u$$
+
+    \item Forma Canonica Observable:
+    $$
+    \begin{bmatrix}
+      \dot{x_1} \\
+      \dot{x_2} \\
+      \dot{x_3 }
+    \end{bmatrix}
+    = \begin{bmatrix}
+      0 & 0 & -a_3 \\
+      1 & 0 & -a_2 \\
+      0 & 1 & -a_1 
+    \end{bmatrix}
+    \begin{bmatrix}
+      x_1 \\
+      x_2 \\
+      x_3
+    \end{bmatrix}
+    + \begin{bmatrix}
+      b_3 - a_3b_0 \\
+      b_2 - a_2b_0 \\
+      b_1 - a_1b_0
+    \end{bmatrix} u
+    $$
+    $$y= \begin{bmatrix}
+      0 & 0 & 1
+    \end{bmatrix} \begin{bmatrix}
+      x_1 \\
+      x_2 \\
+      x_3
+    \end{bmatrix}+b_0 u$$
+  \item Forma canonica diagonal:
+  $$
+  \dfrac{Y(s)}{U(S)}= b_0+ \frac{c_1}{s+p_1}+ \frac{c_2}{s+p_2}+ \frac{c_3}{s+p_3}
+  $$
+  $$
+  \begin{bmatrix}
+    \dot{x_1} \\
+    \dot{x_2} \\
+    \dot{x_3 }
+  \end{bmatrix}
+  = \begin{bmatrix}
+    -p_1 & 0 & 0 \\
+    0 & -p_2 & 0 \\
+    0 & 0 & -p_3
+  \end{bmatrix}
+  \begin{bmatrix}
+    x_1 \\
+    x_2 \\
+    x_3
+  \end{bmatrix}
+  + \begin{bmatrix}
+    1 \\
+    1 \\
+    1
+  \end{bmatrix} u
+  $$
+
+  $$y= \begin{bmatrix}
+    c_1 & c_2 & c_3
+  \end{bmatrix} \begin{bmatrix}
+    x_1 \\
+    x_2 \\
+    x_3
+  \end{bmatrix}+b_0 u$$
+  \end{itemform}
+\end{multicols}
+
+
 
 \newpage
 % ============================================================
