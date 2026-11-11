@@ -382,6 +382,67 @@ CMRR
 \includegraphics[width=1\linewidth]{src/FM4/Comparador.png}
 
 \newpage
+\begin{multicols}{2}
+    \begin{itemform}
+
+        \item INA
+        
+        Al aumentar Zi se pierde ancho de banda, pero se gana CMRR. Al aumentar Zo se pierde CMRR, pero se gana ancho de banda.
+        \item Log Amp
+        Vt
+        $$V_T=\dfrac{kT}{q}=\dfrac{1.38 \times 10^{-23} \times 300}{1.6 \times 10^{-19}} \approx 25.87\,mV = 1/38.64 $$
+        
+       
+    \end{itemform}
+
+\textbf{Integrador} ($R_1$ entrada, $R_f\parallel C$ retro)
+\begin{itemize}
+\item \textbf{Av Int y Low-Freq:} $AV_{Int}=\dfrac{1}{R_1C} \quad AV_{LF}=-\dfrac{R_f}{R_1}$
+
+\item \textbf{Salidas:} $V_o=-AV_{int}\displaystyle\int V_i\,dt \quad V_{o-ramp}\approx-\dfrac{a\,t^2}{2R_1C}$
+\item \textbf{Frecuencia:} $f_c=\dfrac{1}{2\pi R_fC} \quad f_{safe}=10f_c=\dfrac{10}{2\pi R_fC}$
+\item \textbf{Frecuencias:}         
+Se agrega un Rf para limitar la ganancia a bajas frecuencias.
+
+$$
+f_{min} = \dfrac{1}{2 \pi R_f C} \quad f_{max} = \dfrac{1}{2 \pi R_i C}
+$$
+
+
+\end{itemize}
+\textbf{Derivador} ($R_i$ + $C$ entrada, $R_f\parallel C_f$ retro)
+\begin{itemize}
+\item \textbf{Ganancias:} $A_{deriv}=-R_fC \quad A_{HF}=-\dfrac{R_f}{R_i}$
+
+
+\item \textbf{Salida :} $V_o=-R_fC\,\dfrac{dV_i}{dt}$
+
+\item \textbf{$C_f$ para atenuar ruido arriba de $f_{ruido}$ y frecuencia segura:}
+\[ f_{ruido}=\frac{1}{2\pi R_fC_f} \quad f_{safe}\ll\dfrac{1}{2\pi R_iC}\]
+
+\end{itemize}
+
+\end{multicols}
+
+\includegraphics[width=0.9\textwidth]{src/FM4/OpampsOperations.png}
+
+\newpage
+\begin{multicols}{2}
+    \begin{itemform}
+    \item En retroalimentación negativa ambas entradas tienden a igualarse
+    \item Amp no inversor  no es posible atenuar señales
+    \item Amp Seguidor es util para acoplar impedancias por su alta zin y baja zo
+    \item Amp Restador -  Al aumentar Zi se pierde BW
+    \item INA -  Aplicaciones Control de velocidad Cargas y pruebas de baterias, equipos medicos
+    \item INA - Impendancia Alta, Alto CMRR
+    \end{itemform} 
+
+
+\end{multicols}
+\includegraphics[width=0.8\textwidth]{src/FM4/INA.png}
+
+
+\newpage
 \section{Electronica de Potencia}
 \begin{multicols}{2}
 \fmSubSec{Convertidores CC}
@@ -433,6 +494,9 @@ CMRR
 \end{multicols}
 \includegraphics[width=1\linewidth]{src/FM4/Amp.png}
 \newpage
+\begin{multicols}{2}
+    
+\end{multicols}
 
 \section{Dispositivos}
     
